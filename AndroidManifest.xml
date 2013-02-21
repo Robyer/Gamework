@@ -22,6 +22,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="cz.robyer.gamework.HelpActivity"
+            android:label="@string/title_activity_help"
+            android:parentActivityName="cz.robyer.gamework.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="cz.robyer.gamework.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

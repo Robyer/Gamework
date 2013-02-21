@@ -1,6 +1,7 @@
 package cz.robyer.gamework;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,7 +27,15 @@ public class MainActivity extends Activity {
 		((Button)findViewById(R.id.btn_play)).setOnClickListener(notImplementedListener);
 		((Button)findViewById(R.id.btn_scenarios)).setOnClickListener(notImplementedListener);
 		((Button)findViewById(R.id.btn_options)).setOnClickListener(notImplementedListener);
-		((Button)findViewById(R.id.btn_help)).setOnClickListener(notImplementedListener);
+		
+		((Button)findViewById(R.id.btn_help)).setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(MainActivity.this, HelpActivity.class);
+				startActivity(intent);
+			}
+		});
 	}
 
 /*	@Override
