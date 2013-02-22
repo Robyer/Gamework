@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario>
+    <about>
+	    <title>Example scenario</title>
+	    <author>Robert Pösel</author>
+	    <version>0.0.1</version>
+	    <location>Brno</location>
+	    <duration>1h</duration>
+	    <difficulty>Easy</difficulty>
+    </about>
+   
+    <areas>
+        <!--
+        	Types:
+        	- point (lat, long, radius)
+        	- multipoint (vnořené pointy (lat,long)) 
+         -->
+        <area id="home" type="point" lat="49.1675242N" long="16.5827231E" radius="10m" />
+        <area id="albert" type="point" lat="49.1699164N" long="16.5821031E" radius="10m" />
+        <area id="bohunice" type="multipoint">
+            <point lat="49.1699244N" long="16.5750961E" />
+            <point lat="49.1705711N" long="16.5869978E" />
+            <point lat="49.1658472N" long="16.5864353E" />
+            <point lat="49.1647558N" long="16.5754808E" />
+        </area>
+    </areas>
+    
+    <variables>
+        <variable id="health" type="decimal" min="0" max="100" value="100" />
+    </variables>
+    
+    <reactions>
+        <!--
+        	Types:
+        	- sound (path to file) -- a co hlasitost? případně zvuky od frameworku... Gamework:SHOT atd.
+        	- vibrate (strength = 1-10)
+        	- html (path to file)
+        	- ...
+        	- game_start
+        	- game_win
+        	- game_lose
+         -->
+        <reaction id="zvuk1" type="sound" file="sounds/zvuk1.mp3" />
+        <reaction id="vibrace1" type="vibrate" strength="5" />
+        <reaction id="html_index" type="html" file="html/index.html" />    
+        
+        <reaction id="zraneni" type="multi">
+            <reaction type="sound" file="sounds/zvuk1.mp3" />
+        	<reaction type="vibrate" strength="5" />
+        	<reaction type="decrement" variable="health" value="5" />
+        </reaction>
+        
+        <reaction id="start_hry" type="multi">
+            <reaction type="html" value="html/starting.html" />
+            <reaction type="game_start" />
+        </reaction>
+        
+        <reaction id="vyhra" type="multi">
+            <reaction type="sound" file="sounds/vyhra.mp3" />
+            <reaction type="game_win" />
+        </reaction>
+        <reaction id="prohra" type="multi">
+            <reaction type="sound" file="sounds/prohra.mp3" />
+            <reaction type="game_lose" />
+        </reaction>
+    </reactions>
+    
+    <events>
+    	<!-- 
+    		Types:
+    		- area (area ID) -- vstup nebo výstup do oblasti
+    		- area_enter (area ID)
+    		- area_leave (area ID)
+    		- variable_decrement
+    		- variable_increment
+    		- variable -- změna hodnoty proměnné
+    		- time (timestamp value) -- nastání času
+    	 -->
+    	<event id="enter_albert" type="area_enter" area="albert" />
+    	<event id="leave_albert" type="area_leave" area="albert" />
+    	<event id="health_change" type="variable" variable="health" />
+    </events>
+
+    <triggers>
+        <!--
+        	Trigger:
+        	- event = id eventu při kterém se vyvolá
+        	- reaction = id reakce kterou spustí za předpokladu že:
+        	- conditions:
+        		- all = všechny vnořené podmínky musí být splněny
+        		- any = jakákoliv podmínka musí být splněná
+        		- none = bezpodmínečně se spustí
+        	- run:
+        		- always = spustí se vždy při výskytu události
+        		- once = spustí se pouze jednou
+        		(- <číslo> = počet spuštění, kolikrát se může spustit - je to někdy potřeba? hm, možná ano) 
+         -->        
+        <trigger event="health_change" reaction="prohra" conditions="ANY">
+        	<condition type="equals" variable="health" value="0" />    
+        </trigger>
+    </triggers>
+    
+</scenario>
