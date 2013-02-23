@@ -1,10 +1,11 @@
-package cz.robyer.gamework;
+package cz.robyer.gamework.activity;
 
+import cz.robyer.gamework.R;
+import cz.robyer.gamework.service.JavaScriptHandler;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.Activity;
-import android.content.Intent;
-import android.net.Uri;
+//import android.content.Intent;
+//import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -14,7 +15,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 @SuppressLint("SetJavaScriptEnabled")
-public class HelpActivity extends Activity {
+public class Help extends BaseActivity {
 
 	WebView webview;
 	

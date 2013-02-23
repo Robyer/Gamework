@@ -1,4 +1,4 @@
-package cz.robyer.gamework;
+package cz.robyer.gamework.service;
 
 import android.app.Activity;
 import android.webkit.JavascriptInterface;

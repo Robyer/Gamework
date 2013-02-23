@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="cz.robyer.gamework.MainActivity"
+            android:name="cz.robyer.gamework.activity.Main"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,9 +23,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="cz.robyer.gamework.HelpActivity"
+            android:name="cz.robyer.gamework.activity.Help"
             android:label="@string/title_activity_help"
-            android:parentActivityName="cz.robyer.gamework.MainActivity" >
+            android:parentActivityName="cz.robyer.gamework.activity.Main" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="cz.robyer.gamework.MainActivity" />

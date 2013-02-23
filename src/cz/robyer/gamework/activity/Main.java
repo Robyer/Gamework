@@ -1,6 +1,6 @@
-package cz.robyer.gamework;
+package cz.robyer.gamework.activity;
 
-import android.app.Activity;
+import cz.robyer.gamework.R;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -8,7 +8,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 
-public class MainActivity extends Activity {
+public class Main extends BaseActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -19,7 +19,7 @@ public class MainActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(MainActivity.this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
+				Toast.makeText(Main.this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
 			}
 			
 		}; 
@@ -32,7 +32,7 @@ public class MainActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(MainActivity.this, HelpActivity.class);
+				Intent intent = new Intent(Main.this, Help.class);
 				startActivity(intent);
 			}
 		});
