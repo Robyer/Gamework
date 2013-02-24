@@ -1,12 +1,17 @@
 package cz.robyer.gamework.activity;
 
-import cz.robyer.gamework.R;
+import java.io.InputStream;
+
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
+import cz.robyer.gamework.R;
+import cz.robyer.gamework.service.ScenarioParser;
+import cz.robyer.gamework.util.Log;
 
 public class Main extends BaseActivity {
 
@@ -16,12 +21,10 @@ public class Main extends BaseActivity {
 		setContentView(R.layout.activity_main);
 		
 		OnClickListener notImplementedListener = new OnClickListener() {
-			
 			@Override
 			public void onClick(View v) {
 				Toast.makeText(Main.this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
 			}
-			
 		}; 
 		
 		((Button)findViewById(R.id.btn_play)).setOnClickListener(notImplementedListener);
@@ -29,11 +32,17 @@ public class Main extends BaseActivity {
 		((Button)findViewById(R.id.btn_options)).setOnClickListener(notImplementedListener);
 		
 		((Button)findViewById(R.id.btn_help)).setOnClickListener(new OnClickListener() {
-			
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(Main.this, Help.class);
 				startActivity(intent);
+			}
+		});
+		
+		((Button)findViewById(R.id.btn_parse)).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				parseScenario("example.xml");
 			}
 		});
 	}
@@ -44,5 +53,18 @@ public class Main extends BaseActivity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}*/
+	
+	private void parseScenario(String filename) {
+		try {
+			ScenarioParser parser = new ScenarioParser();
+			
+			InputStream file = getAssets().open(filename);
+			parser.parse(file);
+			file.close();
+		} catch (Exception e) {
+			Log.e("Main", e.getMessage(), e);
+			throw new RuntimeException(e);
+		}
+	}
 
 }

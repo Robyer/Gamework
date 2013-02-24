@@ -22,13 +22,13 @@
         		- point (lat, long, radius)
         		- multipoint (vnořené pointy (lat,long)) 
          -->
-        <area id="home" type="point" lat="49.1675242N" long="16.5827231E" radius="10m" />
-        <area id="albert" type="point" lat="49.1699164N" long="16.5821031E" radius="10m" />
+        <area id="home" type="point" lat="49.1675242" lon="16.5827231" radius="10" />
+        <area id="albert" type="point" lat="49.1699164" lon="16.5821031" radius="10" />
         <area id="bohunice" type="multipoint">
-            <point lat="49.1699244N" long="16.5750961E" />
-            <point lat="49.1705711N" long="16.5869978E" />
-            <point lat="49.1658472N" long="16.5864353E" />
-            <point lat="49.1647558N" long="16.5754808E" />
+            <point lat="49.1699244" lon="16.5750961" />
+            <point lat="49.1705711" lon="16.5869978" />
+            <point lat="49.1658472" lon="16.5864353" />
+            <point lat="49.1647558" lon="16.5754808" />
         </area>
     </areas>
     
@@ -45,7 +45,7 @@
     <reactions>
         <!--
         	Types:
-        	- sound (path to file) -- a co hlasitost? případně zvuky od frameworku... Gamework:SHOT atd.
+        	- sound (path to file) - a co hlasitost? případně zvuky od frameworku... Gamework:SHOT atd.
         	- vibrate (strength = 1-10)
         	- html (path to file)
         	- ...
@@ -89,13 +89,13 @@
     <hooks>
         <!--
         	Types:
-    		- area (area ID) -- vstup nebo výstup do oblasti
+    		- area (area ID) - vstup nebo výstup do oblasti
     		- area_enter (area ID)
     		- area_leave (area ID)
     		- variable_decrement
     		- variable_increment
-    		- variable -- změna hodnoty proměnné
-    		- time (timestamp value) -- nastání času
+    		- variable - změna hodnoty proměnné
+    		- time (timestamp value) - nastání času
        	 -->
         <hook type="variable" value="health">
             <!-- Trigger:
@@ -120,7 +120,7 @@
         <hook type="area_enter" value="home">
             <!-- návrat domů -->
             <trigger reaction="vyhra" conditions="ALL">
-                <condition type="true" variable="nakoupeno />
+                <condition type="true" variable="nakoupeno" />
             </trigger>
             <trigger reaction="prohra" condition="ALL">
                 <condition type="false" variable="nakoupeno" />
