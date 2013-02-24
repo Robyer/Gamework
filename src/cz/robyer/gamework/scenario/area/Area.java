@@ -1,4 +1,4 @@
-package cz.robyer.gamework.scenario;
+package cz.robyer.gamework.scenario.area;
 
 public abstract class Area {
 	public static final String TYPE_POINT = "point";

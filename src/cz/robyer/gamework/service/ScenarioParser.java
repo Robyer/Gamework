@@ -9,13 +9,15 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.util.Xml;
-import cz.robyer.gamework.scenario.Area;
 import cz.robyer.gamework.scenario.Hook;
-import cz.robyer.gamework.scenario.MultiPointArea;
-import cz.robyer.gamework.scenario.PointArea;
 import cz.robyer.gamework.scenario.Reaction;
 import cz.robyer.gamework.scenario.Scenario;
-import cz.robyer.gamework.scenario.Variable;
+import cz.robyer.gamework.scenario.area.Area;
+import cz.robyer.gamework.scenario.area.MultiPointArea;
+import cz.robyer.gamework.scenario.area.PointArea;
+import cz.robyer.gamework.scenario.variable.BooleanVariable;
+import cz.robyer.gamework.scenario.variable.DecimalVariable;
+import cz.robyer.gamework.scenario.variable.Variable;
 import cz.robyer.gamework.util.Log;
 import cz.robyer.gamework.util.Point;
 
@@ -97,10 +99,54 @@ public class ScenarioParser {
 		return null;
 	}
 
-	private HashMap<String, Variable> readVariables(XmlPullParser parser) {
+	private HashMap<String, Variable> readVariables(XmlPullParser parser) throws XmlPullParserException, IOException {
 		Log.i("ScenarioParser", "Reading variables.");
-		// TODO Auto-generated method stub
-		return null;
+		HashMap<String, Variable> variables = new HashMap<String, Variable>();
+		
+		parser.require(XmlPullParser.START_TAG, ns, "variables");
+		while (parser.next() != XmlPullParser.END_TAG) {
+			if (parser.getEventType() != XmlPullParser.START_TAG) {
+	            continue;
+	        }
+			
+			Variable variable = null;
+	        String name = parser.getName();
+
+	        if (name.equalsIgnoreCase("variable")) {
+	        	parser.require(XmlPullParser.START_TAG, ns, "variable");
+	        	String id = parser.getAttributeValue(null, "id");
+	        	String type = parser.getAttributeValue(null, "type");
+	        	
+	        	if (type.equalsIgnoreCase(Variable.TYPE_BOOLEAN)) {
+	        		String value = parser.getAttributeValue(null, "value");
+	        		
+	        		variable = BooleanVariable.fromString(id, value);
+	        		Log.i(TAG, "Got BooleanVariable.");
+	        		
+	        		parser.nextTag();
+	        	} else if (type.equalsIgnoreCase(Variable.TYPE_DECIMAL)) {
+	        		String value = parser.getAttributeValue(null, "value");
+	        		String min = parser.getAttributeValue(null, "min");
+	        		String max = parser.getAttributeValue(null, "max");
+	        		
+	        		variable = DecimalVariable.fromString(id, value, min, max);
+	        		Log.i(TAG, "Got DecimalVariable.");
+	        		
+	        		parser.nextTag();
+	        	} else {
+	        		Log.e(TAG, "Variable of type '" + type + "' is unknown.");
+	        		skip(parser);
+	        		continue;
+	        	}
+	        	
+	        	variables.put(id, variable);
+	        	parser.require(XmlPullParser.END_TAG, ns, "variable");
+	        } else {
+	        	skip(parser);
+	        }
+	    }
+		
+	    return variables;
 	}
 
 	private HashMap<String, Area> readAreas(XmlPullParser parser) throws XmlPullParserException, IOException {

@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cz.robyer.gamework.scenario.area.Area;
+import cz.robyer.gamework.scenario.variable.Variable;
+
 public class Scenario {
 
 	private String title;

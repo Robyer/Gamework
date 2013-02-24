@@ -1,4 +1,4 @@
-package cz.robyer.gamework.scenario;
+package cz.robyer.gamework.scenario.area;
 
 import java.util.ArrayList;
 import java.util.List;
