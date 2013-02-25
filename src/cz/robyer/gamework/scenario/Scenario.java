@@ -8,6 +8,7 @@ import java.util.Map;
 import android.content.Context;
 
 import cz.robyer.gamework.scenario.area.Area;
+import cz.robyer.gamework.scenario.reaction.MultiReaction;
 import cz.robyer.gamework.scenario.reaction.Reaction;
 import cz.robyer.gamework.scenario.variable.Variable;
 
@@ -100,6 +101,7 @@ public class Scenario {
 			hooks = new ArrayList<Hook>();
 		
 		hooks.add(hook);
+		// TODO: add hook to particular objects
 		hook.setScenario(this);
 	}
 	

@@ -164,11 +164,17 @@ public class ScenarioParser {
     		reaction = new VibrateReaction(id, Integer.parseInt(value));
     	} else if (type.equalsIgnoreCase(Reaction.TYPE_HTML)) {
     		reaction = new HtmlReaction(id, value);
-    	} else if (type.equalsIgnoreCase(Reaction.TYPE_DECREMENT)) {
+    	} else if (type.equalsIgnoreCase(Reaction.TYPE_VAR_DEC)) {
     		reaction = new VariableReaction(id, VariableReaction.DECREMENT, variable, value);
-    	} else if (type.equalsIgnoreCase(Reaction.TYPE_INCREMENT)) {
+    	} else if (type.equalsIgnoreCase(Reaction.TYPE_VAR_DIV)) {
+    		reaction = new VariableReaction(id, VariableReaction.DIVIDE, variable, value);
+    	} else if (type.equalsIgnoreCase(Reaction.TYPE_VAR_INC)) {
     		reaction = new VariableReaction(id, VariableReaction.INCREMENT, variable, value);
-    	} else if (type.equalsIgnoreCase(Reaction.TYPE_SET)) {
+    	} else if (type.equalsIgnoreCase(Reaction.TYPE_VAR_MUL)) {
+    		reaction = new VariableReaction(id, VariableReaction.MULTIPLY, variable, value);
+    	} else if (type.equalsIgnoreCase(Reaction.TYPE_VAR_NEG)) {
+    		reaction = new VariableReaction(id, VariableReaction.NEGATE, variable, value);
+    	} else if (type.equalsIgnoreCase(Reaction.TYPE_VAR_SET)) {
     		reaction = new VariableReaction(id, VariableReaction.SET, variable, value);
     	} else if (type.equalsIgnoreCase(Reaction.TYPE_GAME_START)) {
     		reaction = new GameReaction(id, GameReaction.START);

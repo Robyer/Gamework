@@ -17,10 +17,17 @@ public abstract class BaseObject {
 	}
 	
 	public Context getContext() {
-		if (!isAttached())
+		if (context == null)
 			throw new RuntimeException("BaseObject '" + this + "' is not attached to any Scenario.");
 			
 		return context;
+	}
+	
+	public Scenario getScenario() {
+		if (scenario == null)
+			throw new RuntimeException("BaseObject '" + this + "' is not attached to any Scenario.");
+			
+		return scenario;
 	}
 	
 }

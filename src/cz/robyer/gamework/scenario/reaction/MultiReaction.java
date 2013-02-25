@@ -3,12 +3,22 @@ package cz.robyer.gamework.scenario.reaction;
 import java.util.ArrayList;
 import java.util.List;
 
+import cz.robyer.gamework.scenario.Scenario;
+
 public class MultiReaction extends Reaction {
 
 	protected List<Reaction> reactions;
 	
 	public MultiReaction(String id) {
 		super(id);
+	}
+	
+	public void setScenario(Scenario scenario) {
+		super.setScenario(scenario);
+	
+		for (Reaction r : reactions) {
+			r.setScenario(scenario);
+		}
 	}
 		
 	public void addReaction(Reaction reaction) {

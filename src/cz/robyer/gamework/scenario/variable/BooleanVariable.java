@@ -1,5 +1,7 @@
 package cz.robyer.gamework.scenario.variable;
 
+import cz.robyer.gamework.scenario.reaction.VariableReaction;
+
 public class BooleanVariable extends Variable {
 	protected boolean value;
 	
@@ -18,5 +20,23 @@ public class BooleanVariable extends Variable {
 	
 	public boolean getValue() {
 		return value;
+	}
+	
+	public void modify(int type, String s) {
+		boolean value = Boolean.parseBoolean(s);
+		
+		switch (type) {
+		case VariableReaction.SET:
+			this.value = value;
+			break;
+		case VariableReaction.NEGATE:
+			this.value = !this.value;
+			break;
+		default:
+			// TODO: not supported exception
+			break;
+		}
+		
+		callHooks(); // TODO: call hooks
 	}
 }

@@ -15,10 +15,8 @@ public class VibrateReaction extends Reaction {
 
 	@Override
 	public void action() {
-		if (isAttached()) {
-			Vibrator v = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
-			v.vibrate(value);
-		}
+		Vibrator v = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
+		v.vibrate(value);
 	}
 
 }

@@ -2,6 +2,8 @@ package cz.robyer.gamework.scenario.variable;
 
 import java.security.InvalidParameterException;
 
+import cz.robyer.gamework.scenario.reaction.VariableReaction;
+
 public class DecimalVariable extends Variable {
 	protected int value;
 	protected int min = 0;
@@ -50,24 +52,33 @@ public class DecimalVariable extends Variable {
 			value = Math.min(Math.max(value, min), max);
 		}
 	}
-
-	public void incrementValue(int amount) { //addValue
-		value += amount;
-		checkLimit();
-	}
-
-	public void decrementValue(int amount) { //subtractValue
-		value -= amount;
-		checkLimit();
-	}
 	
-	public void multiplyValue(int amount) {
-		value *= amount;
+	public void modify(int type, String s) {
+		int value = Integer.parseInt(s);
+		
+		switch (type) {
+		case VariableReaction.SET:
+			this.value = value;
+			break;
+		case VariableReaction.INCREMENT:
+			this.value += value;
+			break;
+		case VariableReaction.DECREMENT:
+			this.value -= value;
+			break;
+		case VariableReaction.MULTIPLY:
+			this.value *= value;
+			break;
+		case VariableReaction.DIVIDE:
+			this.value /= value;
+			break;
+		default:
+			// TODO: not supported exception
+			break;
+		}
+		
 		checkLimit();
+		callHooks(); // TODO: call hooks
 	}
-	
-	public void divideValue(int amount) {
-		value /= amount;
-		checkLimit();
-	}
+
 }
