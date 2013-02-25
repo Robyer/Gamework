@@ -3,9 +3,9 @@ package cz.robyer.gamework.scenario.variable;
 import java.security.InvalidParameterException;
 
 public class DecimalVariable extends Variable {
-	private int value;
-	private int min = 0;
-	private int max = 0;
+	protected int value;
+	protected int min = 0;
+	protected int max = 0;
 
 	public DecimalVariable(String id, int value) {
 		super(id);
@@ -14,7 +14,7 @@ public class DecimalVariable extends Variable {
 	
 	public DecimalVariable(String id, int value, int min, int max) {
 		this(id, value);
-		this.setLimit(min, max);
+		setLimit(min, max);
 	}
 
 	public static DecimalVariable fromString(String id, String value) {
@@ -37,7 +37,7 @@ public class DecimalVariable extends Variable {
 	
 	public void setLimit(int min, int max) {
 		if (min > max)
-			throw new InvalidParameterException("Minimum value can't be greater than maximum value.");
+			throw new InvalidParameterException("Minimum value must be lower than maximum value.");
 		
 		this.min = min;
 		this.max = max;

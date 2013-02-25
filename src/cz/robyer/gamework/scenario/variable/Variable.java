@@ -1,17 +1,13 @@
 package cz.robyer.gamework.scenario.variable;
 
-public abstract class Variable {
+import cz.robyer.gamework.scenario.IdentificableObject;
+
+public abstract class Variable extends IdentificableObject {
 	public static final String TYPE_BOOLEAN = "boolean";
 	public static final String TYPE_DECIMAL = "decimal";
-	
-	private String id;
 
 	public Variable(String id) {
-		this.id = id;
-	}
-	
-	public String getId() {
-		return id;
+		super(id);
 	}
 	
 }

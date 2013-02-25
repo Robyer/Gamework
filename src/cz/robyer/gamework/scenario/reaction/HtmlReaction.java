@@ -1,7 +1,7 @@
 package cz.robyer.gamework.scenario.reaction;
 
 public class HtmlReaction extends Reaction {
-	private String value;
+	protected String value;
 	
 	public HtmlReaction(String id, String value) {
 		super(id);

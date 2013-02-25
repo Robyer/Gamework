@@ -54,7 +54,7 @@
         	- set
         	- ...
         	- game_start
-        	- game_win
+        	- game_won
         	- game_lose
          -->
         <reaction id="zvuk1" type="sound" value="sounds/zvuk1.mp3" />
@@ -74,7 +74,7 @@
         
         <reaction id="vyhra" type="multi">
             <reaction type="sound" value="sounds/vyhra.mp3" />
-            <reaction type="game_win" />
+            <reaction type="game_won" />
         </reaction>
         <reaction id="prohra" type="multi">
             <reaction type="sound" value="sounds/prohra.mp3" />

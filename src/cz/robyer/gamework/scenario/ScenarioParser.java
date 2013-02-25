@@ -1,17 +1,13 @@
-package cz.robyer.gamework.service;
+package cz.robyer.gamework.scenario;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.content.Context;
 import android.util.Xml;
-import cz.robyer.gamework.scenario.Hook;
-import cz.robyer.gamework.scenario.Scenario;
 import cz.robyer.gamework.scenario.area.Area;
 import cz.robyer.gamework.scenario.area.MultiPointArea;
 import cz.robyer.gamework.scenario.area.PointArea;
@@ -30,53 +26,58 @@ import cz.robyer.gamework.util.Point;
 
 public class ScenarioParser {
 	private static final String TAG = ScenarioParser.class.getSimpleName();
+    private static final String ns = null; // We don't use namespaces
+    
+    private Context context;
+    private XmlPullParser parser;
+    private Scenario scenario;
+    
+    public ScenarioParser(Context context, boolean namespaces) throws XmlPullParserException {
+    	this.context = context;
+    	this.parser = Xml.newPullParser();
+    	this.parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, namespaces);
+    }
 	
-	// We don't use namespaces
-    private static final String ns = null;
-	
-	public Scenario parse(Context context, InputStream input) throws XmlPullParserException, IOException {
-		XmlPullParser parser = Xml.newPullParser();
-	    parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-	    parser.setInput(input, null);
+	public Scenario parse(InputStream input, boolean aboutOnly) throws XmlPullParserException, IOException {
+	    scenario = null;
+		
+		parser.setInput(input, null);
 	    parser.nextTag();
-	    
-	    return readFeed(context, parser);
-	}
-	
-	private Scenario readFeed(Context context, XmlPullParser parser) throws XmlPullParserException, IOException {
-	    Scenario scenario = null;
-	    
 	    parser.require(XmlPullParser.START_TAG, ns, "scenario");
+	    
 	    while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {
 	            continue;
 	        }
 	        String name = parser.getName();
-	        // Starts by looking for the entry tag
+
 	        if (scenario == null) {
 	        	if (name.equalsIgnoreCase("about")) {
-	        		scenario = readAbout(context, parser);
+	        		readScenario();
 	        	} else {
 	        		throw new IllegalStateException("First child in <scenario> must be <about>.");
 	        	}
+	        	
+	        	if (aboutOnly)
+	        		break;
 	        } else {
 		        if (name.equalsIgnoreCase("areas"))
-		        	scenario.setAreas(readAreas(parser));
+		        	readAreas();
 		    	else if (name.equalsIgnoreCase("variables"))
-		    		scenario.setVariables(readVariables(parser));
+		    		readVariables();
 				else if (name.equalsIgnoreCase("reactions"))
-			    	scenario.setReactions(readReactions(parser));
+			    	readReactions();
 				else if (name.equalsIgnoreCase("hooks"))
-					scenario.setHooks(readHooks(parser));
+					readHooks();
 		        else
-		            skip(parser);
+		            skip();
 	    	}
 	    }
 	    
 	    return scenario;
 	}
 	
-	private void skip(XmlPullParser parser) throws XmlPullParserException, IOException {
+	private void skip() throws XmlPullParserException, IOException {
 	    Log.i(TAG, "Skipping unknown child.");
 		if (parser.getEventType() != XmlPullParser.START_TAG) {
 	        throw new IllegalStateException();
@@ -94,16 +95,13 @@ public class ScenarioParser {
 	    }
 	}
 
-	private ArrayList<Hook> readHooks(XmlPullParser parser) {
+	private void readHooks() {
 		Log.i("ScenarioParser", "Reading hooks");
 		// TODO Auto-generated method stub
-		return null;
 	}
 
-	private HashMap<String, Reaction> readReactions(XmlPullParser parser) throws XmlPullParserException, IOException {
+	private void readReactions() throws XmlPullParserException, IOException {
 		Log.i("ScenarioParser", "Reading reactions.");
-		
-		HashMap<String, Reaction> reactions = new HashMap<String, Reaction>();
 		
 		parser.require(XmlPullParser.START_TAG, ns, "reactions");
 		while (parser.next() != XmlPullParser.END_TAG) {
@@ -129,30 +127,28 @@ public class ScenarioParser {
 	        	            continue;
 	        	        }
 	        			
-	        			if (parser.getName().equalsIgnoreCase("reaction")) {			
-	        				Reaction innerReaction = readReaction(parser, "");
-		        			((MultiReaction)reaction).addReaction(innerReaction);
+	        			if (parser.getName().equalsIgnoreCase("reaction")) {
+		        			((MultiReaction)reaction).addReaction(readReaction(""));
 	        			} else {
 	        				Log.e(TAG, "Expected <reaction>, got <" + parser.getName() + ">.");
-	        				skip(parser);
+	        				skip();
 	        			}
 	        		}
 	        		
 	        	} else {
-	        		reaction = readReaction(parser, id);
+	        		reaction = readReaction(id);
 	        	}
 
-	        	reactions.put(id, reaction);
+	        	scenario.addReaction(id, reaction);
+	        	
 	        	parser.require(XmlPullParser.END_TAG, ns, "reaction");
 	        } else {
-	        	skip(parser);
+	        	skip();
 	        }
 	    }
-		
-	    return reactions;
 	}
 
-	private Reaction readReaction(XmlPullParser parser, String id) throws XmlPullParserException, IOException {
+	private Reaction readReaction(String id) throws XmlPullParserException, IOException {
 		Reaction reaction = null;
 		parser.require(XmlPullParser.START_TAG, ns, "reaction");
 		
@@ -176,13 +172,13 @@ public class ScenarioParser {
     		reaction = new VariableReaction(id, VariableReaction.SET, variable, value);
     	} else if (type.equalsIgnoreCase(Reaction.TYPE_GAME_START)) {
     		reaction = new GameReaction(id, GameReaction.START);
-    	} else if (type.equalsIgnoreCase(Reaction.TYPE_GAME_WIN)) {
-    		reaction = new GameReaction(id, GameReaction.WIN);
+    	} else if (type.equalsIgnoreCase(Reaction.TYPE_GAME_WON)) {
+    		reaction = new GameReaction(id, GameReaction.WON);
     	} else if (type.equalsIgnoreCase(Reaction.TYPE_GAME_LOSE)) {
     		reaction = new GameReaction(id, GameReaction.LOSE);
     	} else {
     		Log.e(TAG, "Reaction of type '" + type + "' is unknown.");
-    		skip(parser);
+    		skip();
     		return null;
     	}
     		
@@ -192,9 +188,8 @@ public class ScenarioParser {
     	return reaction;
 	}
 
-	private HashMap<String, Variable> readVariables(XmlPullParser parser) throws XmlPullParserException, IOException {
+	private void readVariables() throws XmlPullParserException, IOException {
 		Log.i("ScenarioParser", "Reading variables.");
-		HashMap<String, Variable> variables = new HashMap<String, Variable>();
 		
 		parser.require(XmlPullParser.START_TAG, ns, "variables");
 		while (parser.next() != XmlPullParser.END_TAG) {
@@ -228,24 +223,21 @@ public class ScenarioParser {
 	        		parser.nextTag();
 	        	} else {
 	        		Log.e(TAG, "Variable of type '" + type + "' is unknown.");
-	        		skip(parser);
+	        		skip();
 	        		continue;
 	        	}
 	        	
-	        	variables.put(id, variable);
+	        	scenario.addVariable(id, variable);
+	        	
 	        	parser.require(XmlPullParser.END_TAG, ns, "variable");
 	        } else {
-	        	skip(parser);
+	        	skip();
 	        }
 	    }
-		
-	    return variables;
 	}
 
-	private HashMap<String, Area> readAreas(XmlPullParser parser) throws XmlPullParserException, IOException {
+	private void readAreas() throws XmlPullParserException, IOException {
 		Log.i("ScenarioParser", "Reading areas.");
-		
-		HashMap<String, Area> areas = new HashMap<String, Area>();
 		
 		parser.require(XmlPullParser.START_TAG, ns, "areas");
 		while (parser.next() != XmlPullParser.END_TAG) {
@@ -290,27 +282,26 @@ public class ScenarioParser {
 			        		parser.nextTag();
 	        			} else {
 	        				Log.e(TAG, "Expected <point>, got <" + parser.getName() + ">.");
-	        				skip(parser);
+	        				skip();
 	        			}
 	        		}
 	        		
 	        	} else {
 	        		Log.e(TAG, "Area of type '" + type + "' is unknown.");
-	        		skip(parser);
+	        		skip();
 	        		continue;
 	        	}
 	        	
-	        	areas.put(id, area);
+	        	scenario.addArea(id, area);
+	        	
 	        	parser.require(XmlPullParser.END_TAG, ns, "area");
 	        } else {
-	        	skip(parser);
+	        	skip();
 	        }
 	    }
-		
-	    return areas;
 	}
 
-	private Scenario readAbout(Context context, XmlPullParser parser) throws XmlPullParserException, IOException {
+	private void readScenario() throws XmlPullParserException, IOException {
 		Log.i(TAG, "Reading about.");
 		
 		parser.require(XmlPullParser.START_TAG, ns, "about");
@@ -328,26 +319,26 @@ public class ScenarioParser {
 	        }
 	        String name = parser.getName();
 	        if (name.equals("title")) {
-	            title = readText(parser, "title");
+	            title = readText("title");
 	        } else if (name.equals("author")) {
-	        	author = readText(parser, "author");
+	        	author = readText("author");
 	        } else if (name.equals("version")) {
-	        	version = readText(parser, "version");
+	        	version = readText("version");
 	        } else if (name.equals("location")) {
-	        	location = readText(parser, "location");
+	        	location = readText("location");
 	        } else if (name.equals("duration")) {
-	        	duration = readText(parser, "duration");
+	        	duration = readText("duration");
 	        } else if (name.equals("difficulty")) {
-	        	difficulty = readText(parser, "difficulty");
+	        	difficulty = readText("difficulty");
 	        } else {
-	            skip(parser);
+	            skip();
 	        }
 	    }
 		
-	    return new Scenario(context, title, author, version, location, duration, difficulty);
+	    scenario = new Scenario(context, title, author, version, location, duration, difficulty);
 	}
 	
-	private String readText(XmlPullParser parser, String tag) throws IOException, XmlPullParserException {
+	private String readText(String tag) throws IOException, XmlPullParserException {
 	    parser.require(XmlPullParser.START_TAG, ns, tag);
 		
 		String result = "";

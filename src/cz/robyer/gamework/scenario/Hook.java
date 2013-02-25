@@ -1,6 +1,6 @@
 package cz.robyer.gamework.scenario;
 
-public class Hook {
+public class Hook extends BaseObject {
 	private String id;
 
 	public Hook(String id) {

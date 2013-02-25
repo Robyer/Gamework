@@ -12,19 +12,23 @@ import cz.robyer.gamework.scenario.reaction.Reaction;
 import cz.robyer.gamework.scenario.variable.Variable;
 
 public class Scenario {
-	private Context context;
+	protected Context context;
 	
-	private String title;
-	private String author;
-	private String version;
-	private String location;
-	private String duration;
-	private String difficulty;
+	protected String title;
+	protected String author;
+	protected String version;
+	protected String location;
+	protected String duration;
+	protected String difficulty;
 	
-	private Map<String, Area> areas;// = new HashMap<String, Area>();
-	private Map<String, Variable> variables;// = new HashMap<String, Variable>();
-	private Map<String, Reaction> reactions;// = new HashMap<String, Reaction>();
-	private List<Hook> hooks;// = new ArrayList<Hook>();
+	protected Map<String, Area> areas;// = new HashMap<String, Area>();
+	protected Map<String, Variable> variables;// = new HashMap<String, Variable>();
+	protected Map<String, Reaction> reactions;// = new HashMap<String, Reaction>();
+	protected List<Hook> hooks;// = new ArrayList<Hook>();
+	
+	public Scenario(Context context) {
+		this.context = context;
+	}
 	
 	public Scenario(Context context, String title, String author, String version, String location, String duration, String difficulty) {
 		this.context = context;
@@ -35,30 +39,71 @@ public class Scenario {
 		this.duration = duration;
 		this.difficulty = difficulty;
 	}
-	
-	/* Getters, setters */
-	
+		
 	public Context getContext() {
 		return context;
 	}
 	
-	// TODO: pozor na pøipojení scenario do dìtí (pokud se pøedávají všechny najednou tak asi pøipojené nejsou...
-	public void setAreas(HashMap<String, Area> areas) {
-		this.areas = areas;
+	public void addArea(String id, Area area) {
+		if (areas == null)
+			areas = new HashMap<String, Area>();
+		
+		areas.put(id, area);
+		area.setScenario(this);
 	}
 	
-	public void setVariables(HashMap<String, Variable> variables) {
-		this.variables = variables;
+	public void addArea(Area area) {
+		addArea(area.getId(), area);
 	}
 	
-	public void setReactions(HashMap<String, Reaction> reactions) {
-		this.reactions = reactions;
+	public Area getArea(String id) {
+		return areas.get(id);
 	}
 	
-	public void setHooks(ArrayList<Hook> hooks) {
-		this.hooks = hooks;
+	
+	public void addVariable(String id, Variable variable) {
+		if (variables == null)
+			variables = new HashMap<String, Variable>();
+		
+		variables.put(id, variable);
+		variable.setScenario(this);
 	}
 	
+	public void addVariable(Variable variable) {
+		addVariable(variable.getId(), variable);
+	}
+	
+	public Variable getVariable(String id) {
+		return variables.get(id);
+	}
+	
+		
+	public void addReaction(String id, Reaction reaction) {
+		if (reactions == null)
+			reactions = new HashMap<String, Reaction>();
+		
+		reactions.put(id, reaction);
+		reaction.setScenario(this);
+	}
+	
+	public void addReaction(Reaction reaction) {
+		addReaction(reaction.getId(), reaction);
+	}
+	
+	public Reaction getReaction(String id) {
+		return reactions.get(id);
+	}
+	
+	
+	public void addHook(Hook hook) {
+		if (hooks == null)
+			hooks = new ArrayList<Hook>();
+		
+		hooks.add(hook);
+		hook.setScenario(this);
+	}
+	
+	/* basic information getters/setters */
 
 	public String getTitle() {
 		return title;

@@ -1,9 +1,8 @@
 package cz.robyer.gamework.scenario.reaction;
 
-import android.content.Context;
-import cz.robyer.gamework.scenario.Scenario;
+import cz.robyer.gamework.scenario.IdentificableObject;
 
-public abstract class Reaction {
+public abstract class Reaction extends IdentificableObject {
 	public static final String TYPE_MULTI = "multi";
 	// Standard handling
 	public static final String TYPE_SOUND = "sound";
@@ -15,31 +14,11 @@ public abstract class Reaction {
 	public static final String TYPE_SET = "set";
 	// Game events handling
 	public static final String TYPE_GAME_START = "game_start";
-	public static final String TYPE_GAME_WIN = "game_win";
+	public static final String TYPE_GAME_WON = "game_won";
 	public static final String TYPE_GAME_LOSE = "game_lose";
 	
-	protected String id;
-	protected Scenario scenario;
-	protected Context context;
-
 	public Reaction(String id) {
-		// TODO: remove this method as Scenario parameter is required
-		this.id = id;
-	}
-	
-	public Reaction(Scenario scenario, String id) {
-		this.scenario = scenario;
-		this.context = scenario.getContext();
-		this.id = id;
-	}
-	
-	public String getId() {
-		return id;
-	}
-	
-	public void setScenario(Scenario scenario) {
-		this.scenario = scenario;
-		this.context = scenario.getContext();
+		super(id);
 	}
 	
 	public abstract void action();

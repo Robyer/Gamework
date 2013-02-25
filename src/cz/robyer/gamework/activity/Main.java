@@ -3,7 +3,6 @@ package cz.robyer.gamework.activity;
 import java.io.InputStream;
 
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -11,10 +10,8 @@ import android.widget.Button;
 import android.widget.Toast;
 import cz.robyer.gamework.R;
 import cz.robyer.gamework.scenario.Scenario;
-import cz.robyer.gamework.scenario.reaction.Reaction;
-import cz.robyer.gamework.scenario.reaction.SoundReaction;
+import cz.robyer.gamework.scenario.ScenarioParser;
 import cz.robyer.gamework.scenario.reaction.VibrateReaction;
-import cz.robyer.gamework.service.ScenarioParser;
 import cz.robyer.gamework.util.Log;
 
 public class Main extends BaseActivity {
@@ -35,10 +32,11 @@ public class Main extends BaseActivity {
 			
 			@Override
 			public void onClick(View v) {
-				Scenario scenario = new Scenario(getApplicationContext(), "", "", "", "", "", "");
-				Reaction reaction = new VibrateReaction("", 500);
-				reaction.setScenario(scenario);
-				reaction.action();
+				Scenario scenario = new Scenario(getApplicationContext());
+				
+				String id = "testvibr";
+				scenario.addReaction(new VibrateReaction(id, 500));
+				scenario.getReaction(id).action();
 			}
 		});
 		((Button)findViewById(R.id.btn_scenarios)).setOnClickListener(notImplementedListener);
@@ -69,10 +67,10 @@ public class Main extends BaseActivity {
 	
 	private void parseScenario(String filename) {
 		try {
-			ScenarioParser parser = new ScenarioParser();
+			ScenarioParser parser = new ScenarioParser(getApplicationContext(), false);
 			
 			InputStream file = getAssets().open(filename);
-			parser.parse(this.getApplicationContext(), file);
+			parser.parse(file, false);
 			file.close();
 		} catch (Exception e) {
 			Log.e("Main", e.getMessage(), e);

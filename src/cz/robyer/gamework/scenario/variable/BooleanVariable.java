@@ -1,7 +1,7 @@
 package cz.robyer.gamework.scenario.variable;
 
 public class BooleanVariable extends Variable {
-	private boolean value;
+	protected boolean value;
 	
 	public BooleanVariable(String id, boolean value) {
 		super(id);

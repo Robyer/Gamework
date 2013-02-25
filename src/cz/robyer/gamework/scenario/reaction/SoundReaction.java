@@ -1,7 +1,7 @@
 package cz.robyer.gamework.scenario.reaction;
 
 public class SoundReaction extends Reaction {
-	private String value;
+	protected String value;
 	
 	public SoundReaction(String id, String value) {
 		super(id);
