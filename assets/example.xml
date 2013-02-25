@@ -58,7 +58,9 @@
         	- game_lose
          -->
         <reaction id="zvuk1" type="sound" value="sounds/zvuk1.mp3" />
-        <reaction id="vibrace1" type="vibrate" value="5" />
+        <reaction id="vibrace1" type="vibrate" value="100" />
+        <reaction id="vibrace2" type="vibrate" value="500" />
+        <reaction id="vibrace3" type="vibrate" value="800" />
         <reaction id="html_index" type="html" value="html/index.html" />    
         
         <reaction id="zraneni" type="multi">

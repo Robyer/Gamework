@@ -10,7 +10,7 @@ public class VibrateReaction extends Reaction {
 	
 	public VibrateReaction(String id, int value) {
 		super(id);
-		this.value = Math.min(Math.max(value, 1), 5000); // TODO: make limit as constant
+		this.value = Math.min(Math.max(value, 1), 5000); // TODO: make limit as constant?
 	}
 
 	@Override

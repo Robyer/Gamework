@@ -15,7 +15,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 @SuppressLint("SetJavaScriptEnabled")
-public class Help extends BaseActivity {
+public class HelpActivity extends BaseActivity {
 
 	WebView webview;
 	
