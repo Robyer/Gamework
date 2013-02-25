@@ -12,6 +12,7 @@ public class PointArea extends Area {
 		this.radius = radius;
 	}
 
+	@Override
 	public boolean isPointInArea(double lat, double lon) {
 		// TODO implement it
 		return false;

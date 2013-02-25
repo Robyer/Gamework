@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import cz.robyer.gamework.scenario.area.Area;
+import cz.robyer.gamework.scenario.reaction.Reaction;
 import cz.robyer.gamework.scenario.variable.Variable;
 
 public class Scenario {

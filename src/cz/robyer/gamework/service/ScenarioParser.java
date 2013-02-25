@@ -10,11 +10,17 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import android.util.Xml;
 import cz.robyer.gamework.scenario.Hook;
-import cz.robyer.gamework.scenario.Reaction;
 import cz.robyer.gamework.scenario.Scenario;
 import cz.robyer.gamework.scenario.area.Area;
 import cz.robyer.gamework.scenario.area.MultiPointArea;
 import cz.robyer.gamework.scenario.area.PointArea;
+import cz.robyer.gamework.scenario.reaction.GameReaction;
+import cz.robyer.gamework.scenario.reaction.HtmlReaction;
+import cz.robyer.gamework.scenario.reaction.MultiReaction;
+import cz.robyer.gamework.scenario.reaction.Reaction;
+import cz.robyer.gamework.scenario.reaction.SoundReaction;
+import cz.robyer.gamework.scenario.reaction.VariableReaction;
+import cz.robyer.gamework.scenario.reaction.VibrateReaction;
 import cz.robyer.gamework.scenario.variable.BooleanVariable;
 import cz.robyer.gamework.scenario.variable.DecimalVariable;
 import cz.robyer.gamework.scenario.variable.Variable;
@@ -93,10 +99,96 @@ public class ScenarioParser {
 		return null;
 	}
 
-	private HashMap<String, Reaction> readReactions(XmlPullParser parser) {
+	private HashMap<String, Reaction> readReactions(XmlPullParser parser) throws XmlPullParserException, IOException {
 		Log.i("ScenarioParser", "Reading reactions.");
-		// TODO Auto-generated method stub
-		return null;
+		
+		HashMap<String, Reaction> reactions = new HashMap<String, Reaction>();
+		
+		parser.require(XmlPullParser.START_TAG, ns, "reactions");
+		while (parser.next() != XmlPullParser.END_TAG) {
+			if (parser.getEventType() != XmlPullParser.START_TAG) {
+	            continue;
+	        }
+			
+			Reaction reaction = null;
+	        String name = parser.getName();
+
+	        if (name.equalsIgnoreCase("reaction")) {
+	        	parser.require(XmlPullParser.START_TAG, ns, "reaction");
+	        	String id = parser.getAttributeValue(null, "id");
+	        	String type = parser.getAttributeValue(null, "type");
+	        	
+	        	if (type.equalsIgnoreCase(Reaction.TYPE_MULTI)) {
+	        		Log.i(TAG, "Got MultiReaction id='" + id + "'.");
+	        		
+	        		reaction = new MultiReaction(id);
+	        		
+	        		while (parser.next() != XmlPullParser.END_TAG) {
+	        			if (parser.getEventType() != XmlPullParser.START_TAG) {
+	        	            continue;
+	        	        }
+	        			
+	        			if (parser.getName().equalsIgnoreCase("reaction")) {			
+	        				Reaction innerReaction = readReaction(parser, "");
+		        			((MultiReaction)reaction).addReaction(innerReaction);
+	        			} else {
+	        				Log.e(TAG, "Expected <reaction>, got <" + parser.getName() + ">.");
+	        				skip(parser);
+	        			}
+	        		}
+	        		
+	        	} else {
+	        		reaction = readReaction(parser, id);
+	        	}
+
+	        	reactions.put(id, reaction);
+	        	parser.require(XmlPullParser.END_TAG, ns, "reaction");
+	        } else {
+	        	skip(parser);
+	        }
+	    }
+		
+	    return reactions;
+	}
+
+	private Reaction readReaction(XmlPullParser parser, String id) throws XmlPullParserException, IOException {
+		Reaction reaction = null;
+		parser.require(XmlPullParser.START_TAG, ns, "reaction");
+		
+		String type = parser.getAttributeValue(null, "type");
+		String value = parser.getAttributeValue(null, "value"); // null for game reactions
+		String variable = parser.getAttributeValue(null, "variable"); // only for variable reactions, null otherwise
+		
+		Log.i(TAG, "Got Reaction id='" + id + "' type='" + type + "'.");
+		
+		if (type.equalsIgnoreCase(Reaction.TYPE_SOUND)) {
+			reaction = new SoundReaction(id, value);
+    	} else if (type.equalsIgnoreCase(Reaction.TYPE_VIBRATE)) {
+    		reaction = new VibrateReaction(id, Integer.parseInt(value));
+    	} else if (type.equalsIgnoreCase(Reaction.TYPE_HTML)) {
+    		reaction = new HtmlReaction(id, value);
+    	} else if (type.equalsIgnoreCase(Reaction.TYPE_DECREMENT)) {
+    		reaction = new VariableReaction(id, VariableReaction.DECREMENT, variable, value);
+    	} else if (type.equalsIgnoreCase(Reaction.TYPE_INCREMENT)) {
+    		reaction = new VariableReaction(id, VariableReaction.INCREMENT, variable, value);
+    	} else if (type.equalsIgnoreCase(Reaction.TYPE_SET)) {
+    		reaction = new VariableReaction(id, VariableReaction.SET, variable, value);
+    	} else if (type.equalsIgnoreCase(Reaction.TYPE_GAME_START)) {
+    		reaction = new GameReaction(id, GameReaction.START);
+    	} else if (type.equalsIgnoreCase(Reaction.TYPE_GAME_WIN)) {
+    		reaction = new GameReaction(id, GameReaction.WIN);
+    	} else if (type.equalsIgnoreCase(Reaction.TYPE_GAME_LOSE)) {
+    		reaction = new GameReaction(id, GameReaction.LOSE);
+    	} else {
+    		Log.e(TAG, "Reaction of type '" + type + "' is unknown.");
+    		skip(parser);
+    		return null;
+    	}
+    		
+		parser.nextTag();
+
+    	parser.require(XmlPullParser.END_TAG, ns, "reaction");
+    	return reaction;
 	}
 
 	private HashMap<String, Variable> readVariables(XmlPullParser parser) throws XmlPullParserException, IOException {

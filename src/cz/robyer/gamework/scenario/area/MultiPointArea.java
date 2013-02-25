@@ -18,13 +18,15 @@ public class MultiPointArea extends Area {
 		this.points = points;
 	}
 
+	@Override
 	public boolean isPointInArea(double lat, double lon) {
 		// TODO implement it
 		return false;
 	}
 
 	public void addPoint(Point point) {
-		this.points.add(point);
+		if (point != null)
+			this.points.add(point);
 	}
 	
 }
