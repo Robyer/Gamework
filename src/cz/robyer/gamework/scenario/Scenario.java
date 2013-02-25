@@ -5,12 +5,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.content.Context;
+
 import cz.robyer.gamework.scenario.area.Area;
 import cz.robyer.gamework.scenario.reaction.Reaction;
 import cz.robyer.gamework.scenario.variable.Variable;
 
 public class Scenario {
-
+	private Context context;
+	
 	private String title;
 	private String author;
 	private String version;
@@ -23,7 +26,8 @@ public class Scenario {
 	private Map<String, Reaction> reactions;// = new HashMap<String, Reaction>();
 	private List<Hook> hooks;// = new ArrayList<Hook>();
 	
-	public Scenario(String title, String author, String version, String location, String duration, String difficulty) {
+	public Scenario(Context context, String title, String author, String version, String location, String duration, String difficulty) {
+		this.context = context;
 		this.title = title;
 		this.author = author;
 		this.version = version;
@@ -34,6 +38,11 @@ public class Scenario {
 	
 	/* Getters, setters */
 	
+	public Context getContext() {
+		return context;
+	}
+	
+	// TODO: pozor na pøipojení scenario do dìtí (pokud se pøedávají všechny najednou tak asi pøipojené nejsou...
 	public void setAreas(HashMap<String, Area> areas) {
 		this.areas = areas;
 	}

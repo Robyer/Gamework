@@ -10,6 +10,10 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 import cz.robyer.gamework.R;
+import cz.robyer.gamework.scenario.Scenario;
+import cz.robyer.gamework.scenario.reaction.Reaction;
+import cz.robyer.gamework.scenario.reaction.SoundReaction;
+import cz.robyer.gamework.scenario.reaction.VibrateReaction;
 import cz.robyer.gamework.service.ScenarioParser;
 import cz.robyer.gamework.util.Log;
 
@@ -27,7 +31,16 @@ public class Main extends BaseActivity {
 			}
 		}; 
 		
-		((Button)findViewById(R.id.btn_play)).setOnClickListener(notImplementedListener);
+		((Button)findViewById(R.id.btn_play)).setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Scenario scenario = new Scenario(getApplicationContext(), "", "", "", "", "", "");
+				Reaction reaction = new VibrateReaction("", 500);
+				reaction.setScenario(scenario);
+				reaction.action();
+			}
+		});
 		((Button)findViewById(R.id.btn_scenarios)).setOnClickListener(notImplementedListener);
 		((Button)findViewById(R.id.btn_options)).setOnClickListener(notImplementedListener);
 		
@@ -59,7 +72,7 @@ public class Main extends BaseActivity {
 			ScenarioParser parser = new ScenarioParser();
 			
 			InputStream file = getAssets().open(filename);
-			parser.parse(file);
+			parser.parse(this.getApplicationContext(), file);
 			file.close();
 		} catch (Exception e) {
 			Log.e("Main", e.getMessage(), e);

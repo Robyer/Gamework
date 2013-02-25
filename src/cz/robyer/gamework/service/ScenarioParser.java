@@ -8,6 +8,7 @@ import java.util.HashMap;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.content.Context;
 import android.util.Xml;
 import cz.robyer.gamework.scenario.Hook;
 import cz.robyer.gamework.scenario.Scenario;
@@ -33,16 +34,16 @@ public class ScenarioParser {
 	// We don't use namespaces
     private static final String ns = null;
 	
-	public Scenario parse(InputStream input) throws XmlPullParserException, IOException {
+	public Scenario parse(Context context, InputStream input) throws XmlPullParserException, IOException {
 		XmlPullParser parser = Xml.newPullParser();
 	    parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
 	    parser.setInput(input, null);
 	    parser.nextTag();
 	    
-	    return readFeed(parser);
+	    return readFeed(context, parser);
 	}
 	
-	private Scenario readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
+	private Scenario readFeed(Context context, XmlPullParser parser) throws XmlPullParserException, IOException {
 	    Scenario scenario = null;
 	    
 	    parser.require(XmlPullParser.START_TAG, ns, "scenario");
@@ -54,7 +55,7 @@ public class ScenarioParser {
 	        // Starts by looking for the entry tag
 	        if (scenario == null) {
 	        	if (name.equalsIgnoreCase("about")) {
-	        		scenario = readAbout(parser);
+	        		scenario = readAbout(context, parser);
 	        	} else {
 	        		throw new IllegalStateException("First child in <scenario> must be <about>.");
 	        	}
@@ -309,7 +310,7 @@ public class ScenarioParser {
 	    return areas;
 	}
 
-	private Scenario readAbout(XmlPullParser parser) throws XmlPullParserException, IOException {
+	private Scenario readAbout(Context context, XmlPullParser parser) throws XmlPullParserException, IOException {
 		Log.i(TAG, "Reading about.");
 		
 		parser.require(XmlPullParser.START_TAG, ns, "about");
@@ -343,7 +344,7 @@ public class ScenarioParser {
 	        }
 	    }
 		
-	    return new Scenario(title, author, version, location, duration, difficulty);
+	    return new Scenario(context, title, author, version, location, duration, difficulty);
 	}
 	
 	private String readText(XmlPullParser parser, String tag) throws IOException, XmlPullParserException {

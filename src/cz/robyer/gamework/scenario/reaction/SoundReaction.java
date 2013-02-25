@@ -11,7 +11,7 @@ public class SoundReaction extends Reaction {
 	@Override
 	public void action() {
 		// TODO Auto-generated method stub
-
+		//scenario.soundManager.playSound(value);
 	}
 
 }

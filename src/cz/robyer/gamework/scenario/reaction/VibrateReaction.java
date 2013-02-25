@@ -1,5 +1,7 @@
 package cz.robyer.gamework.scenario.reaction;
 
+import android.os.Vibrator;
+
 public class VibrateReaction extends Reaction {
 	private int value = 5;
 	
@@ -10,8 +12,12 @@ public class VibrateReaction extends Reaction {
 
 	@Override
 	public void action() {
-		// TODO Auto-generated method stub
-
+		if (context != null) {
+			Vibrator v = (Vibrator) context.getSystemService(context.VIBRATOR_SERVICE);
+			v.vibrate(Math.max(1000, value));
+		} else {
+			// not attached scenario yet
+		}
 	}
 
 }
