@@ -29,6 +29,7 @@ public class DecimalVariable extends Variable {
 		
 	public void setValue(int value) {
 		this.value = value;
+		checkLimit();
 	}
 	
 	public int getValue() {
@@ -50,13 +51,23 @@ public class DecimalVariable extends Variable {
 		}
 	}
 
-	public void incrementValue(int amount) {
+	public void incrementValue(int amount) { //addValue
 		value += amount;
 		checkLimit();
 	}
 
-	public void decrementValue(int amount) {
+	public void decrementValue(int amount) { //subtractValue
 		value -= amount;
+		checkLimit();
+	}
+	
+	public void multiplyValue(int amount) {
+		value *= amount;
+		checkLimit();
+	}
+	
+	public void divideValue(int amount) {
+		value /= amount;
 		checkLimit();
 	}
 }
