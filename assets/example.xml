@@ -56,17 +56,22 @@
         	- game_start
         	- game_won
         	- game_lose
+        	- ...
+        	- dialog (icon?, title?, message, buttons (and their reactions))
          -->
         <reaction id="zvuk1" type="sound" value="sounds/zvuk1.mp3" />
+        <reaction id="vibrace" type="vibrate" value="400" />
         <reaction id="vibrace1" type="vibrate" value="100" />
         <reaction id="vibrace2" type="vibrate" value="500" />
         <reaction id="vibrace3" type="vibrate" value="800" />
         <reaction id="html_index" type="html" value="html/index.html" />    
         
+        <reaction id="zdravi" type="var_set" variable="health" value="50" />
+        
         <reaction id="zraneni" type="multi">
             <reaction type="sound" value="sounds/zvuk1.mp3" />
-        	<reaction type="vibrate" value="5" />
-        	<reaction type="decrement" variable="health" value="5" />
+        	<reaction type="vibrate" value="100" />
+        	<reaction type="var_decrement" variable="health" value="5" />
         </reaction>
         
         <reaction id="start_hry" type="multi">
@@ -75,6 +80,7 @@
         </reaction>
         
         <reaction id="vyhra" type="multi">
+            <reaction type="vibrate" value="500" />
             <reaction type="sound" value="sounds/vyhra.mp3" />
             <reaction type="game_won" />
         </reaction>
@@ -84,7 +90,7 @@
         </reaction>
         <reaction id="nakup" type="multi">
             <reaction type="sound" value="sounds/nakup.mp3" />
-            <reaction type="set" variable="nakoupeno" value="true" />
+            <reaction type="var_set" variable="nakoupeno" value="true" />
         </reaction>
     </reactions>
     
@@ -94,10 +100,9 @@
     		- area (area ID) - vstup nebo výstup do oblasti
     		- area_enter (area ID)
     		- area_leave (area ID)
-    		- variable_decrement
-    		- variable_increment
     		- variable - změna hodnoty proměnné
     		- time (timestamp value) - nastání času
+    		- qrcode/gps/photo/...?
        	 -->
         <hook type="variable" value="health">
             <!-- Trigger:
@@ -105,19 +110,20 @@
 	        	- conditions:
 	        		- all = všechny vnořené podmínky musí být splněny
 	        		- any = jakákoliv podmínka musí být splněná
-	        		- none = bezpodmínečně se spustí
+	        		- none = bezpodmínečně se spustí (výchozí)
 	        	- run:
 	        		- always = spustí se vždy při výskytu události
-	        		- once = spustí se pouze jednou
-	        		(- <číslo> = počet spuštění, kolikrát se může spustit - je to někdy potřeba? hm, možná ano) 
+	        		- <číslo> = počet spuštění, kolikrát se může spustit
          	-->
             <trigger reaction="prohra" conditions="ALL">
                 <condition type="equals" variable="health" value="0" />
             </trigger>
+            
+            <trigger reaction="vibrace" />
         </hook>
         <hook type="area_enter" value="albert">
             <!-- vstup do Albertu -->
-            <trigger reaction="nakup" run="once" />
+            <trigger reaction="nakup" run="1" />
         </hook>
         <hook type="area_enter" value="home">
             <!-- návrat domů -->

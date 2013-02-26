@@ -16,9 +16,10 @@ public class MultiReaction extends Reaction {
 	public void setScenario(Scenario scenario) {
 		super.setScenario(scenario);
 	
-		for (Reaction r : reactions) {
-			r.setScenario(scenario);
-		}
+		if (reactions != null)
+			for (Reaction r : reactions) {
+				r.setScenario(scenario);
+			}
 	}
 		
 	public void addReaction(Reaction reaction) {

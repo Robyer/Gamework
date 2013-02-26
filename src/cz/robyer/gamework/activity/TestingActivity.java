@@ -40,20 +40,17 @@ public class TestingActivity extends Activity {
 			@Override
 			public void onClick(View v) {				
 				String filename = ((EditText)findViewById(R.id.edit_filename)).getText().toString();
-				if (parseScenario(filename)) {
+				scenario = parseScenario(filename);
+				
+				if (scenario != null) {
 					//ProgressDialog dialog = ProgressDialog.show(TestingActivity.this, "", "Loading. Please wait...", true);
+					Toast.makeText(TestingActivity.this, "Sucessfully parsed scenario '" + filename + "'.", Toast.LENGTH_LONG).show();
 					
 					AlertDialog ad = new AlertDialog.Builder(TestingActivity.this).create();
 					ad.setCancelable(false); // This blocks the 'BACK' button
 					//ad.setIcon(android.R.drawable.ic_dialog_info);
 					ad.setTitle(scenario.getTitle());
-					String message = "Author: " + scenario.getAuthor()
-							+ "\nVersion: " + scenario.getVersion()
-							+ "\nLocation: " + scenario.getLocation()
-							+ "\nDuration: " + scenario.getDuration()
-							+ "\nDifficulty: " + scenario.getDifficulty();
-					
-					ad.setMessage(message);
+					ad.setMessage(scenario.getDescription());
 					ad.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {  
 					    @Override  
 					    public void onClick(DialogInterface dialog, int which) {  
@@ -63,6 +60,8 @@ public class TestingActivity extends Activity {
 					
 					//dialog.hide();
 					ad.show();
+				} else {
+					Toast.makeText(TestingActivity.this, "Error when parsing scenario '" + filename + "'.", Toast.LENGTH_LONG).show();
 				}
 			}
 		});
@@ -87,20 +86,17 @@ public class TestingActivity extends Activity {
 		
 	}
 	
-	private boolean parseScenario(String filename) {
+	private Scenario parseScenario(String filename) {
+		Scenario scenario = null;
 		try {
 			ScenarioParser parser = new ScenarioParser(getApplicationContext(), false);
-			
 			InputStream file = getAssets().open(filename);
 			scenario = parser.parse(file, false);
 			file.close();
-			Toast.makeText(this, "Sucessfully parsed scenario '" + filename + "'.", Toast.LENGTH_LONG).show();
 		} catch (Exception e) {
-			Toast.makeText(this, "Error when parsing scenario '" + filename + "'.", Toast.LENGTH_LONG).show();
 			Log.e(TAG, e.getMessage(), e);
-			return false;
 		}
-		return true;
+		return scenario;
 	}
 
 	/**

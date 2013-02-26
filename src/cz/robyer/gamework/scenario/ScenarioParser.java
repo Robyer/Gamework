@@ -8,6 +8,8 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import android.content.Context;
 import android.util.Xml;
+import cz.robyer.gamework.hook.Condition;
+import cz.robyer.gamework.hook.Hook;
 import cz.robyer.gamework.scenario.area.Area;
 import cz.robyer.gamework.scenario.area.MultiPointArea;
 import cz.robyer.gamework.scenario.area.PointArea;
@@ -27,7 +29,53 @@ import cz.robyer.gamework.util.Point;
 public class ScenarioParser {
 	private static final String TAG = ScenarioParser.class.getSimpleName();
     private static final String ns = null; // We don't use namespaces
+    	
+    // Area constants
+	public static final String AREA_TYPE_POINT = "point";
+	public static final String AREA_TYPE_MULTIPOINT = "multipoint";
+	
+	// Variable constants
+	public static final String VAR_TYPE_BOOLEAN = "boolean";
+	public static final String VAR_TYPE_DECIMAL = "decimal";
+	
+	// Reaction constants
+	public static final String REACTION_TYPE_MULTI = "multi";
+	public static final String REACTION_TYPE_SOUND = "sound";
+	public static final String REACTION_TYPE_VIBRATE = "vibrate";
+	public static final String REACTION_TYPE_HTML = "html";
+	public static final String REACTION_TYPE_VAR_SET = "var_set";
+	public static final String REACTION_TYPE_VAR_INC = "var_increment";
+	public static final String REACTION_TYPE_VAR_DEC = "var_decrement";
+	public static final String REACTION_TYPE_VAR_MUL = "var_multiply";
+	public static final String REACTION_TYPE_VAR_DIV = "var_divide";
+	public static final String REACTION_TYPE_VAR_NEG = "var_negate";
+	public static final String REACTION_TYPE_GAME_START = "game_start";
+	public static final String REACTION_TYPE_GAME_WON = "game_won";
+	public static final String REACTION_TYPE_GAME_LOSE = "game_lose";
     
+    // Hook constants
+	public static final String HOOK_TYPE_AREA = "area";
+	public static final String HOOK_TYPE_AREA_ENTER = "area_enter";
+	public static final String HOOK_TYPE_AREA_LEAVE = "area_leave";
+	public static final String HOOK_TYPE_VARIABLE = "variable";
+	public static final String HOOK_TYPE_TIME = "time";
+	
+	// Trigger constants
+	public static final String TRIGGER_CONDITIONS_NONE = "none";
+	public static final String TRIGGER_CONDITIONS_ALL = "all";
+	public static final String TRIGGER_CONDITIONS_ANY = "any";
+	
+	// Condition constants
+	public static final String CONDITION_TYPE_EQUALS = "equals";
+	public static final String CONDITION_TYPE_NOTEQUALS = "notequals";
+	public static final String CONDITION_TYPE_TRUE = "true";
+	public static final String CONDITION_TYPE_FALSE = "false";
+	public static final String CONDITION_TYPE_GREATER = "greater";
+	public static final String CONDITION_TYPE_SMALLER = "smaller";
+	public static final String CONDITION_TYPE_GREATEREQUALS = "greaterequals";
+	public static final String CONDITION_TYPE_SMALLEREQUALS = "smallerequals";
+   
+	
     private Context context;
     private XmlPullParser parser;
     private Scenario scenario;
@@ -95,9 +143,137 @@ public class ScenarioParser {
 	    }
 	}
 
-	private void readHooks() {
+	private void readHooks() throws XmlPullParserException, IOException {
 		Log.i("ScenarioParser", "Reading hooks");
-		// TODO Auto-generated method stub
+
+		parser.require(XmlPullParser.START_TAG, ns, "hooks");
+		while (parser.next() != XmlPullParser.END_TAG) {
+			if (parser.getEventType() != XmlPullParser.START_TAG) {
+	            continue;
+	        }
+			
+			String name = parser.getName();
+
+	        if (name.equalsIgnoreCase("hook")) {
+	        	parser.require(XmlPullParser.START_TAG, ns, "hook");
+	        	
+	        	String type = parser.getAttributeValue(null, "type");
+	        	String value = parser.getAttributeValue(null, "value");
+	        	int itype;
+	        	
+	        	if (type.equalsIgnoreCase(HOOK_TYPE_AREA)) {
+	        		itype = Hook.TYPE_AREA;
+	        	} else if (type.equalsIgnoreCase(HOOK_TYPE_AREA_ENTER)) {
+	        		itype = Hook.TYPE_AREA_ENTER;
+	        	} else if (type.equalsIgnoreCase(HOOK_TYPE_AREA_LEAVE)) {
+	        		itype = Hook.TYPE_AREA_LEAVE;
+	        	} else if (type.equalsIgnoreCase(HOOK_TYPE_TIME)) {
+	        		itype = Hook.TYPE_TIME;
+	        	} else if (type.equalsIgnoreCase(HOOK_TYPE_VARIABLE)) {
+	        		itype = Hook.TYPE_VARIABLE;
+	        	} else {
+	        		Log.e(TAG, "Reaction of type '" + type + "' is unknown.");
+	        		skip();
+	        		return;
+	        	}
+	        	
+	        	while (parser.next() != XmlPullParser.END_TAG) {
+        			if (parser.getEventType() != XmlPullParser.START_TAG) {
+        	            continue;
+        	        }
+        			
+        			if (parser.getName().equalsIgnoreCase("trigger")) {
+        				Hook hook = readTrigger(itype, value);
+        				scenario.addHook(hook, itype, value);
+        			} else {
+        				Log.e(TAG, "Expected <trigger>, got <" + parser.getName() + ">.");
+        				skip();
+        			}
+        		}
+
+	        	parser.require(XmlPullParser.END_TAG, ns, "hook");
+	        } else {
+	        	skip();
+	        }
+	    }
+		parser.require(XmlPullParser.END_TAG, ns, "hooks");
+	}
+
+	private Hook readTrigger(int hook_type, String hook_value) throws XmlPullParserException, IOException {
+		Hook hook = null;
+		parser.require(XmlPullParser.START_TAG, ns, "trigger");
+		
+		String reaction = parser.getAttributeValue(null, "reaction");
+		String conditions = parser.getAttributeValue(null, "conditions");
+		String run = parser.getAttributeValue(null, "run");
+		
+		int conditions_type;
+		if (conditions == null || conditions.equalsIgnoreCase(TRIGGER_CONDITIONS_NONE)) {
+			conditions_type = Hook.CONDITIONS_NONE;
+		} else if (conditions.equalsIgnoreCase(TRIGGER_CONDITIONS_ALL)) {
+			conditions_type = Hook.CONDITIONS_ALL;
+		} else if (conditions.equalsIgnoreCase(TRIGGER_CONDITIONS_ANY)) {
+			conditions_type = Hook.CONDITIONS_ANY;
+		} else {
+			Log.i(TAG, "Conditions='" + conditions + "' is unknown. Used no conditions.");
+			conditions_type = Hook.CONDITIONS_NONE;
+		}
+		
+		int runs = Hook.RUN_ALWAYS;
+		if (run != null)
+			runs = Integer.parseInt(run);
+				
+		hook = new Hook(hook_type, hook_value, reaction, conditions_type, runs);
+		Log.i(TAG, "- Trigger reaction='" + reaction + "' conditions='" + conditions + "' run='" + runs + "'.");
+
+		while (parser.next() != XmlPullParser.END_TAG) {
+			if (parser.getEventType() != XmlPullParser.START_TAG) {
+	            continue;
+	        }
+			
+			if (parser.getName().equalsIgnoreCase("condition")) {
+				parser.require(XmlPullParser.START_TAG, ns, "condition");
+				
+				String type = parser.getAttributeValue(null, "type");
+				String variable = parser.getAttributeValue(null, "variable");
+				String value = parser.getAttributeValue(null, "value");
+				int itype;
+				
+				if (type.equalsIgnoreCase(CONDITION_TYPE_EQUALS)) {
+					itype = Condition.TYPE_EQUALS;
+				} else if (type.equalsIgnoreCase(CONDITION_TYPE_FALSE)) {
+					itype = Condition.TYPE_FALSE;
+				} else if (type.equalsIgnoreCase(CONDITION_TYPE_TRUE)) {
+					itype = Condition.TYPE_TRUE;
+				} else if (type.equalsIgnoreCase(CONDITION_TYPE_NOTEQUALS)) {
+					itype = Condition.TYPE_NOTEQUALS;
+				} else if (type.equalsIgnoreCase(CONDITION_TYPE_GREATER)) {
+					itype = Condition.TYPE_GREATER;
+				} else if (type.equalsIgnoreCase(CONDITION_TYPE_SMALLER)) {
+					itype = Condition.TYPE_SMALLER;
+				} else if (type.equalsIgnoreCase(CONDITION_TYPE_GREATEREQUALS)) {
+					itype = Condition.TYPE_GREATEREQUALS;
+				} else if (type.equalsIgnoreCase(CONDITION_TYPE_SMALLEREQUALS)) {
+					itype = Condition.TYPE_SMALLEREQUALS;
+				} else {
+					Log.e(TAG, "Condition of type '" + type + "' is unknown.");
+	        		skip();
+	        		continue;
+				}
+				
+				Log.i(TAG, "\\- Condition type='" + type + "' variable='" + variable + "' value='" + value + "'.");
+				hook.addCondition(new Condition(itype, variable, value));
+				
+				parser.nextTag();
+				parser.require(XmlPullParser.END_TAG, ns, "condition");
+			} else {
+				Log.e(TAG, "Expected <condition>, got <" + parser.getName() + ">.");
+				skip();
+			}
+		}
+    		
+    	parser.require(XmlPullParser.END_TAG, ns, "trigger");
+    	return hook;
 	}
 
 	private void readReactions() throws XmlPullParserException, IOException {
@@ -117,7 +293,7 @@ public class ScenarioParser {
 	        	String id = parser.getAttributeValue(null, "id");
 	        	String type = parser.getAttributeValue(null, "type");
 	        	
-	        	if (type.equalsIgnoreCase(Reaction.TYPE_MULTI)) {
+	        	if (type.equalsIgnoreCase(REACTION_TYPE_MULTI)) {
 	        		Log.i(TAG, "Got MultiReaction id='" + id + "'.");
 	        		
 	        		reaction = new MultiReaction(id);
@@ -158,29 +334,29 @@ public class ScenarioParser {
 		
 		Log.i(TAG, "Got Reaction id='" + id + "' type='" + type + "'.");
 		
-		if (type.equalsIgnoreCase(Reaction.TYPE_SOUND)) {
+		if (type.equalsIgnoreCase(REACTION_TYPE_SOUND)) {
 			reaction = new SoundReaction(id, value);
-    	} else if (type.equalsIgnoreCase(Reaction.TYPE_VIBRATE)) {
+    	} else if (type.equalsIgnoreCase(REACTION_TYPE_VIBRATE)) {
     		reaction = new VibrateReaction(id, Integer.parseInt(value));
-    	} else if (type.equalsIgnoreCase(Reaction.TYPE_HTML)) {
+    	} else if (type.equalsIgnoreCase(REACTION_TYPE_HTML)) {
     		reaction = new HtmlReaction(id, value);
-    	} else if (type.equalsIgnoreCase(Reaction.TYPE_VAR_DEC)) {
+    	} else if (type.equalsIgnoreCase(REACTION_TYPE_VAR_DEC)) {
     		reaction = new VariableReaction(id, VariableReaction.DECREMENT, variable, value);
-    	} else if (type.equalsIgnoreCase(Reaction.TYPE_VAR_DIV)) {
+    	} else if (type.equalsIgnoreCase(REACTION_TYPE_VAR_DIV)) {
     		reaction = new VariableReaction(id, VariableReaction.DIVIDE, variable, value);
-    	} else if (type.equalsIgnoreCase(Reaction.TYPE_VAR_INC)) {
+    	} else if (type.equalsIgnoreCase(REACTION_TYPE_VAR_INC)) {
     		reaction = new VariableReaction(id, VariableReaction.INCREMENT, variable, value);
-    	} else if (type.equalsIgnoreCase(Reaction.TYPE_VAR_MUL)) {
+    	} else if (type.equalsIgnoreCase(REACTION_TYPE_VAR_MUL)) {
     		reaction = new VariableReaction(id, VariableReaction.MULTIPLY, variable, value);
-    	} else if (type.equalsIgnoreCase(Reaction.TYPE_VAR_NEG)) {
+    	} else if (type.equalsIgnoreCase(REACTION_TYPE_VAR_NEG)) {
     		reaction = new VariableReaction(id, VariableReaction.NEGATE, variable, value);
-    	} else if (type.equalsIgnoreCase(Reaction.TYPE_VAR_SET)) {
+    	} else if (type.equalsIgnoreCase(REACTION_TYPE_VAR_SET)) {
     		reaction = new VariableReaction(id, VariableReaction.SET, variable, value);
-    	} else if (type.equalsIgnoreCase(Reaction.TYPE_GAME_START)) {
+    	} else if (type.equalsIgnoreCase(REACTION_TYPE_GAME_START)) {
     		reaction = new GameReaction(id, GameReaction.START);
-    	} else if (type.equalsIgnoreCase(Reaction.TYPE_GAME_WON)) {
+    	} else if (type.equalsIgnoreCase(REACTION_TYPE_GAME_WON)) {
     		reaction = new GameReaction(id, GameReaction.WON);
-    	} else if (type.equalsIgnoreCase(Reaction.TYPE_GAME_LOSE)) {
+    	} else if (type.equalsIgnoreCase(REACTION_TYPE_GAME_LOSE)) {
     		reaction = new GameReaction(id, GameReaction.LOSE);
     	} else {
     		Log.e(TAG, "Reaction of type '" + type + "' is unknown.");
@@ -211,14 +387,14 @@ public class ScenarioParser {
 	        	String id = parser.getAttributeValue(null, "id");
 	        	String type = parser.getAttributeValue(null, "type");
 	        	
-	        	if (type.equalsIgnoreCase(Variable.TYPE_BOOLEAN)) {
+	        	if (type.equalsIgnoreCase(VAR_TYPE_BOOLEAN)) {
 	        		String value = parser.getAttributeValue(null, "value");
 	        		
 	        		variable = BooleanVariable.fromString(id, value);
 	        		Log.i(TAG, "Got BooleanVariable.");
 	        		
 	        		parser.nextTag();
-	        	} else if (type.equalsIgnoreCase(Variable.TYPE_DECIMAL)) {
+	        	} else if (type.equalsIgnoreCase(VAR_TYPE_DECIMAL)) {
 	        		String value = parser.getAttributeValue(null, "value");
 	        		String min = parser.getAttributeValue(null, "min");
 	        		String max = parser.getAttributeValue(null, "max");
@@ -259,17 +435,21 @@ public class ScenarioParser {
 	        	String id = parser.getAttributeValue(null, "id");
 	        	String type = parser.getAttributeValue(null, "type");
 	        	
-	        	if (type.equalsIgnoreCase(Area.TYPE_POINT)) {
+	        	if (type.equalsIgnoreCase(AREA_TYPE_POINT)) {
 	        		String latitude = parser.getAttributeValue(null, "lat");
 	        		String longitude = parser.getAttributeValue(null, "lon");
 	        		String radius = parser.getAttributeValue(null, "radius");
 	        		
-	        		Point point = new Point(Double.parseDouble(latitude), Double.parseDouble(longitude));
-	        		area = new PointArea(id, point, Integer.parseInt(radius));
-	        		Log.i(TAG, "Got PointArea.");
-	        		
+	        		if (latitude != null && longitude != null && radius != null) {
+		        		Point point = new Point(Double.parseDouble(latitude), Double.parseDouble(longitude));
+		        		area = new PointArea(id, point, Integer.parseInt(radius));
+		        		Log.i(TAG, "Got PointArea");
+	        		} else {
+	        			Log.e(TAG, "Area type point must contains lat, lon and radius.");
+	        		}
+	        			        		
 	        		parser.nextTag();
-	        	} else if (type.equalsIgnoreCase(Area.TYPE_MULTIPOINT)) {
+	        	} else if (type.equalsIgnoreCase(AREA_TYPE_MULTIPOINT)) {
 	        		area = new MultiPointArea(id);
 	        		
 	        		while (parser.next() != XmlPullParser.END_TAG) {
@@ -281,9 +461,13 @@ public class ScenarioParser {
 			        		String latitude = parser.getAttributeValue(null, "lat");
 			        		String longitude = parser.getAttributeValue(null, "lon");
 			        		
-			        		Point point = new Point(Double.parseDouble(latitude), Double.parseDouble(longitude));
-			        		((MultiPointArea)area).addPoint(point);
-			        		Log.i(TAG, "Got PointArea->Point.");
+			        		if (latitude != null && longitude != null) {
+				        		Point point = new Point(Double.parseDouble(latitude), Double.parseDouble(longitude));
+				        		((MultiPointArea)area).addPoint(point);
+				        		Log.i(TAG, "Got PointArea->Point.");
+			        		} else {
+			        			Log.e(TAG, "Point must contains lat and lon.");
+			        		}
 			        		
 			        		parser.nextTag();
 	        			} else {

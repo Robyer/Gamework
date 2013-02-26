@@ -6,13 +6,16 @@ import java.util.List;
 import java.util.Map;
 
 import android.content.Context;
+import android.util.Log;
 
+import cz.robyer.gamework.hook.Hook;
 import cz.robyer.gamework.scenario.area.Area;
-import cz.robyer.gamework.scenario.reaction.MultiReaction;
 import cz.robyer.gamework.scenario.reaction.Reaction;
 import cz.robyer.gamework.scenario.variable.Variable;
 
 public class Scenario {
+	public static final String TAG = Scenario.class.getSimpleName();
+	
 	protected Context context;
 	
 	protected String title;
@@ -48,6 +51,8 @@ public class Scenario {
 	public void addArea(String id, Area area) {
 		if (areas == null)
 			areas = new HashMap<String, Area>();
+		else if (areas.containsKey(id))
+			Log.w(TAG, "Duplicit definition of area id='" + id + "'.");
 		
 		areas.put(id, area);
 		area.setScenario(this);
@@ -65,6 +70,8 @@ public class Scenario {
 	public void addVariable(String id, Variable variable) {
 		if (variables == null)
 			variables = new HashMap<String, Variable>();
+		else if (variables.containsKey(id))
+			Log.w(TAG, "Duplicit definition of variable id='" + id + "'.");
 		
 		variables.put(id, variable);
 		variable.setScenario(this);
@@ -82,6 +89,8 @@ public class Scenario {
 	public void addReaction(String id, Reaction reaction) {
 		if (reactions == null)
 			reactions = new HashMap<String, Reaction>();
+		else if (reactions.containsKey(id))
+			Log.w(TAG, "Duplicit definition of reaction id='" + id + "'.");
 		
 		reactions.put(id, reaction);
 		reaction.setScenario(this);
@@ -96,13 +105,33 @@ public class Scenario {
 	}
 	
 	
-	public void addHook(Hook hook) {
+	public void addHook(Hook hook, int type, String value) {
 		if (hooks == null)
 			hooks = new ArrayList<Hook>();
 		
-		hooks.add(hook);
-		// TODO: add hook to particular objects
-		hook.setScenario(this);
+		HookableObject hookable = null;
+		
+		switch (type) {
+		case Hook.TYPE_AREA:
+		case Hook.TYPE_AREA_ENTER:
+		case Hook.TYPE_AREA_LEAVE:
+			hookable = areas.get(value);
+			break;
+		case Hook.TYPE_VARIABLE:
+			hookable = variables.get(value);
+			break;
+		case Hook.TYPE_TIME:
+			// TODO: get hookable time object
+			break;
+		}
+
+		if (hookable != null) {
+			hooks.add(hook);
+			hook.setScenario(this);
+			hookable.addHook(hook);
+		} else {
+			// TODO: throw exception?
+		}
 	}
 	
 	/* basic information getters/setters */
@@ -153,6 +182,15 @@ public class Scenario {
 
 	public void setDifficulty(String difficulty) {
 		this.difficulty = difficulty;
+	}
+	
+	public String getDescription() {
+		// TODO: make translatable - load string from resources
+		return "Author: " + this.author
+				+ "\nVersion: " + this.version
+				+ "\nLocation: " + this.location
+				+ "\nDuration: " + this.duration
+				+ "\nDifficulty: " + this.difficulty;
 	}
 
 }
