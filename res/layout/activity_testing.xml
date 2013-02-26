@@ -30,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="ID of reaction"
-        android:text="vibrace1"
+        android:text="zraneni"
         android:id="@+id/edit_reaction"
         />
 

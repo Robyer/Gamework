@@ -59,8 +59,8 @@
         	- ...
         	- dialog (icon?, title?, message, buttons (and their reactions))
          -->
-        <reaction id="zvuk1" type="sound" value="sounds/zvuk1.mp3" />
-        <reaction id="vibrace" type="vibrate" value="400" />
+        <reaction id="zvuk1" type="sound" value="sound/rooster.mp3" />
+        <reaction id="vibrace" type="vibrate" value="50" />
         <reaction id="vibrace1" type="vibrate" value="100" />
         <reaction id="vibrace2" type="vibrate" value="500" />
         <reaction id="vibrace3" type="vibrate" value="800" />
@@ -69,9 +69,9 @@
         <reaction id="zdravi" type="var_set" variable="health" value="50" />
         
         <reaction id="zraneni" type="multi">
-            <reaction type="sound" value="sounds/zvuk1.mp3" />
+            <reaction type="sound" value="sound/rooster.mp3" />
         	<reaction type="vibrate" value="100" />
-        	<reaction type="var_decrement" variable="health" value="5" />
+        	<reaction type="var_decrement" variable="health" value="20" />
         </reaction>
         
         <reaction id="start_hry" type="multi">
@@ -119,7 +119,9 @@
                 <condition type="equals" variable="health" value="0" />
             </trigger>
             
-            <trigger reaction="vibrace" />
+            <trigger reaction="vibrace">
+                <condition type="equals" variable="health" value="0" />
+        	</trigger>    
         </hook>
         <hook type="area_enter" value="albert">
             <!-- vstup do Albertu -->

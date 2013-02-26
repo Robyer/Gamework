@@ -1,17 +1,21 @@
 package cz.robyer.gamework.scenario;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import android.content.Context;
+import android.content.res.AssetFileDescriptor;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.util.Log;
-
 import cz.robyer.gamework.R;
 import cz.robyer.gamework.hook.Hook;
 import cz.robyer.gamework.scenario.area.Area;
 import cz.robyer.gamework.scenario.reaction.Reaction;
+import cz.robyer.gamework.scenario.reaction.SoundReaction;
 import cz.robyer.gamework.scenario.variable.Variable;
 
 public class Scenario {
@@ -30,6 +34,7 @@ public class Scenario {
 	protected Map<String, Variable> variables;// = new HashMap<String, Variable>();
 	protected Map<String, Reaction> reactions;// = new HashMap<String, Reaction>();
 	protected List<Hook> hooks;// = new ArrayList<Hook>();
+	protected SoundPool soundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
 	
 	public Scenario(Context context) {
 		this.context = context;
@@ -47,6 +52,10 @@ public class Scenario {
 		
 	public Context getContext() {
 		return context;
+	}
+	
+	public SoundPool getSoundPool() {
+		return soundPool;
 	}
 	
 	public void addArea(String id, Area area) {
@@ -92,6 +101,20 @@ public class Scenario {
 			reactions = new HashMap<String, Reaction>();
 		else if (reactions.containsKey(id))
 			Log.w(TAG, "Duplicit definition of reaction id='" + id + "'.");
+		
+		if (reaction instanceof SoundReaction) {
+			// initialize sound in soundpool
+			// TODO: rewrite better with support for MultiReactions...
+			AssetFileDescriptor descriptor;
+			try {
+				descriptor = getContext().getAssets().openFd(((SoundReaction)reaction).getValue());
+				int soundId = soundPool.load(descriptor, 1);
+				((SoundReaction)reaction).setSoundId(soundId);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		
 		reactions.put(id, reaction);
 		reaction.setScenario(this);
