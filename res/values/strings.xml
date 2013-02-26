@@ -11,5 +11,7 @@
     <string name="scenarios">Scenarios</string>
     <string name="options">Options</string>
     <string name="help">Help</string>
+    
+    <string name="scenarioInfo">Author: %1$s\nVersion: %2$s\nLocation: %3$s\nDuration: %4$s\nDifficulty: %5$s</string>
 
 </resources>

@@ -8,6 +8,7 @@ import java.util.Map;
 import android.content.Context;
 import android.util.Log;
 
+import cz.robyer.gamework.R;
 import cz.robyer.gamework.hook.Hook;
 import cz.robyer.gamework.scenario.area.Area;
 import cz.robyer.gamework.scenario.reaction.Reaction;
@@ -185,12 +186,7 @@ public class Scenario {
 	}
 	
 	public String getDescription() {
-		// TODO: make translatable - load string from resources
-		return "Author: " + this.author
-				+ "\nVersion: " + this.version
-				+ "\nLocation: " + this.location
-				+ "\nDuration: " + this.duration
-				+ "\nDifficulty: " + this.difficulty;
+		return getContext().getResources().getString(R.string.scenarioInfo, author, version, location, duration, difficulty);
 	}
 
 }
