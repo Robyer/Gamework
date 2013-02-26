@@ -23,8 +23,10 @@ public class HookableObject extends IdentificableObject {
 	
 	protected void callHooks() {
 		Log.d("HookableObject", "Calling all hooks.");
-		for (Hook h : hooks) {
-			h.call();
+		if (hooks != null) {
+			for (Hook h : hooks) {
+				h.call();
+			}
 		}
 	}
 	

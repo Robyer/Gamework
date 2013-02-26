@@ -77,20 +77,22 @@ public class Hook extends BaseObject {
 				break;
 			case CONDITIONS_ALL:
 				valid = true;
-				for (Condition condition : conditions) {
-					if (!condition.isValid()) {
-						valid = false;
-						break;
+				if (conditions != null)
+					for (Condition condition : conditions) {
+						if (!condition.isValid()) {
+							valid = false;
+							break;
+						}
 					}
-				}
 				break;
 			case CONDITIONS_ANY:
-				for (Condition condition : conditions) {
-					if (condition.isValid()) {
-						valid = true;
-						break;
+				if (conditions != null)
+					for (Condition condition : conditions) {
+						if (condition.isValid()) {
+							valid = true;
+							break;
+						}
 					}
-				}
 				break;
 			}
 			
