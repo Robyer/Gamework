@@ -128,10 +128,10 @@
         <hook type="area_enter" value="home">
             <!-- návrat domů -->
             <trigger reaction="vyhra" conditions="ALL">
-                <condition type="true" variable="nakoupeno" />
+                <condition type="equals" variable="nakoupeno" value="true" />
             </trigger>
             <trigger reaction="prohra" condition="ALL">
-                <condition type="false" variable="nakoupeno" />
+                <condition type="equals" variable="nakoupeno" value="false" />
             </trigger>
         </hook>
     </hooks>

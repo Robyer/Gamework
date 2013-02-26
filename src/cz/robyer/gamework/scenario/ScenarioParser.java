@@ -68,8 +68,6 @@ public class ScenarioParser {
 	// Condition constants
 	public static final String CONDITION_TYPE_EQUALS = "equals";
 	public static final String CONDITION_TYPE_NOTEQUALS = "notequals";
-	public static final String CONDITION_TYPE_TRUE = "true";
-	public static final String CONDITION_TYPE_FALSE = "false";
 	public static final String CONDITION_TYPE_GREATER = "greater";
 	public static final String CONDITION_TYPE_SMALLER = "smaller";
 	public static final String CONDITION_TYPE_GREATEREQUALS = "greaterequals";
@@ -241,10 +239,6 @@ public class ScenarioParser {
 				
 				if (type.equalsIgnoreCase(CONDITION_TYPE_EQUALS)) {
 					itype = Condition.TYPE_EQUALS;
-				} else if (type.equalsIgnoreCase(CONDITION_TYPE_FALSE)) {
-					itype = Condition.TYPE_FALSE;
-				} else if (type.equalsIgnoreCase(CONDITION_TYPE_TRUE)) {
-					itype = Condition.TYPE_TRUE;
 				} else if (type.equalsIgnoreCase(CONDITION_TYPE_NOTEQUALS)) {
 					itype = Condition.TYPE_NOTEQUALS;
 				} else if (type.equalsIgnoreCase(CONDITION_TYPE_GREATER)) {

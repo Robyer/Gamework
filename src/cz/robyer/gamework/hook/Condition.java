@@ -1,17 +1,17 @@
 package cz.robyer.gamework.hook;
 
 import cz.robyer.gamework.scenario.BaseObject;
+import cz.robyer.gamework.scenario.variable.BooleanVariable;
+import cz.robyer.gamework.scenario.variable.DecimalVariable;
 import cz.robyer.gamework.scenario.variable.Variable;
 
 public class Condition extends BaseObject {
 	public static final int TYPE_EQUALS = 0;
 	public static final int TYPE_NOTEQUALS = 1;
-	public static final int TYPE_TRUE = 2;
-	public static final int TYPE_FALSE = 3;
-	public static final int TYPE_GREATER = 4;
-	public static final int TYPE_SMALLER = 5;
-	public static final int TYPE_GREATEREQUALS = 6;
-	public static final int TYPE_SMALLEREQUALS = 7;
+	public static final int TYPE_GREATER = 3;
+	public static final int TYPE_SMALLER = 4;
+	public static final int TYPE_GREATEREQUALS = 5;
+	public static final int TYPE_SMALLEREQUALS = 6;
 	
 	protected int type;
 	protected String variable;
@@ -32,31 +32,40 @@ public class Condition extends BaseObject {
 		Variable variable = getScenario().getVariable(this.variable);
 		boolean valid = false;
 		
-		if (variable != null) {		
+		if (variable instanceof BooleanVariable) {
+			boolean varValue = ((BooleanVariable)variable).getValue();
+			boolean condValue = Boolean.parseBoolean(value);
+			
 			switch (type) {
 			case TYPE_EQUALS:
-				
+				valid = (varValue == condValue);
 				break;
 			case TYPE_NOTEQUALS:
-				
+				valid = (varValue != condValue);
 				break;
-			case TYPE_TRUE:
-				
+			}
+		} else if (variable instanceof DecimalVariable) {
+			int varValue = ((DecimalVariable)variable).getValue();
+			int condValue = Integer.parseInt(value);
+			
+			switch (type) {
+			case TYPE_EQUALS:
+				valid = (varValue == condValue);
 				break;
-			case TYPE_FALSE:
-				
+			case TYPE_NOTEQUALS:
+				valid = (varValue != condValue);
 				break;
 			case TYPE_GREATER:
-				
+				valid = (varValue > condValue);
 				break;
 			case TYPE_SMALLER:
-				
+				valid = (varValue < condValue);
 				break;
 			case TYPE_GREATEREQUALS:
-				
+				valid = (varValue >= condValue);
 				break;
 			case TYPE_SMALLEREQUALS:
-				
+				valid = (varValue <= condValue);
 				break;
 			}
 		}
