@@ -102,20 +102,6 @@ public class Scenario {
 		else if (reactions.containsKey(id))
 			Log.w(TAG, "Duplicit definition of reaction id='" + id + "'.");
 		
-		if (reaction instanceof SoundReaction) {
-			// initialize sound in soundpool
-			// TODO: rewrite better with support for MultiReactions...
-			AssetFileDescriptor descriptor;
-			try {
-				descriptor = getContext().getAssets().openFd(((SoundReaction)reaction).getValue());
-				int soundId = soundPool.load(descriptor, 1);
-				((SoundReaction)reaction).setSoundId(soundId);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		
 		reactions.put(id, reaction);
 		reaction.setScenario(this);
 	}
