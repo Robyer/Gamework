@@ -3,7 +3,7 @@ package cz.robyer.gamework.scenario.area;
 import cz.robyer.gamework.util.Point;
 
 public class PointArea extends Area {
-	private static int LEAVE_RADIUS = 3;
+	protected static int LEAVE_RADIUS = 3;
 	
 	protected Point point;
 	protected int radius;

@@ -19,7 +19,7 @@ public class Point {
 	
 	/**
 	 * Slightly modified version from http://www.androidsnippets.com/distance-between-two-gps-coordinates-in-meter
-	 * @return double distance in meters between coordinates
+	 * @return Distance in meters between point and given coordinates
 	 */
 	public double distanceTo(double latitude, double longitude) {
 	    double pk = 180 / Math.PI;

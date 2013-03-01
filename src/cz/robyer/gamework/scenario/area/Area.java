@@ -20,6 +20,7 @@ public abstract class Area extends HookableObject {
 		Log.d("Area", "Checking point in area - was: " + (inArea ? "true" : "false") + ", is: " + (r ? "true" : "false"));
 		
 		if (inArea != r) {
+			// enter or exit from/to area
 			inArea = r;
 			callHooks(r);
 		}

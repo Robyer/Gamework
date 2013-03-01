@@ -9,6 +9,8 @@ import android.content.res.AssetFileDescriptor;
 public class SoundReaction extends Reaction {
 	protected String value;
 	protected int soundId = -1;
+	protected float volume = 1.0f;
+	protected float pitch = 1.0f;
 	
 	public SoundReaction(String id, String value) {
 		super(id);
@@ -36,7 +38,7 @@ public class SoundReaction extends Reaction {
 	@Override
 	public void action() {
 		if (soundId != -1)
-			getScenario().getSoundPool().play(soundId, 1.0f, 1.0f, 1, 0, 0.6f);
+			getScenario().getSoundPool().play(soundId, volume, volume, 1, 0, pitch);
 	}
 
 }
