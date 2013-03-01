@@ -1,13 +1,11 @@
 package cz.robyer.gamework.scenario;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import android.content.Context;
-import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.util.Log;
@@ -15,7 +13,6 @@ import cz.robyer.gamework.R;
 import cz.robyer.gamework.hook.Hook;
 import cz.robyer.gamework.scenario.area.Area;
 import cz.robyer.gamework.scenario.reaction.Reaction;
-import cz.robyer.gamework.scenario.reaction.SoundReaction;
 import cz.robyer.gamework.scenario.variable.Variable;
 
 public class Scenario {

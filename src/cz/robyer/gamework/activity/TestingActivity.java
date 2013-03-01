@@ -5,10 +5,11 @@ import java.io.InputStream;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,6 +18,10 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+
 import cz.robyer.gamework.R;
 import cz.robyer.gamework.scenario.Scenario;
 import cz.robyer.gamework.scenario.ScenarioParser;
@@ -81,6 +86,16 @@ public class TestingActivity extends Activity {
 				} else {
 					Toast.makeText(TestingActivity.this, "You must load some scenario first.", Toast.LENGTH_LONG).show();
 				}
+			}
+		});
+		
+		// Show map button
+		((Button)findViewById(R.id.btn_showmap)).setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(getApplicationContext(), MapActivity.class);
+				startActivity(i);
 			}
 		});
 		

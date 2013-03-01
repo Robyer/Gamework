@@ -23,7 +23,8 @@
         		- multipoint (vnořené pointy (lat,long)) 
          -->
         <area id="home" type="point" lat="49.1675242" lon="16.5827231" radius="10" />
-        <area id="albert" type="point" lat="49.1699164" lon="16.5821031" radius="10" />
+        <area id="home2" type="sound" lat="49.1675242" lon="16.5827231" radius="10" value="sound/.mp3" soundRadius="15" />
+        <area id="albert" type="point" lat="49.1699164" lon="16.5821031" radius="15" />
         <area id="bohunice" type="multipoint">
             <point lat="49.1699244" lon="16.5750961" />
             <point lat="49.1705711" lon="16.5869978" />
