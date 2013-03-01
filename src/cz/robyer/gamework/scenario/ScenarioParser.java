@@ -13,6 +13,7 @@ import cz.robyer.gamework.hook.Hook;
 import cz.robyer.gamework.scenario.area.Area;
 import cz.robyer.gamework.scenario.area.MultiPointArea;
 import cz.robyer.gamework.scenario.area.PointArea;
+import cz.robyer.gamework.scenario.area.SoundArea;
 import cz.robyer.gamework.scenario.reaction.GameReaction;
 import cz.robyer.gamework.scenario.reaction.HtmlReaction;
 import cz.robyer.gamework.scenario.reaction.MultiReaction;
@@ -32,6 +33,7 @@ public class ScenarioParser {
     	
     // Area constants
 	public static final String AREA_TYPE_POINT = "point";
+	public static final String AREA_TYPE_SOUND = "sound";
 	public static final String AREA_TYPE_MULTIPOINT = "multipoint";
 	
 	// Variable constants
@@ -440,6 +442,22 @@ public class ScenarioParser {
 		        		Log.i(TAG, "Got PointArea");
 	        		} else {
 	        			Log.e(TAG, "Area type point must contains lat, lon and radius.");
+	        		}
+	        			        		
+	        		parser.nextTag();
+	        	} else if (type.equalsIgnoreCase(AREA_TYPE_SOUND)) {
+	        		String latitude = parser.getAttributeValue(null, "lat");
+	        		String longitude = parser.getAttributeValue(null, "lon");
+	        		String radius = parser.getAttributeValue(null, "radius");
+	        		String value = parser.getAttributeValue(null, "value");
+	        		String soundRadius = parser.getAttributeValue(null, "soundRadius");
+	        		
+	        		if (latitude != null && longitude != null && radius != null && value != null && soundRadius != null) {
+		        		Point point = new Point(Double.parseDouble(latitude), Double.parseDouble(longitude));
+		        		area = new SoundArea(id, point, Integer.parseInt(radius), value, Integer.parseInt(soundRadius));
+		        		Log.i(TAG, "Got SoundArea");
+	        		} else {
+	        			Log.e(TAG, "Area type soundArea must contains lat, lon, radius, value and soundRadius.");
 	        		}
 	        			        		
 	        		parser.nextTag();

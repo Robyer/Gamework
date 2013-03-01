@@ -16,9 +16,10 @@ public class SoundArea extends PointArea {
 	protected int loop = -1; // loop forever
 	protected int soundRadius;
 	
-	public SoundArea(String id, Point point, int radius, String value) {
+	public SoundArea(String id, Point point, int radius, String value, int soundRadius) {
 		super(id, point, radius);
 		this.value = value;
+		this.soundRadius = soundRadius;
 	}
 	
 	public void setScenario(Scenario scenario) {
@@ -28,9 +29,9 @@ public class SoundArea extends PointArea {
 			try {
 				AssetFileDescriptor descriptor = getContext().getAssets().openFd(value);
 				soundId = getScenario().getSoundPool().load(descriptor, 1);
+				descriptor.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Log.e("SoundArea", "Can't load sound '" + value + "'");
 			}			
 		}
 	}

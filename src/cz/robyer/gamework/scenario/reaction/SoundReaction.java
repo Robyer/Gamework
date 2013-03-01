@@ -5,6 +5,7 @@ import java.io.IOException;
 import cz.robyer.gamework.scenario.Scenario;
 
 import android.content.res.AssetFileDescriptor;
+import android.util.Log;
 
 public class SoundReaction extends Reaction {
 	protected String value;
@@ -28,9 +29,9 @@ public class SoundReaction extends Reaction {
 			try {
 				AssetFileDescriptor descriptor = getContext().getAssets().openFd(value);
 				soundId = getScenario().getSoundPool().load(descriptor, 1);
+				descriptor.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Log.e("SoundReaction", "Can't load sound '" + value + "'");
 			}			
 		}
 	}
