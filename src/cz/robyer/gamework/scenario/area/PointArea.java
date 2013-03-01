@@ -3,6 +3,8 @@ package cz.robyer.gamework.scenario.area;
 import cz.robyer.gamework.util.Point;
 
 public class PointArea extends Area {
+	private static int LEAVE_RADIUS = 3;
+	
 	protected Point point;
 	protected int radius;
 	
@@ -13,9 +15,8 @@ public class PointArea extends Area {
 	}
 
 	@Override
-	public boolean isPointInArea(double lat, double lon) {
-		// TODO implement it
-		return false;
+	protected boolean isPointInArea(double lat, double lon) {
+		return point.distanceTo(lat, lon) < (radius + (inArea ? LEAVE_RADIUS : 0));
 	}
 
 	public Point getPoint() {
@@ -25,5 +26,5 @@ public class PointArea extends Area {
 	public int getRadius() {
 		return radius;
 	}
-
+	
 }
