@@ -6,8 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 import android.content.Context;
+import android.location.Location;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.os.Handler;
 import android.util.Log;
 import cz.robyer.gamework.R;
 import cz.robyer.gamework.hook.Hook;
@@ -19,32 +21,29 @@ public class Scenario {
 	public static final String TAG = Scenario.class.getSimpleName();
 	
 	protected Context context;
-	
-	protected String title;
-	protected String author;
-	protected String version;
-	protected String location;
-	protected String duration;
-	protected String difficulty;
+	protected Handler handler;
+	protected ScenarioInfo info;
 	
 	protected Map<String, Area> areas;// = new HashMap<String, Area>();
 	protected Map<String, Variable> variables;// = new HashMap<String, Variable>();
 	protected Map<String, Reaction> reactions;// = new HashMap<String, Reaction>();
 	protected List<Hook> hooks;// = new ArrayList<Hook>();
+	
 	protected SoundPool soundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
+	protected TimeUpdater timeUpdater = new TimeUpdater(this);
+	protected LocationUpdater locationUpdater = new LocationUpdater(this);
+	
+	protected long gameTime;
+	protected long systemTime;
+	protected Location location;
 	
 	public Scenario(Context context) {
-		this.context = context;
+		this(context, new ScenarioInfo());
 	}
 	
-	public Scenario(Context context, String title, String author, String version, String location, String duration, String difficulty) {
+	public Scenario(Context context, ScenarioInfo info) {
 		this.context = context;
-		this.title = title;
-		this.author = author;
-		this.version = version;
-		this.location = location;
-		this.duration = duration;
-		this.difficulty = difficulty;
+		this.info = info;
 	}
 		
 	public Context getContext() {
@@ -73,6 +72,9 @@ public class Scenario {
 		return areas.get(id);
 	}
 	
+	public Map<String, Area> getAreas() {
+		return areas;
+	}
 	
 	public void addVariable(String id, Variable variable) {
 		if (variables == null)
@@ -128,8 +130,9 @@ public class Scenario {
 			hookable = variables.get(value);
 			break;
 		case Hook.TYPE_TIME:
-			// TODO: get hookable time object
+			hookable = timeUpdater;
 			break;
+			// TODO: add locationUpdater
 		}
 
 		if (hookable != null) {
@@ -141,58 +144,41 @@ public class Scenario {
 		}
 	}
 	
-	/* basic information getters/setters */
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getAuthor() {
-		return author;
-	}
-
-	public void setAuthor(String author) {
-		this.author = author;
-	}
-
-	public String getVersion() {
-		return version;
-	}
-
-	public void setVersion(String version) {
-		this.version = version;
-	}
-
-	public String getLocation() {
-		return location;
-	}
-
-	public void setLocation(String location) {
+	public void updateLocation(Location location) {
+		// TODO: call hooks etc.
 		this.location = location;
 	}
-
-	public String getDuration() {
-		return duration;
-	}
-
-	public void setDuration(String duration) {
-		this.duration = duration;
-	}
-
-	public String getDifficulty() {
-		return difficulty;
-	}
-
-	public void setDifficulty(String difficulty) {
-		this.difficulty = difficulty;
+	
+	public void updateTime(long time, long systemTime) {
+		// TODO: call hooks etc.
+		this.gameTime = time;
+		this.systemTime = systemTime;
 	}
 	
 	public String getDescription() {
-		return getContext().getResources().getString(R.string.scenarioInfo, author, version, location, duration, difficulty);
+		return getContext().getResources().getString(R.string.scenarioInfo,
+			info.getAuthor(),
+			info.getVersion(),
+			info.getLocation(),
+			info.getDuration(),
+			info.getDifficulty()
+		);
+	}
+
+	public Handler getHandler() {
+		return handler;
+	}
+
+	public ScenarioInfo getInfo() {
+		return info;
+	}
+
+	public void setHandler(Handler handler) {
+		this.handler = handler;
+	}
+
+	public TimeUpdater getTimeUpdater() {
+		return timeUpdater;
 	}
 
 }

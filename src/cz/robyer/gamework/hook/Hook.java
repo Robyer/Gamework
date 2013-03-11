@@ -56,6 +56,10 @@ public class Hook extends BaseObject {
 	public int getType() {
 		return type;
 	}
+	
+	public String getValue() {
+		return value;
+	}
 
 	public void addCondition(Condition condition) {
 		if (conditions == null) {

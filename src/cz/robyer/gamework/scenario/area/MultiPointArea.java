@@ -27,6 +27,10 @@ public class MultiPointArea extends Area {
 		calcBoundaries(point.getLatitude(), point.getLongitude());
 	}
 	
+	public List<Point> getPoints() {
+		return points;
+	}
+	
 	private void calcBoundaries(double lat, double lon) {
 		if (minLat > lat) minLat = lat;		
 		if (maxLat < lat) maxLat = lat;		

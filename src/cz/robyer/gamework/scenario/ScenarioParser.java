@@ -172,7 +172,7 @@ public class ScenarioParser {
 	        	} else if (type.equalsIgnoreCase(HOOK_TYPE_VARIABLE)) {
 	        		itype = Hook.TYPE_VARIABLE;
 	        	} else {
-	        		Log.e(TAG, "Reaction of type '" + type + "' is unknown.");
+	        		Log.e(TAG, "Hook of type '" + type + "' is unknown.");
 	        		skip();
 	        		return;
 	        	}
@@ -537,7 +537,8 @@ public class ScenarioParser {
 	        }
 	    }
 		
-	    scenario = new Scenario(context, title, author, version, location, duration, difficulty);
+		ScenarioInfo info = new ScenarioInfo(title, author, version, location, duration, difficulty);
+	    scenario = new Scenario(context, info);
 	}
 	
 	private String readText(String tag) throws IOException, XmlPullParserException {
