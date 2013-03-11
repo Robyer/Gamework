@@ -95,7 +95,7 @@ public class TestingActivity extends Activity {
             		myLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, myLocationListener);
             		myLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, myLocationListener);
             		
-            		scenario.getTimeUpdater().start();
+            		scenario.getTimeUpdater().start(true);
                     
                /*     timer = new Timer();
                     timer.scheduleAtFixedRate(new TimerTask() {
@@ -143,7 +143,7 @@ public class TestingActivity extends Activity {
 					//ProgressDialog dialog = ProgressDialog.show(TestingActivity.this, "", "Loading. Please wait...", true);
 					Toast.makeText(TestingActivity.this, "Sucessfully parsed scenario '" + filename + "'.", Toast.LENGTH_LONG).show();
 					
-					AlertDialog ad = new AlertDialog.Builder(TestingActivity.this).create();
+					/*AlertDialog ad = new AlertDialog.Builder(TestingActivity.this).create();
 					ad.setCancelable(false); // This blocks the 'BACK' button
 					//ad.setIcon(android.R.drawable.ic_dialog_info);
 					ad.setTitle(scenario.getInfo().getTitle());
@@ -156,7 +156,7 @@ public class TestingActivity extends Activity {
 					});
 					
 					//dialog.hide();
-					ad.show();
+					ad.show();*/
 				} else {
 					Toast.makeText(TestingActivity.this, "Error when parsing scenario '" + filename + "'.", Toast.LENGTH_LONG).show();
 				}

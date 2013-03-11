@@ -23,37 +23,36 @@ public class TimeUpdater extends HookableObject {
 		if (hooks == null)
 			return;
 		
+		long secs = time / 1000; // from mili to seconds
+		
 		for (Hook h : hooks) {
 			boolean valid = false;
 				
 			switch (h.getType()) {
-			case Hook.TYPE_TIME:
-				time /= 1000; // from mili to seconds
-				
+			case Hook.TYPE_TIME:				
 				if (h.getValue().equalsIgnoreCase("second")) {
 					valid = true;
 				} else if (h.getValue().equalsIgnoreCase("minute")) {
-					valid = (time % 60 == 0);
+					valid = (secs % 60 == 0);
 				} else if (h.getValue().equalsIgnoreCase("hour")) {
-					valid = (time % 3600 == 0);
+					valid = (secs % 3600 == 0);
 				}
 
 				break;
 			}
-				
-			Log.d("TimeUpdater", valid ? "Calling hooks - " + h.getValue() : "Not calling hooks - " + h.getValue());
 				
 			if (valid)
 				h.call();
 		}
 	}
 	
-	public void start() {
+	public void start(boolean reset) {
 		if (timer == null) {
 			Log.i("TimeUpdater", "Starting timer.");
 			// system time clock: System.currentTimeMillis()
 			// uptime clock (not ticking in deep sleep): SystemClock.uptimeMillis();
-			start = SystemClock.uptimeMillis();
+			if (reset || start <= 0)
+				start = SystemClock.uptimeMillis();
 			
 			timer = new Timer();
 			timer.schedule(new TimerTask() {
@@ -73,15 +72,11 @@ public class TimeUpdater extends HookableObject {
 					//getScenario().getHandler().sendEmptyMessage(0);
 				}
 				
-			}, 0, 1000);
+			}, 1000, 1000);
 		} else {
 			Log.e("TimeUpdater", "Timer is running, it can't be started again, until it's stopped.");
 		}
 	}
-	
-	/*public void pause() {
-		
-	}*/
 	
 	public void stop() {
 		Log.i("TimeUpdater", "Stopping timer.");
