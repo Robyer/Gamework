@@ -93,7 +93,9 @@
             <reaction type="sound" value="sounds/nakup.mp3" />
             <reaction type="var_set" variable="nakoupeno" value="true" />
         </reaction>
-        <reaction id="tick_sound" type="sound" value="sound/tick.mp3" />
+        
+        <reaction id="tick_second" type="sound" value="sound/tick.mp3" />
+        <reaction id="tick_minute" type="sound" value="sound/tick2.mp3" />
     </reactions>
     
     <hooks>
@@ -139,7 +141,14 @@
             </trigger>
         </hook>
         <hook type="time" value="second">            
-           	<condition type="greater" value="0" />
+           	<trigger reaction="tick_second" condition="ALL">
+           		<condition type="greater" value="0" />
+           	</trigger>
+        </hook>
+        <hook type="time" value="minute">
+           	<trigger reaction="tick_minute" condition="ALL">
+           		<condition type="greater" value="0" />
+           	</trigger>
         </hook>
     </hooks>
     
