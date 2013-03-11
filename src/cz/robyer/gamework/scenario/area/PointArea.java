@@ -1,14 +1,16 @@
 package cz.robyer.gamework.scenario.area;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import cz.robyer.gamework.util.Point;
 
 public class PointArea extends Area {
 	protected static int LEAVE_RADIUS = 3;
 	
-	protected Point point;
+	protected LatLng point;
 	protected int radius;
 	
-	public PointArea(String id, Point point, int radius) {
+	public PointArea(String id, LatLng point, int radius) {
 		super(id);
 		this.point = point;
 		this.radius = radius;
@@ -16,10 +18,10 @@ public class PointArea extends Area {
 
 	@Override
 	protected boolean isPointInArea(double lat, double lon) {
-		return point.distanceTo(lat, lon) < (radius + (inArea ? LEAVE_RADIUS : 0));
+		return Point.distanceBetween(point.latitude, point.longitude, lat, lon) < (radius + (inArea ? LEAVE_RADIUS : 0));
 	}
 
-	public Point getPoint() {
+	public LatLng getPoint() {
 		return point;
 	}
 

@@ -8,6 +8,9 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import android.content.Context;
 import android.util.Xml;
+
+import com.google.android.gms.maps.model.LatLng;
+
 import cz.robyer.gamework.hook.Condition;
 import cz.robyer.gamework.hook.Hook;
 import cz.robyer.gamework.scenario.area.Area;
@@ -25,7 +28,6 @@ import cz.robyer.gamework.scenario.variable.BooleanVariable;
 import cz.robyer.gamework.scenario.variable.DecimalVariable;
 import cz.robyer.gamework.scenario.variable.Variable;
 import cz.robyer.gamework.util.Log;
-import cz.robyer.gamework.util.Point;
 
 public class ScenarioParser {
 	private static final String TAG = ScenarioParser.class.getSimpleName();
@@ -437,7 +439,7 @@ public class ScenarioParser {
 	        		String radius = parser.getAttributeValue(null, "radius");
 	        		
 	        		if (latitude != null && longitude != null && radius != null) {
-		        		Point point = new Point(Double.parseDouble(latitude), Double.parseDouble(longitude));
+		        		LatLng point = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
 		        		area = new PointArea(id, point, Integer.parseInt(radius));
 		        		Log.i(TAG, "Got PointArea");
 	        		} else {
@@ -453,7 +455,7 @@ public class ScenarioParser {
 	        		String soundRadius = parser.getAttributeValue(null, "soundRadius");
 	        		
 	        		if (latitude != null && longitude != null && radius != null && value != null && soundRadius != null) {
-		        		Point point = new Point(Double.parseDouble(latitude), Double.parseDouble(longitude));
+		        		LatLng point = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
 		        		area = new SoundArea(id, point, Integer.parseInt(radius), value, Integer.parseInt(soundRadius));
 		        		Log.i(TAG, "Got SoundArea");
 	        		} else {
@@ -474,7 +476,7 @@ public class ScenarioParser {
 			        		String longitude = parser.getAttributeValue(null, "lon");
 			        		
 			        		if (latitude != null && longitude != null) {
-				        		Point point = new Point(Double.parseDouble(latitude), Double.parseDouble(longitude));
+				        		LatLng point = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
 				        		((MultiPointArea)area).addPoint(point);
 				        		Log.i(TAG, "Got PointArea->Point.");
 			        		} else {

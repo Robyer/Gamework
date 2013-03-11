@@ -3,10 +3,10 @@ package cz.robyer.gamework.scenario.area;
 import java.util.ArrayList;
 import java.util.List;
 
-import cz.robyer.gamework.util.Point;
+import com.google.android.gms.maps.model.LatLng;
 
 public class MultiPointArea extends Area {
-	protected List<Point> points;
+	protected List<LatLng> points;
 	protected double minLat;
 	protected double maxLat;
 	protected double minLon;
@@ -16,18 +16,18 @@ public class MultiPointArea extends Area {
 		super(id);
 	}
 
-	public void addPoint(Point point) {
+	public void addPoint(LatLng point) {
 		if (point == null)
 			return;
 		
 		if (points == null)
-			points = new ArrayList<Point>();
+			points = new ArrayList<LatLng>();
 			
 		points.add(point);
-		calcBoundaries(point.getLatitude(), point.getLongitude());
+		calcBoundaries(point.latitude, point.longitude);
 	}
 	
-	public List<Point> getPoints() {
+	public List<LatLng> getPoints() {
 		return points;
 	}
 	
@@ -47,17 +47,17 @@ public class MultiPointArea extends Area {
 		boolean c = false;
 		// algorithm from http://www.faqs.org/faqs/graphics/algorithms-faq/
 		for (int i = 0, j = points.size()-1; i < points.size(); j = i++) {
-			if ((((points.get(i).getLatitude() <= lat) && (lat < points.get(j).getLatitude())) ||
-				((points.get(j).getLatitude() <= lat) && (lat < points.get(i).getLatitude()))) &&
-				(lon < (points.get(j).getLongitude() - points.get(i).getLongitude()) * (lat - points.get(i).getLatitude()) / (points.get(j).getLatitude() - points.get(i).getLatitude()) + points.get(i).getLongitude()))		
+			if ((((points.get(i).latitude <= lat) && (lat < points.get(j).latitude)) ||
+				((points.get(j).latitude <= lat) && (lat < points.get(i).latitude))) &&
+				(lon < (points.get(j).longitude - points.get(i).longitude) * (lat - points.get(i).latitude) / (points.get(j).latitude - points.get(i).latitude) + points.get(i).longitude))
 				c = !c;
 		}
 		
 		// algorithm from http://en.wikipedia.org/wiki/Even-odd_rule
 		/*for (int i = 0, j = points.size()-1; i < points.size(); j = i++) {
-			if (((points.get(i).getLatitude() > lat) != (points.get(j).getLatitude() > lat)) &&
-				(lon < (points.get(j).getLongitude() - points.get(i).getLongitude()) *
-				(lat - points.get(i).getLatitude()) / (points.get(j).getLatitude() - points.get(i).getLatitude()) + points.get(i).getLongitude()))	
+			if (((points.get(i).latitude > lat) != (points.get(j).latitude > lat)) &&
+				(lon < (points.get(j).longitude - points.get(i).longitude) *
+				(lat - points.get(i).latitude) / (points.get(j).latitude - points.get(i).latitude) + points.get(i).longitude))	
 				c = !c;
 		}*/
 		

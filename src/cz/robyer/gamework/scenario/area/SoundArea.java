@@ -5,6 +5,9 @@ import java.io.IOException;
 import android.content.res.AssetFileDescriptor;
 import android.media.SoundPool;
 import android.util.Log;
+
+import com.google.android.gms.maps.model.LatLng;
+
 import cz.robyer.gamework.scenario.Scenario;
 import cz.robyer.gamework.util.Point;
 
@@ -16,7 +19,7 @@ public class SoundArea extends PointArea {
 	protected int loop = -1; // loop forever
 	protected int soundRadius;
 	
-	public SoundArea(String id, Point point, int radius, String value, int soundRadius) {
+	public SoundArea(String id, LatLng point, int radius, String value, int soundRadius) {
 		super(id, point, radius);
 		this.value = value;
 		this.soundRadius = soundRadius;
@@ -42,7 +45,7 @@ public class SoundArea extends PointArea {
 	
 	@Override
 	public void checkPointInArea(double lat, double lon) {
-		double distance = point.distanceTo(lat, lon);		
+		double distance = Point.distanceBetween(point.latitude, point.longitude, lat, lon);		
 		boolean r = distance < (radius + (inArea ? LEAVE_RADIUS : 0));
 		float actualVolume = calcVolume(distance);
 

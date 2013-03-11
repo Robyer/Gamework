@@ -22,7 +22,6 @@ import cz.robyer.gamework.scenario.area.Area;
 import cz.robyer.gamework.scenario.area.MultiPointArea;
 import cz.robyer.gamework.scenario.area.PointArea;
 import cz.robyer.gamework.scenario.area.SoundArea;
-import cz.robyer.gamework.util.Point;
 
 public class MapActivity extends FragmentActivity {
 
@@ -52,7 +51,7 @@ public class MapActivity extends FragmentActivity {
 	        			PointArea area = (PointArea)a;
 	        			
 	        			CircleOptions circle = new CircleOptions(); 
-	        			circle.center(new LatLng(area.getPoint().getLatitude(), area.getPoint().getLongitude()));
+	        			circle.center(area.getPoint());
 	        			circle.radius(area.getRadius());
 	        			
 	        			circle.strokeWidth(2);
@@ -63,9 +62,9 @@ public class MapActivity extends FragmentActivity {
 	        			MultiPointArea area = (MultiPointArea)a;
 	        			
 	        			PolygonOptions polygon = new PolygonOptions();
-	        			List<Point> points = area.getPoints();
-	        			for (Point p : points) {
-	        				polygon.add(new LatLng(p.getLatitude(), p.getLongitude()));	
+	        			List<LatLng> points = area.getPoints();
+	        			for (LatLng p : points) {
+	        				polygon.add(p);	
 	        			}
 	        			
 	        			polygon.strokeWidth(2);
