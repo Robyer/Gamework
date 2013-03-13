@@ -24,6 +24,8 @@ public class TimeUpdater extends HookableObject {
 			return;
 		
 		long secs = time / 1000; // from mili to seconds
+		boolean isMinute = (secs % 60 == 0);
+		boolean isHour = (secs % 3600 == 0);
 		
 		for (Hook h : hooks) {
 			boolean valid = false;
@@ -33,11 +35,10 @@ public class TimeUpdater extends HookableObject {
 				if (h.getValue().equalsIgnoreCase("second")) {
 					valid = true;
 				} else if (h.getValue().equalsIgnoreCase("minute")) {
-					valid = (secs % 60 == 0);
+					valid = isMinute;
 				} else if (h.getValue().equalsIgnoreCase("hour")) {
-					valid = (secs % 3600 == 0);
+					valid = isHour;
 				}
-
 				break;
 			}
 				
