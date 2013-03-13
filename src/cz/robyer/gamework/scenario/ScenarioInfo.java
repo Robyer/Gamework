@@ -2,16 +2,12 @@ package cz.robyer.gamework.scenario;
 
 public class ScenarioInfo {
 
-	protected String title;
-	protected String author;
-	protected String version;
-	protected String location;
-	protected String duration;
-	protected String difficulty;
-	
-	public ScenarioInfo() {
-		
-	}
+	protected final String title;
+	protected final String author;
+	protected final String version;
+	protected final String location;
+	protected final String duration;
+	protected final String difficulty;
 	
 	public ScenarioInfo(String title, String author, String version, String location, String duration, String difficulty) {
 		this.title = title;
@@ -22,52 +18,28 @@ public class ScenarioInfo {
 		this.difficulty = difficulty;
 	}
 	
-	public String getTitle() {
+	public final String getTitle() {
 		return title;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getAuthor() {
+	public final String getAuthor() {
 		return author;
 	}
 
-	public void setAuthor(String author) {
-		this.author = author;
-	}
-
-	public String getVersion() {
+	public final String getVersion() {
 		return version;
 	}
 
-	public void setVersion(String version) {
-		this.version = version;
-	}
-
-	public String getLocation() {
+	public final String getLocation() {
 		return location;
 	}
 
-	public void setLocation(String location) {
-		this.location = location;
-	}
-
-	public String getDuration() {
+	public final String getDuration() {
 		return duration;
 	}
 
-	public void setDuration(String duration) {
-		this.duration = duration;
-	}
-
-	public String getDifficulty() {
+	public final String getDifficulty() {
 		return difficulty;
-	}
-
-	public void setDifficulty(String difficulty) {
-		this.difficulty = difficulty;
 	}
 
 }

@@ -37,10 +37,6 @@ public class Scenario {
 	protected long systemTime;
 	protected Location location;
 	
-	public Scenario(Context context) {
-		this(context, new ScenarioInfo());
-	}
-	
 	public Scenario(Context context, ScenarioInfo info) {
 		this.context = context;
 		this.info = info;
