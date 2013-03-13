@@ -3,7 +3,9 @@ package cz.robyer.gamework.activity;
 import java.util.List;
 import java.util.Map;
 
+import android.annotation.TargetApi;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
@@ -85,12 +87,13 @@ public class MapActivity extends FragmentActivity {
 	}
 
 	/**
-	 * Set up the {@link android.app.ActionBar}.
+	 * Set up the {@link android.app.ActionBar}, if the API is available.
 	 */
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private void setupActionBar() {
-
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			getActionBar().setDisplayHomeAsUpEnabled(true);
+		}
 	}
 
 	@Override
