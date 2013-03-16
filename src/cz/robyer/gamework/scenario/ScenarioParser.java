@@ -11,13 +11,14 @@ import android.util.Xml;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import cz.robyer.gamework.GameEvent;
 import cz.robyer.gamework.hook.Condition;
 import cz.robyer.gamework.hook.Hook;
 import cz.robyer.gamework.scenario.area.Area;
 import cz.robyer.gamework.scenario.area.MultiPointArea;
 import cz.robyer.gamework.scenario.area.PointArea;
 import cz.robyer.gamework.scenario.area.SoundArea;
-import cz.robyer.gamework.scenario.reaction.GameReaction;
+import cz.robyer.gamework.scenario.reaction.EventReaction;
 import cz.robyer.gamework.scenario.reaction.HtmlReaction;
 import cz.robyer.gamework.scenario.reaction.MultiReaction;
 import cz.robyer.gamework.scenario.reaction.Reaction;
@@ -53,9 +54,12 @@ public class ScenarioParser {
 	public static final String REACTION_TYPE_VAR_MUL = "var_multiply";
 	public static final String REACTION_TYPE_VAR_DIV = "var_divide";
 	public static final String REACTION_TYPE_VAR_NEG = "var_negate";
-	public static final String REACTION_TYPE_GAME_START = "game_start";
-	public static final String REACTION_TYPE_GAME_WON = "game_won";
-	public static final String REACTION_TYPE_GAME_LOSE = "game_lose";
+	public static final String REACTION_TYPE_EVENT = "event";
+	
+	// Events constants
+	public static final String EVENT_GAME_START = "game_start";
+	public static final String EVENT_GAME_WIN = "game_win";
+	public static final String EVENT_GAME_LOSE = "game_lose";
     
     // Hook constants
 	public static final String HOOK_TYPE_AREA = "area";
@@ -77,10 +81,22 @@ public class ScenarioParser {
 	public static final String CONDITION_TYPE_GREATEREQUALS = "greaterequals";
 	public static final String CONDITION_TYPE_SMALLEREQUALS = "smallerequals";
    
-	
     private Context context;
     private XmlPullParser parser;
     private Scenario scenario;
+    
+	public static Scenario fromFile(Context context, String filename) {
+		Scenario scenario = null;
+		try {
+			ScenarioParser parser = new ScenarioParser(context, false);
+			InputStream file = context.getAssets().open(filename);
+			scenario = parser.parse(file, false);
+			file.close();
+		} catch (Exception e) {
+			Log.e(TAG, e.getMessage(), e);
+		}
+		return scenario;
+	}
     
     public ScenarioParser(Context context, boolean namespaces) throws XmlPullParserException {
     	this.context = context;
@@ -350,12 +366,14 @@ public class ScenarioParser {
     		reaction = new VariableReaction(id, VariableReaction.NEGATE, variable, value);
     	} else if (type.equalsIgnoreCase(REACTION_TYPE_VAR_SET)) {
     		reaction = new VariableReaction(id, VariableReaction.SET, variable, value);
-    	} else if (type.equalsIgnoreCase(REACTION_TYPE_GAME_START)) {
-    		reaction = new GameReaction(id, GameReaction.START);
-    	} else if (type.equalsIgnoreCase(REACTION_TYPE_GAME_WON)) {
-    		reaction = new GameReaction(id, GameReaction.WON);
-    	} else if (type.equalsIgnoreCase(REACTION_TYPE_GAME_LOSE)) {
-    		reaction = new GameReaction(id, GameReaction.LOSE);
+    	} else if (type.equalsIgnoreCase(REACTION_TYPE_EVENT)) {
+    		if (value.equalsIgnoreCase(EVENT_GAME_START)) {
+    			reaction = new EventReaction(id, GameEvent.GAME_START);
+    		} else if (value.equalsIgnoreCase(EVENT_GAME_WIN)) {
+    			reaction = new EventReaction(id, GameEvent.GAME_WIN);
+    		} else if (value.equalsIgnoreCase(EVENT_GAME_LOSE)) {
+    			reaction = new EventReaction(id, GameEvent.GAME_LOSE);
+    		}
     	} else {
     		Log.e(TAG, "Reaction of type '" + type + "' is unknown.");
     		skip();

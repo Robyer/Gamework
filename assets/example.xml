@@ -54,9 +54,7 @@
         	- increment
         	- set
         	- ...
-        	- game_start
-        	- game_won
-        	- game_lose
+        	- event (value GAME_START, GAME_WIN, GAME_LOSE, etc.)
         	- ...
         	- dialog (icon?, title?, message, buttons (and their reactions))
          -->
@@ -77,17 +75,17 @@
         
         <reaction id="start_hry" type="multi">
             <reaction type="html" value="html/starting.html" />
-            <reaction type="game_start" />
+            <reaction type="event" value="GAME_START" />
         </reaction>
         
         <reaction id="vyhra" type="multi">
             <reaction type="vibrate" value="500" />
             <reaction type="sound" value="sounds/vyhra.mp3" />
-            <reaction type="game_won" />
+            <reaction type="event" value="GAME_WIN" />
         </reaction>
         <reaction id="prohra" type="multi">
             <reaction type="sound" value="sounds/prohra.mp3" />
-            <reaction type="game_lose" />
+            <reaction type="event" value="GAME_LOSE" />
         </reaction>
         <reaction id="nakup" type="multi">
             <reaction type="sound" value="sounds/nakup.mp3" />
