@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:orientation="horizontal"
+    android:layout_alignParentBottom="true"
+    android:background="@android:drawable/bottom_bar" >
+        
+	<Button
+	    android:id="@+id/btn_map"
+	    android:layout_height="match_parent"
+	    android:layout_width="0dp"
+	    android:layout_weight="1"
+	    android:text="Map" />
+	
+	<Button
+	    android:id="@+id/btn_messages"
+	    android:layout_height="match_parent"
+	    android:layout_width="0dp"
+	    android:layout_weight="1"
+	    android:text="Msg" />
+	
+	<Button
+	    android:id="@+id/btn_tasks"
+	    android:layout_height="match_parent"
+	    android:layout_width="0dp"
+	    android:layout_weight="1"
+	    android:text="Task" />
+	
+	<Button
+	    android:id="@+id/btn_inventory"
+	    android:layout_height="match_parent"
+	    android:layout_width="0dp"
+	    android:layout_weight="1"
+	    android:text="Item" />
+	
+	<Button
+	    android:id="@+id/btn_settings"
+	    android:layout_height="match_parent"
+	    android:layout_width="0dp"
+	    android:layout_weight="1"
+	    android:text="Sets" />
+
+</LinearLayout>

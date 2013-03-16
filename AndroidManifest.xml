@@ -68,6 +68,27 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="cz.robyer.gamework.activity.TestingActivity" />
         </activity>
+
+        <activity
+            android:name="cz.robyer.gamework.activity.GameMapActivity"
+            android:label="@string/title_activity_game_map" >
+        </activity>
+        <activity
+            android:name="cz.robyer.gamework.activity.GameMessagesActivity"
+            android:label="@string/title_activity_game_messages" >
+        </activity>
+        <activity
+            android:name="cz.robyer.gamework.activity.GameTasksActivity"
+            android:label="@string/title_activity_game_tasks" >
+        </activity>
+        <activity
+            android:name="cz.robyer.gamework.activity.GameInventoryActivity"
+            android:label="@string/title_activity_game_inventory" >
+        </activity>
+        <activity
+            android:name="cz.robyer.gamework.activity.GameSettingsActivity"
+            android:label="@string/title_activity_game_settings" >
+        </activity>
     </application>
 
 </manifest>
