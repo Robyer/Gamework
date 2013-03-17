@@ -5,40 +5,50 @@
     android:orientation="horizontal"
     android:layout_alignParentBottom="true"
     android:background="@android:drawable/bottom_bar" >
-        
-	<Button
+
+	<ImageButton
 	    android:id="@+id/btn_map"
 	    android:layout_height="match_parent"
 	    android:layout_width="0dp"
 	    android:layout_weight="1"
-	    android:text="Map" />
+	    android:text="Map"
+	    android:scaleType="fitCenter"
+        android:src="@drawable/icon_map" />
 	
-	<Button
+	<ImageButton
 	    android:id="@+id/btn_messages"
 	    android:layout_height="match_parent"
 	    android:layout_width="0dp"
 	    android:layout_weight="1"
-	    android:text="Msg" />
+	    android:text="Msg"
+	    android:scaleType="fitCenter"
+        android:src="@drawable/icon_message" />
 	
-	<Button
+	<ImageButton
 	    android:id="@+id/btn_tasks"
 	    android:layout_height="match_parent"
 	    android:layout_width="0dp"
 	    android:layout_weight="1"
-	    android:text="Task" />
+	    android:text="Task"
+	    android:scaleType="fitCenter"
+        android:src="@drawable/icon_tasks" />
 	
-	<Button
+	<ImageButton
 	    android:id="@+id/btn_inventory"
 	    android:layout_height="match_parent"
 	    android:layout_width="0dp"
 	    android:layout_weight="1"
-	    android:text="Item" />
+	    android:text="Item"
+	    android:scaleType="fitCenter"
+        android:src="@drawable/icon_backpack" />
 	
-	<Button
+	<ImageButton
 	    android:id="@+id/btn_settings"
 	    android:layout_height="match_parent"
 	    android:layout_width="0dp"
 	    android:layout_weight="1"
-	    android:text="Sets" />
+	    android:text="Sets"
+	    android:scaleType="fitCenter"
+        android:src="@drawable/icon_options" />
 
 </LinearLayout>
