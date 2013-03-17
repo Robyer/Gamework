@@ -4,6 +4,6 @@
     android:layout_height="match_parent"
     tools:context=".GameMapActivity" >
 
-    <include layout="@layout/buttons" />
+    <include layout="@layout/buttons" android:id="@+id/buttonsbar" />
 
 </RelativeLayout>

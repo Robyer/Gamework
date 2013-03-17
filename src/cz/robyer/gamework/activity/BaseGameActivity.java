@@ -58,11 +58,14 @@ public abstract class BaseGameActivity extends BaseActivity implements GameEvent
 			}
 		};
 		
-		findViewById(R.id.btn_map).setOnClickListener(listener);
-		findViewById(R.id.btn_messages).setOnClickListener(listener);
-		findViewById(R.id.btn_tasks).setOnClickListener(listener);
-		findViewById(R.id.btn_inventory).setOnClickListener(listener);
-		findViewById(R.id.btn_settings).setOnClickListener(listener);
+		View buttons = findViewById(R.id.buttonsbar);
+		if (buttons != null) {
+			buttons.findViewById(R.id.btn_map).setOnClickListener(listener);
+			buttons.findViewById(R.id.btn_messages).setOnClickListener(listener);
+			buttons.findViewById(R.id.btn_tasks).setOnClickListener(listener);
+			buttons.findViewById(R.id.btn_inventory).setOnClickListener(listener);
+			buttons.findViewById(R.id.btn_settings).setOnClickListener(listener);
+		}
 		
 	}
 	
