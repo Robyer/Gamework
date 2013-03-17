@@ -12,6 +12,8 @@ import cz.robyer.gamework.scenario.Scenario;
 import cz.robyer.gamework.util.Point;
 
 public class SoundArea extends PointArea {
+	private final String TAG = "SoundArea ("+id+")";
+	
 	protected String value;
 	protected int soundId = -1;
 	protected float volume = 1.0f;
@@ -34,7 +36,7 @@ public class SoundArea extends PointArea {
 				soundId = getScenario().getSoundPool().load(descriptor, 1);
 				descriptor.close();
 			} catch (IOException e) {
-				Log.e("SoundArea", "Can't load sound '" + value + "'");
+				Log.e(TAG, "Can't load sound '" + value + "'");
 			}			
 		}
 	}
@@ -44,12 +46,12 @@ public class SoundArea extends PointArea {
 	}
 	
 	@Override
-	public void checkPointInArea(double lat, double lon) {
+	public void updateLocation(double lat, double lon) {
 		double distance = Point.distanceBetween(point.latitude, point.longitude, lat, lon);		
 		boolean r = distance < (radius + (inArea ? LEAVE_RADIUS : 0));
 		float actualVolume = calcVolume(distance);
 
-		Log.d("SoundArea", "Checking point in area - was '" + (inArea ? "true" : "false") + "', is '" + (r ? "true" : "false") + "'");
+		Log.d(TAG, "Updating location. We were: " + (inArea ? "inside" : "outsude") + ", we are: " + (r ? "inside" : "outside"));
 
 		SoundPool soundPool = getScenario().getSoundPool();
 		
@@ -60,15 +62,15 @@ public class SoundArea extends PointArea {
 			
 			if (soundId != -1) {
 				if (inArea) {
-					Log.d("SoundArea", "Started playing sound '" + value + "' at volume '" + actualVolume + "'");
+					Log.d(TAG, "Started playing sound '" + value + "' at volume '" + actualVolume + "'");
 					soundPool.play(soundId, actualVolume, actualVolume, 1, loop, pitch);
 				} else {
-					Log.d("SoundArea", "Stopped playing sound '" + value + "'");
+					Log.d(TAG, "Stopped playing sound '" + value + "'");
 					soundPool.stop(soundId);
 				}
 			}
 		} else if (inArea) {
-			Log.d("SoundArea", "Changing volume of sound '" + value + "' to volume '" + actualVolume + "'");
+			Log.d(TAG, "Changed volume of sound '" + value + "' to volume '" + actualVolume + "'");
 			soundPool.setVolume(soundId, actualVolume, actualVolume);
 		}
 	}
