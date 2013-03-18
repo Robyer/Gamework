@@ -1,7 +1,7 @@
 package cz.robyer.gamework.scenario;
 
 public abstract class IdentificableObject extends BaseObject {
-	protected String id;
+	protected final String id;
 	
 	public IdentificableObject(String id) {
 		super();

@@ -6,7 +6,7 @@ import cz.robyer.gamework.scenario.HookableObject;
 
 public abstract class Area extends HookableObject {
 	
-	private final String TAG = "Area ("+id+")";
+	private final String TAG = String.format("Area (%1s)", id);
 	protected boolean inArea = false;
 	
 	public Area(String id) {
@@ -18,10 +18,9 @@ public abstract class Area extends HookableObject {
 	public void updateLocation(double lat, double lon) {
 		boolean r = isPointInArea(lat, lon);
 		
-		Log.d(TAG, "Updating location. We were: " + (inArea ? "inside" : "outsude") + ", we are: " + (r ? "inside" : "outside"));
-		
 		if (inArea != r) {
-			// enter or exit from/to area
+			// entering or leaving area
+			Log.i(TAG, String.format("We %1s location %2s", r ? "entered" : "leaved", id));
 			inArea = r;
 			callHooks(r);
 		}

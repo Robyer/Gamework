@@ -12,7 +12,7 @@ import cz.robyer.gamework.scenario.Scenario;
 import cz.robyer.gamework.util.Point;
 
 public class SoundArea extends PointArea {
-	private final String TAG = "SoundArea ("+id+")";
+	private final String TAG = String.format("SoundArea (%1s)", id);
 	
 	protected String value;
 	protected int soundId = -1;
@@ -36,11 +36,16 @@ public class SoundArea extends PointArea {
 				soundId = getScenario().getSoundPool().load(descriptor, 1);
 				descriptor.close();
 			} catch (IOException e) {
-				Log.e(TAG, "Can't load sound '" + value + "'");
+				Log.e(TAG, String.format("Can't load sound '%1s'", value));
 			}			
 		}
 	}
 
+	/**
+	 * Calculate sound volume depending on distance
+	 * @param distance in meters
+	 * @return volume from 0.0 to 1.0
+	 */
 	private float calcVolume(double distance) {
 		return 1.0f - (float)((soundRadius - distance) / soundRadius);  
 	}
@@ -51,12 +56,11 @@ public class SoundArea extends PointArea {
 		boolean r = distance < (radius + (inArea ? LEAVE_RADIUS : 0));
 		float actualVolume = calcVolume(distance);
 
-		Log.d(TAG, "Updating location. We were: " + (inArea ? "inside" : "outsude") + ", we are: " + (r ? "inside" : "outside"));
-
 		SoundPool soundPool = getScenario().getSoundPool();
 		
 		if (inArea != r) {
-			// enter or exit from/to area
+			// entering or leaving area
+			Log.i(TAG, String.format("We %1s location %2s", r ? "entered" : "leaved", id));
 			inArea = r;
 			callHooks(inArea);
 			
@@ -70,7 +74,8 @@ public class SoundArea extends PointArea {
 				}
 			}
 		} else if (inArea) {
-			Log.d(TAG, "Changed volume of sound '" + value + "' to volume '" + actualVolume + "'");
+			// update sound volume 
+			Log.d(TAG, String.format("Changed volume of sound '%1s' to '%2s'", value, actualVolume));
 			soundPool.setVolume(soundId, actualVolume, actualVolume);
 		}
 	}
