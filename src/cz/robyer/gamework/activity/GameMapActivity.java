@@ -3,15 +3,17 @@ package cz.robyer.gamework.activity;
 import java.util.List;
 import java.util.Map;
 
+import android.graphics.Color;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolygonOptions;
 
-import android.graphics.Color;
-import android.os.Bundle;
-import android.util.Log;
 import cz.robyer.gamework.GameEvent;
 import cz.robyer.gamework.GameService;
 import cz.robyer.gamework.R;
@@ -85,6 +87,13 @@ public class GameMapActivity extends BaseGameActivity {
 	    		}
 	        }
 	    }
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.game_map, menu);
+		return true;
 	}
 	
 	public void receiveEvent(GameEvent event) {
