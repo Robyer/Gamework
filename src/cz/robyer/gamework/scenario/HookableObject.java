@@ -3,11 +3,12 @@ package cz.robyer.gamework.scenario;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.util.Log;
 import cz.robyer.gamework.hook.Hook;
 
-import android.util.Log;
-
 public class HookableObject extends IdentificableObject {
+	private static final String TAG = HookableObject.class.getSimpleName();
+	
 	protected List<Hook> hooks;
 	
 	public HookableObject(String id) {
@@ -22,7 +23,7 @@ public class HookableObject extends IdentificableObject {
 	}
 	
 	protected void callHooks() {
-		Log.d("HookableObject", "Calling all hooks.");
+		Log.d(TAG, "Calling all hooks.");
 		if (hooks != null) {
 			for (Hook h : hooks) {
 				h.call();

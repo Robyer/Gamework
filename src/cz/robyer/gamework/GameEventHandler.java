@@ -5,7 +5,8 @@ import java.util.WeakHashMap;
 import cz.robyer.gamework.util.Log;
 
 public class GameEventHandler implements GameEventBroadcaster {
-
+	private static final String TAG = GameEventHandler.class.getSimpleName();
+	
 	// We use a weak hash map to ensure that if an object is added to this as a
 	// listener, but never removes itself, we won't keep it from being
 	// garbage collected.
@@ -13,21 +14,17 @@ public class GameEventHandler implements GameEventBroadcaster {
 			new WeakHashMap<GameEventListener, Boolean>();
 
 	public synchronized boolean addListener(GameEventListener listener) {
-		Log.d("GameEventHandler", "Adding GameEventListener " + listener.toString());
-		if (listeners.put(listener, true) == null) {
-			return true;
-		} else {
-			return false;
-		}
+		Log.d(TAG, "Adding GameEventListener " + listener.toString());
+		return (listeners.put(listener, true) == null);
 	}
 	
 	public synchronized boolean removeListener(GameEventListener listener) {
-		Log.d("GameEventHandler", "Removing GameEventListener " + listener.toString());
-		return listeners.remove(listener);
+		Log.d(TAG, "Removing GameEventListener " + listener.toString());
+		return (listeners.remove(listener) != null);
  	}
 	
 	public synchronized void clearListeners() {
-		Log.d("GameEventHandler", "Clearing GameEventListeners.");
+		Log.d(TAG, "Clearing GameEventListeners.");
 		listeners.clear();
 	}
 	
@@ -39,7 +36,7 @@ public class GameEventHandler implements GameEventBroadcaster {
 	    }
 	
 	    if (Log.loggingEnabled()) {
-	    	Log.println(severity, "GameEventHandler", "Broadcasting event " + event.name());
+	    	Log.println(severity, TAG, "Broadcasting event " + event.name() + " to " + listeners.size() + " listeners.");
 	    }
 	
 	    for (GameEventListener listener : listeners.keySet()) {

@@ -21,16 +21,16 @@
         android:hint="Filename of scenario's xml from assets"
         android:text="example.xml"
         android:id="@+id/edit_filename"
+        android:singleLine="true"
         />
-    
+        
     <Button 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Load scenario"
-        android:id="@+id/btn_filename"
+        android:text="Start game"
+        android:id="@+id/btn_game"
         android:layout_marginBottom="20dp"
         />
-    
     
     <EditText 
         android:layout_width="match_parent"
@@ -48,41 +48,29 @@
         android:layout_marginBottom="20dp"
         />
     
-    <Button 
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Show map"
-        android:id="@+id/btn_showmap"
-        />
-    
     <TextView
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:text="Latitude:"
 		/>
+    
 	<TextView
 		android:id="@+id/Latitude"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		/>
+	
 	<TextView
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:text="Longitude:"
 		/>
+	
 	<TextView
 		android:id="@+id/Longitude"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		/>
-	
-	
-	<Button 
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Start timer"
-        android:id="@+id/btn_timer"
-        />
 	
 	<TextView
 		android:id="@+id/edit_timestamp"

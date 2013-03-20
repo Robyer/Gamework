@@ -1,7 +1,6 @@
 package cz.robyer.gamework.scenario;
 
 import android.content.Context;
-import cz.robyer.gamework.scenario.Scenario;
 
 public abstract class BaseObject {
 	protected Scenario scenario;

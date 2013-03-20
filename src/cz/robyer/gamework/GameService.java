@@ -1,9 +1,9 @@
 package cz.robyer.gamework;
 
-import java.io.InputStream;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
@@ -15,24 +15,29 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
+import android.widget.Toast;
+import cz.robyer.gamework.activity.GameMapActivity;
 import cz.robyer.gamework.activity.TestingActivity;
 import cz.robyer.gamework.constants.Constants;
 import cz.robyer.gamework.scenario.Scenario;
 import cz.robyer.gamework.scenario.ScenarioParser;
 import cz.robyer.gamework.util.Log;
 
-public class GameService extends Service implements GameEventListener, LocationListener {
-	public static boolean running;
+public class GameService extends Service implements GameEventListener, LocationListener {		
+	private static final String TAG = GameService.class.getSimpleName();
+	
+	public static boolean running; // signalizing that instance of GameService exists
+	private static GameService instance;
 	
 	private GameEventHandler eventHandler = new GameEventHandler();
 	
 	private Scenario scenario;
 	Status status = Status.GAME_STOPPED;
 	
-	private Timer timer;
+	private Timer timer; // http://stackoverflow.com/questions/4597690/android-timer-how
 	private long time;
 	private long start;
-	private static Location location;
+	private Location location;
 	
 	private LocationManager locationManager;
 	
@@ -52,79 +57,54 @@ public class GameService extends Service implements GameEventListener, LocationL
 			eventHandler.broadcastEvent(GameEvent.UPDATED_TIME);
 		}
 	};
+	
+	public boolean registerListener(GameEventListener listener) {
+    	return eventHandler.addListener(listener);
+    }
+    
+    public boolean unregisterListener(GameEventListener listener) {
+    	return eventHandler.removeListener(listener);
+    }
     
     @Override
     public void onCreate() {
         // The service is being created    	
-    	Log.d("GameService", "onCreate()");
+    	Log.i(TAG, "onCreate()");
     	
+    	instance = this;
     	locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
     }
-    
+      
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+    	Log.i(TAG, "onStartCommand()");
+    	
     	if (running) {
     		// game is already running, do nothing
-    		return 0; // TODO: maybe different code... and... just do something different :(
+    		Log.i(TAG, "Game is already running.");
+    		Toast.makeText(getApplicationContext(), "Game is already running.", Toast.LENGTH_LONG).show();
+    		return 0;    		
     	}
     	
-    	Log.d("GameService", "onStartCommand()");
-    	
     	String filename = intent.getStringExtra("filename");
-		try {
-			ScenarioParser parser = new ScenarioParser(getApplicationContext(), false);
-			InputStream file = getAssets().open(filename);
-			scenario = parser.parse(file, false);
-			file.close();
-		} catch (Exception e) {
-			Log.e("GameService", e.getMessage(), e);
-		}
-		
+    	scenario = ScenarioParser.fromAsset(getApplicationContext(), filename);
+    	if (scenario == null) {
+    		Log.e(TAG, "Scenario '" + filename + "' wasn't loaded.");
+    		return 0;
+    	}
+    	
+    	Log.i(TAG, "Scenario '" + filename + "' was loaded.");
     	
     	running = true;
-    	eventHandler.addListener(this);
+    	registerListener(this);
     	start = SystemClock.uptimeMillis();
     		// system time clock: System.currentTimeMillis()
     		// uptime clock (not ticking in deep sleep): SystemClock.uptimeMillis();
     	
     	timer = new Timer();
     	timer.schedule(timerTask, 1000, 1000);
-    	
-    	
-    	NotificationCompat.Builder mBuilder =
-    	        new NotificationCompat.Builder(this)
-    	        .setSmallIcon(R.drawable.ic_stat_game)
-    	        .setContentTitle("Gamework - playing")
-    	        .setContentText("Hello World!");
-    	
-    	// Creates an explicit intent for an Activity in your app
-    	Intent resultIntent = new Intent(this, TestingActivity.class); // TODO: GameActivity
-
-    	// The stack builder object will contain an artificial back stack for the
-    	// started Activity.
-    	// This ensures that navigating backward from the Activity leads out of
-    	// your application to the Home screen.
-/*    	TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-    	// Adds the back stack for the Intent (but not the Intent itself)
-    	stackBuilder.addParentStack(TestingActivity.class);
-    	// Adds the Intent that starts the Activity to the top of the stack
-    	stackBuilder.addNextIntent(resultIntent);
-    	PendingIntent resultPendingIntent =
-    	        stackBuilder.getPendingIntent(
-    	            0,
-    	            PendingIntent.FLAG_UPDATE_CURRENT
-    	        );
-*/    	
-    	PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, resultIntent, 0);
-    	
-    	mBuilder.setContentIntent(resultPendingIntent);
-    	/*NotificationManager mNotificationManager =
-    	    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-    	// mId allows you to update the notification later on.
-    	mNotificationManager.notify(mId, mBuilder.build());*/
-    	
-    	startForeground(Constants.NOTIFICATION_GAMEPLAY, mBuilder.build());
-    	
+    	    	
+    	showForegroundNotification(true);
     	
     	locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
@@ -137,20 +117,24 @@ public class GameService extends Service implements GameEventListener, LocationL
     		eventHandler.broadcastEvent(GameEvent.UPDATED_LOCATION);
     	// }
     	
+    	Intent gameIntent = new Intent(getApplicationContext(), GameMapActivity.class);
+    	gameIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    	startActivity(gameIntent);    	
+    	
     	// The service is starting, due to a call to startService()
         return START_NOT_STICKY; // or START_REDELIVER_INTENT?
     }
     
     @Override
     public IBinder onBind(Intent intent) {
-    	Log.d("GameService", "onBind()");
-    	return null; // we dont support binding
+    	Log.i(TAG, "onBind()");
+    	return null; // we don't support binding
     }
 
     @Override
     public void onDestroy() {
         // The service is no longer used and is being destroyed
-    	Log.d("GameService", "onDestroy()");    	    	
+    	Log.i(TAG, "onDestroy()");    	    	
     	
     	running = false;
     	eventHandler.clearListeners();
@@ -161,11 +145,33 @@ public class GameService extends Service implements GameEventListener, LocationL
 		
 		locationManager.removeUpdates(this);
 		location = null;
+		
+		instance = null;
+    }
+    
+    public Location getLocation() {
+    	return location;
+    }
+    
+    public Scenario getScenario() {
+    	return scenario;
+    }
+    
+    public long getTime() {
+    	return time;
+    }
+    
+    public Status getStatus() {
+    	return status;
+    }
+    
+    public static GameService getInstance() {
+    	return instance;
     }
 	
 	@Override
     public void onLocationChanged(Location location) {
-    	GameService.location = location;
+    	this.location = location;
 
     	eventHandler.broadcastEvent(GameEvent.UPDATED_LOCATION);    	    	
     }
@@ -173,7 +179,37 @@ public class GameService extends Service implements GameEventListener, LocationL
 	@Override public void onProviderDisabled(String provider) {}
 	@Override public void onProviderEnabled(String provider) {}
 	@Override public void onStatusChanged(String provider, int status, Bundle extras) {}
+	
+	private void showForegroundNotification(boolean foreground) {
+    	// Creates an explicit intent for an Activity in your app
+    	Intent notificationIntent = new Intent(this, TestingActivity.class) // TODO: GameActivity
+    			.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
+    	NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+//    			.setOnlyAlertOnce(true)
+//    			.setOngoing(true)
+    			.setWhen(start)
+    	        .setSmallIcon(R.drawable.ic_stat_game)
+    	        .setContentIntent(PendingIntent.getActivity(this, 0, notificationIntent, 0))
+    	        .setContentTitle("Gamework - playing")    	        
+    	        .setStyle(new NotificationCompat.BigTextStyle()
+    	        				.bigText(String.format(
+    	        	        			"Game time: %1s\nGame location: %2s, %3s",
+    	        	        			time/1000,
+    	        	        			location != null ? location.getLatitude() : "-",
+    	        	        			location != null ? location.getLongitude() : "-"
+    	        	    	        ))
+//								.setBigContentTitle(title)
+								.setSummaryText("Game is running"));
+    	
+    	if (foreground)
+    		startForeground(Constants.NOTIFICATION_GAMEPLAY, mBuilder.build());
+    	else {
+    		NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+   			mNotificationManager.notify(Constants.NOTIFICATION_GAMEPLAY, mBuilder.build());
+    	}
+    		
+	}
 	
     @Override
 	public void receiveEvent(GameEvent event) {
@@ -199,10 +235,12 @@ public class GameService extends Service implements GameEventListener, LocationL
     	case UPDATED_LOCATION:
     		if (location != null)
     			scenario.onLocationUpdate(location.getLatitude(), location.getLongitude());
+    		showForegroundNotification(false);
     		break;
     		
     	case UPDATED_TIME:
     		scenario.onTimeUpdate(time);
+    		showForegroundNotification(false);
     		break;
     	}
 

@@ -11,7 +11,7 @@
 	    android:layout_height="match_parent"
 	    android:layout_width="0dp"
 	    android:layout_weight="1"
-	    android:text="Map"
+	    android:contentDescription="Map"
 	    android:scaleType="fitCenter"
         android:src="@drawable/icon_map" />
 	
@@ -20,7 +20,7 @@
 	    android:layout_height="match_parent"
 	    android:layout_width="0dp"
 	    android:layout_weight="1"
-	    android:text="Msg"
+	    android:contentDescription="Messages"
 	    android:scaleType="fitCenter"
         android:src="@drawable/icon_message" />
 	
@@ -29,7 +29,7 @@
 	    android:layout_height="match_parent"
 	    android:layout_width="0dp"
 	    android:layout_weight="1"
-	    android:text="Task"
+	    android:contentDescription="Tasks"
 	    android:scaleType="fitCenter"
         android:src="@drawable/icon_tasks" />
 	
@@ -38,7 +38,7 @@
 	    android:layout_height="match_parent"
 	    android:layout_width="0dp"
 	    android:layout_weight="1"
-	    android:text="Item"
+	    android:contentDescription="Inventory"
 	    android:scaleType="fitCenter"
         android:src="@drawable/icon_backpack" />
 	
@@ -47,7 +47,7 @@
 	    android:layout_height="match_parent"
 	    android:layout_width="0dp"
 	    android:layout_weight="1"
-	    android:text="Sets"
+	    android:contentDescription="Settings"
 	    android:scaleType="fitCenter"
         android:src="@drawable/icon_options" />
 

@@ -6,8 +6,11 @@ import java.util.List;
 import cz.robyer.gamework.scenario.BaseObject;
 import cz.robyer.gamework.scenario.Scenario;
 import cz.robyer.gamework.scenario.reaction.Reaction;
+import cz.robyer.gamework.util.Log;
 
 public class Hook extends BaseObject {
+	private static final String TAG = Hook.class.getSimpleName();
+	
 	public static final int TYPE_AREA = 0;
 	public static final int TYPE_AREA_ENTER = 1;
 	public static final int TYPE_AREA_LEAVE = 2;
@@ -62,12 +65,15 @@ public class Hook extends BaseObject {
 	}
 
 	public void addCondition(Condition condition) {
-		if (conditions == null) {
-			conditions = new ArrayList<Condition>();
+		if (condition == null) {
+			Log.w(TAG, "addCondition() with null condition");
+			return;
 		}
 		
-		if (condition != null)
-			conditions.add(condition);
+		if (conditions == null)
+			conditions = new ArrayList<Condition>();
+		
+		conditions.add(condition);
 	}
 	
 	public void call() {

@@ -6,11 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 import android.content.Context;
-import android.location.Location;
 import android.media.AudioManager;
 import android.media.SoundPool;
-import android.os.Handler;
 import android.util.Log;
+import cz.robyer.gamework.GameEventHandler;
 import cz.robyer.gamework.R;
 import cz.robyer.gamework.hook.Hook;
 import cz.robyer.gamework.scenario.area.Area;
@@ -18,10 +17,10 @@ import cz.robyer.gamework.scenario.reaction.Reaction;
 import cz.robyer.gamework.scenario.variable.Variable;
 
 public class Scenario {
-	public static final String TAG = Scenario.class.getSimpleName();
+	private static final String TAG = Scenario.class.getSimpleName();
 	
 	protected Context context;
-	protected Handler handler;
+	protected GameEventHandler handler;
 	protected ScenarioInfo info;
 	
 	protected Map<String, Area> areas;// = new HashMap<String, Area>();
@@ -31,20 +30,33 @@ public class Scenario {
 	
 	protected SoundPool soundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
 	protected TimeUpdater timeUpdater = new TimeUpdater(this);
-	protected LocationUpdater locationUpdater = new LocationUpdater(this);
-	
-	protected long gameTime;
-	protected long systemTime;
-	protected Location location;
 	
 	public Scenario(Context context, ScenarioInfo info) {
 		this.context = context;
 		this.info = info;
 	}
+	
+	public Scenario(Context context, GameEventHandler handler, ScenarioInfo info) {
+		this(context, info);
+		setHandler(handler);
+	}
 		
 	public Context getContext() {
 		return context;
 	}
+	
+	public GameEventHandler getHandler() {
+		return handler;
+	}
+	
+	private void setHandler(GameEventHandler handler) {
+		this.handler = handler;
+	}
+
+	public TimeUpdater getTimeUpdater() {
+		return timeUpdater;
+	}
+
 	
 	public SoundPool getSoundPool() {
 		return soundPool;
@@ -128,7 +140,7 @@ public class Scenario {
 		case Hook.TYPE_TIME:
 			hookable = timeUpdater;
 			break;
-			// TODO: add locationUpdater
+			// TODO: add locationUpdater?
 		}
 
 		if (hookable != null) {
@@ -138,17 +150,6 @@ public class Scenario {
 		} else {
 			// TODO: throw exception?
 		}
-	}
-	
-	public void updateLocation(Location location) {
-		// TODO: call hooks etc.
-		this.location = location;
-	}
-	
-	public void updateTime(long time, long systemTime) {
-		// TODO: call hooks etc.
-		this.gameTime = time;
-		this.systemTime = systemTime;
 	}
 	
 	public String getDescription() {
@@ -161,20 +162,20 @@ public class Scenario {
 		);
 	}
 
-	public Handler getHandler() {
-		return handler;
-	}
-
 	public ScenarioInfo getInfo() {
 		return info;
 	}
 
-	public void setHandler(Handler handler) {
-		this.handler = handler;
+	public void onTimeUpdate(long time) {
+		// TODO: improve somehow?
+		timeUpdater.updateTime(time);
 	}
 
-	public TimeUpdater getTimeUpdater() {
-		return timeUpdater;
+	public void onLocationUpdate(double lat, double lon) {
+		// TODO: improve somehow?
+		for (Area a : areas.values()) {
+			a.updateLocation(lat, lon);
+		}
 	}
-
+	
 }

@@ -1,23 +1,18 @@
 package cz.robyer.gamework.activity;
 
-import java.io.InputStream;
-
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Handler.Callback;
-import android.os.Message;
 import android.support.v4.app.NavUtils;
-import android.view.Menu;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -25,125 +20,153 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import cz.robyer.gamework.GameEvent;
+import cz.robyer.gamework.GameEventListener;
+import cz.robyer.gamework.GameService;
 import cz.robyer.gamework.R;
 import cz.robyer.gamework.scenario.Scenario;
-import cz.robyer.gamework.scenario.ScenarioParser;
 import cz.robyer.gamework.scenario.reaction.Reaction;
-import cz.robyer.gamework.util.Log;
+import cz.robyer.gamework.util.IntentFactory;
 
-public class TestingActivity extends Activity {
+public class TestingActivity extends Activity implements GameEventListener {
 	private static final String TAG = TestingActivity.class.getSimpleName();
-
-	public static Scenario scenario;
-	
-	private LocationManager myLocationManager;
-	private LocationListener myLocationListener;
-	private TextView myLatitude, myLongitude;
-	
-/*	private Timer timer;*/
-	
-	long starttime = 0;
-	TextView time_text;
-	
-	
-	private final Handler h = new Handler(new Callback() {
-
-		@Override
-        public boolean handleMessage(Message msg) {
-			//long millis = System.currentTimeMillis() - starttime;			
-			Bundle data = msg.peekData();
-			if (data != null) {
-				long millis = data.getLong("time", 0); 
-						
-				int seconds = (int) (millis / 1000);
-				int minutes = seconds / 60;
-				seconds     = seconds % 60;
-
-				time_text.setText(String.format("%d:%02d", minutes, seconds));
-			}
-			return false;
-        }
-
-    });
-	
+	private TextView myLatitude, myLongitude, time_text;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_testing);
+
 		// Show the Up button in the action bar.
 		setupActionBar();
+			
+		initButtons();
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
 		
-		time_text = (TextView)findViewById(R.id.edit_timestamp);		
+		// GPS location
+		myLatitude = (TextView)findViewById(R.id.Latitude);
+		myLongitude = (TextView)findViewById(R.id.Longitude);
+		time_text = (TextView)findViewById(R.id.edit_timestamp);
 		
-		((Button)findViewById(R.id.btn_timer)).setOnClickListener(new OnClickListener() {
+		updateLocation();
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		if (GameService.running)
+			getGame().registerListener(this);		
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		
+		if (GameService.running)
+			getGame().unregisterListener(this);		
+	}
+	
+	@Override
+	protected void onStop() {
+		super.onStop();
+
+		//myLatitude = myLongitude = time_text = null;
+	}
+	
+	private void updateLocation() {
+		runOnUiThread(new Runnable() {
+			public void run() {
+				if (GameService.running) {
+					Location loc = getGame().getLocation();
+					if (loc != null) {				
+						myLatitude.setText(String.valueOf(loc.getLatitude()) + " (" + loc.getProvider() + ")");
+						myLongitude.setText(String.valueOf(loc.getLongitude()) + " (" + loc.getProvider() + ")");
+					}		
+				}
+			}
+		});
+	}
+	
+	private void updateTime() {
+		runOnUiThread(new Runnable() {
+			public void run() {
+				if (GameService.running) {					
+					long time = getGame().getTime();
+					int seconds = (int) (time / 1000);
+					int minutes = seconds / 60;
+					seconds     = seconds % 60;
+
+					time_text.setText(String.format("%d:%02d", minutes, seconds));
+				}
+			}
+		});		
+	}
+	
+	private GameService getGame() {
+		return GameService.getInstance();
+	}
+	
+	private void showNotification(int id, String title, String content) {
+		NotificationCompat.Builder mBuilder =
+		        new NotificationCompat.Builder(this)
+		        .setSmallIcon(R.drawable.ic_launcher)
+		        .setContentTitle(title)
+		        .setContentText(content);
+		
+		// Creates an explicit intent for an Activity in your app
+		Intent resultIntent = new Intent(this, TestingActivity.class);
+
+		// The stack builder object will contain an artificial back stack for the
+		// started Activity.
+		// This ensures that navigating backward from the Activity leads out of
+		// your application to the Home screen.
+		TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+		// Adds the back stack for the Intent (but not the Intent itself)
+		stackBuilder.addParentStack(TestingActivity.class);
+		// Adds the Intent that starts the Activity to the top of the stack
+		stackBuilder.addNextIntent(resultIntent);
+		PendingIntent resultPendingIntent =
+		        stackBuilder.getPendingIntent(
+		            0,
+		            PendingIntent.FLAG_UPDATE_CURRENT
+		        );
+		mBuilder.setContentIntent(resultPendingIntent);
+		NotificationManager mNotificationManager =
+		    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		// mId allows you to update the notification later on.
+		mNotificationManager.notify(id, mBuilder.build());
+	}
+	
+	private void hideNotification(int id) {
+		NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		mNotificationManager.cancel(id);
+	}
+	
+	private void initButtons() {
+		// Start/Stop timer
+		Button btn_timer = (Button)findViewById(R.id.btn_game);
+		
+		btn_timer.setText(GameService.running ? "Stop game" : "Start game");
+		
+		btn_timer.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Button b = (Button)v;
-                if (b.getText().equals("Stop timer")){
-                    myLocationManager.removeUpdates(myLocationListener);
-                	
-                	/*timer.cancel();
-                    timer.purge();*/
-                    //h2.removeCallbacks(run);
-                    b.setText("Start timer");
-                    
-                    scenario.getTimeUpdater().stop();
+                if (b.getText().equals("Stop game")){
+                	b.setText("Start game");
+                	stopService(IntentFactory.createGameServiceIntent(getApplicationContext()));                    
                 } else {
-                    starttime = System.currentTimeMillis();
-                    
-            		myLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, myLocationListener);
-            		myLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, myLocationListener);
-            		
-            		scenario.getTimeUpdater().start(true);
-                    
-               /*     timer = new Timer();
-                    timer.scheduleAtFixedRate(new TimerTask() {
+                	ProgressDialog.show(TestingActivity.this, "", "Loading. Please wait...", true, true);
 
-    					@Override
-    					public void run() {
-    						// http://stackoverflow.com/questions/4597690/android-timer-how
-    						Log.i("Timer", "Tik tak. System time: " + System.currentTimeMillis());
-    						h.sendEmptyMessage(0);
-    						
-    						
-    						
-    						/*TestingActivity.this.runOnUiThread(new Runnable() {
-
-    			                @Override
-    			                public void run() {
-    			                   long millis = System.currentTimeMillis() - starttime;
-    			                   int seconds = (int) (millis / 1000);
-    			                   int minutes = seconds / 60;
-    			                   seconds     = seconds % 60;
-
-    			                   time_text.setText(String.format("%d:%02d", minutes, seconds));
-    			                }
-    			            });*/
-/*    					}
-    				
-    				}, 0,500);*/
-                    //timer.schedule(new secondTask(),  0,500);
-                    //h2.postDelayed(run, 0);
-                    b.setText("Stop timer");
-                }
-			}			
-		});
-		
-		((Button)findViewById(R.id.btn_filename)).setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {				
-				String filename = ((EditText)findViewById(R.id.edit_filename)).getText().toString();
-				scenario = parseScenario(filename);
-				
-				if (scenario != null) {					
-					scenario.setHandler(TestingActivity.this.h);
-					
-					//ProgressDialog dialog = ProgressDialog.show(TestingActivity.this, "", "Loading. Please wait...", true);
-					Toast.makeText(TestingActivity.this, "Sucessfully parsed scenario '" + filename + "'.", Toast.LENGTH_LONG).show();
-					
-					/*AlertDialog ad = new AlertDialog.Builder(TestingActivity.this).create();
+                	String filename = ((EditText)findViewById(R.id.edit_filename)).getText().toString();
+                	startService(IntentFactory.createGameServiceIntent(getApplicationContext(), filename));
+                	
+                	/*AlertDialog ad = new AlertDialog.Builder(TestingActivity.this).create();
 					ad.setCancelable(false); // This blocks the 'BACK' button
 					//ad.setIcon(android.R.drawable.ic_dialog_info);
 					ad.setTitle(scenario.getInfo().getTitle());
@@ -157,10 +180,8 @@ public class TestingActivity extends Activity {
 					
 					//dialog.hide();
 					ad.show();*/
-				} else {
-					Toast.makeText(TestingActivity.this, "Error when parsing scenario '" + filename + "'.", Toast.LENGTH_LONG).show();
-				}
-			}
+                }
+			}	
 		});
 		
 		((Button)findViewById(R.id.btn_reaction)).setOnClickListener(new OnClickListener() {
@@ -168,87 +189,23 @@ public class TestingActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				String value = ((EditText)findViewById(R.id.edit_reaction)).getText().toString();
-				if (scenario != null) {
-					Reaction reaction = scenario.getReaction(value);
-					if (reaction != null)
-						reaction.action();
-					else {
-						Toast.makeText(TestingActivity.this, "Reaction with this id doesn't exist.", Toast.LENGTH_LONG).show();
+				GameService game = getGame();
+				if (game != null) {
+					Scenario scenario = game.getScenario();
+					if (scenario != null) {
+						Reaction reaction = scenario.getReaction(value);
+						if (reaction != null)
+							reaction.action();
+						else
+							Toast.makeText(TestingActivity.this, "This reaction doesn't exists.", Toast.LENGTH_LONG).show();
 					}
 				} else {
-					Toast.makeText(TestingActivity.this, "You must load some scenario first.", Toast.LENGTH_LONG).show();
+					Toast.makeText(TestingActivity.this, "Game is not running.", Toast.LENGTH_LONG).show();
 				}
 			}
 		});
-		
-		// 'Show map' button
-		((Button)findViewById(R.id.btn_showmap)).setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				Intent i = new Intent(getApplicationContext(), MapActivity.class);
-				startActivity(i);
-			}
-		});
-		
-		// GPS location
-		myLatitude = (TextView)findViewById(R.id.Latitude);
-		myLongitude = (TextView)findViewById(R.id.Longitude);
-
-		myLocationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-
-		myLocationListener = new LocationListener() {
-			
-			@Override
-			public void onStatusChanged(String provider, int status, Bundle extras) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void onProviderEnabled(String provider) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void onProviderDisabled(String provider) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void onLocationChanged(Location location) {
-				// TODO Auto-generated method stub
-				myLatitude.setText(String.valueOf(location.getLatitude()));
-				myLongitude.setText(String.valueOf(location.getLongitude()));
-			}
-		};
-
-		// Get the current location in start-up
-		Location loc = myLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-		if (loc == null)
-			loc = myLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-		
-		if (loc != null) {
-			myLatitude.setText(String.valueOf(loc.getLatitude()) + " (" + loc.getProvider() + ")");
-			myLongitude.setText(String.valueOf(loc.getLongitude()) + " (" + loc.getProvider() + ")");
-		}
 	}
 	
-	private Scenario parseScenario(String filename) {
-		Scenario scenario = null;
-		try {
-			ScenarioParser parser = new ScenarioParser(getApplicationContext(), false);
-			InputStream file = getAssets().open(filename);
-			scenario = parser.parse(file, false);
-			file.close();
-		} catch (Exception e) {
-			Log.e(TAG, e.getMessage(), e);
-		}
-		return scenario;
-	}
-
 	/**
 	 * Set up the {@link android.app.ActionBar}, if the API is available.
 	 */
@@ -257,13 +214,6 @@ public class TestingActivity extends Activity {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			getActionBar().setDisplayHomeAsUpEnabled(true);
 		}
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.testing, menu);
-		return true;
 	}
 
 	@Override
@@ -281,6 +231,18 @@ public class TestingActivity extends Activity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public void receiveEvent(GameEvent event) {
+		switch (event) {
+		case UPDATED_TIME:
+			updateTime();
+			break;
+		case UPDATED_LOCATION:
+			updateLocation();
+			break;
+		}			
 	}
 
 }

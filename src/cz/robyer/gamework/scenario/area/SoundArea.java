@@ -12,7 +12,7 @@ import cz.robyer.gamework.scenario.Scenario;
 import cz.robyer.gamework.util.Point;
 
 public class SoundArea extends PointArea {
-	private final String TAG = String.format("SoundArea (%1s)", id);
+	private static final String TAG = SoundArea.class.getSimpleName();
 	
 	protected String value;
 	protected int soundId = -1;
@@ -36,7 +36,7 @@ public class SoundArea extends PointArea {
 				soundId = getScenario().getSoundPool().load(descriptor, 1);
 				descriptor.close();
 			} catch (IOException e) {
-				Log.e(TAG, String.format("Can't load sound '%1s'", value));
+				Log.e(TAG, String.format("%1s: Can't load sound '%2s'", id, value));
 			}			
 		}
 	}
@@ -60,7 +60,7 @@ public class SoundArea extends PointArea {
 		
 		if (inArea != r) {
 			// entering or leaving area
-			Log.i(TAG, String.format("We %1s location %2s", r ? "entered" : "leaved", id));
+			Log.i(TAG, String.format("%1s: We %2s location %3s", id, r ? "entered" : "leaved", id));
 			inArea = r;
 			callHooks(inArea);
 			

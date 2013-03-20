@@ -1,5 +1,8 @@
 package cz.robyer.gamework.scenario;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -89,9 +92,23 @@ public class ScenarioParser {
 		Scenario scenario = null;
 		try {
 			ScenarioParser parser = new ScenarioParser(context, false);
-			InputStream file = context.getAssets().open(filename);
-			scenario = parser.parse(file, false);
-			file.close();
+			File file = context.getFileStreamPath(filename);
+			InputStream stream = new BufferedInputStream(new FileInputStream(file));
+			scenario = parser.parse(stream, false);
+			stream.close(); // TODO: put this into finally?
+		} catch (Exception e) {
+			Log.e(TAG, e.getMessage(), e);
+		}
+		return scenario;
+	}
+	
+	public static Scenario fromAsset(Context context, String filename) {
+		Scenario scenario = null;
+		try {
+			ScenarioParser parser = new ScenarioParser(context, false);
+			InputStream stream = context.getAssets().open(filename);
+			scenario = parser.parse(stream, false);
+			stream.close(); // TODO: put this into finally?
 		} catch (Exception e) {
 			Log.e(TAG, e.getMessage(), e);
 		}
@@ -162,7 +179,7 @@ public class ScenarioParser {
 	}
 
 	private void readHooks() throws XmlPullParserException, IOException {
-		Log.i("ScenarioParser", "Reading hooks");
+		Log.i(TAG, "Reading hooks");
 
 		parser.require(XmlPullParser.START_TAG, ns, "hooks");
 		while (parser.next() != XmlPullParser.END_TAG) {
@@ -291,7 +308,7 @@ public class ScenarioParser {
 	}
 
 	private void readReactions() throws XmlPullParserException, IOException {
-		Log.i("ScenarioParser", "Reading reactions.");
+		Log.i(TAG, "Reading reactions.");
 		
 		parser.require(XmlPullParser.START_TAG, ns, "reactions");
 		while (parser.next() != XmlPullParser.END_TAG) {
@@ -387,7 +404,7 @@ public class ScenarioParser {
 	}
 
 	private void readVariables() throws XmlPullParserException, IOException {
-		Log.i("ScenarioParser", "Reading variables.");
+		Log.i(TAG, "Reading variables.");
 		
 		parser.require(XmlPullParser.START_TAG, ns, "variables");
 		while (parser.next() != XmlPullParser.END_TAG) {
@@ -435,7 +452,7 @@ public class ScenarioParser {
 	}
 
 	private void readAreas() throws XmlPullParserException, IOException {
-		Log.i("ScenarioParser", "Reading areas.");
+		Log.i(TAG, "Reading areas.");
 		
 		parser.require(XmlPullParser.START_TAG, ns, "areas");
 		while (parser.next() != XmlPullParser.END_TAG) {

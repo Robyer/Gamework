@@ -5,11 +5,13 @@ import cz.robyer.gamework.GameEvent;
 import cz.robyer.gamework.R;
 
 public class GameTasksActivity extends BaseGameActivity {
-
+	private static final String TAG = GameTasksActivity.class.getSimpleName();
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game_tasks);
+		super.initButtons();
 	}
 
 	@Override

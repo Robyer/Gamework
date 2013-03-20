@@ -5,8 +5,7 @@ import cz.robyer.gamework.hook.Hook;
 import cz.robyer.gamework.scenario.HookableObject;
 
 public abstract class Area extends HookableObject {
-	
-	private final String TAG = String.format("Area (%1s)", id);
+	private static final String TAG = Area.class.getSimpleName();
 	protected boolean inArea = false;
 	
 	public Area(String id) {
@@ -20,7 +19,7 @@ public abstract class Area extends HookableObject {
 		
 		if (inArea != r) {
 			// entering or leaving area
-			Log.i(TAG, String.format("We %1s location %2s", r ? "entered" : "leaved", id));
+			Log.i(TAG, String.format("%1s: We %2s location %3s", id, r ? "entered" : "leaved", id));
 			inArea = r;
 			callHooks(r);
 		}

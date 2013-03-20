@@ -39,7 +39,7 @@
         	- decimal (min, max, value)
         	- boolean (value)
          -->
-        <variable id="health" type="decimal" min="0" max="100" value="100" />
+        <variable id="health" type="decimal" min="0" max="100" value="100" title="Zdraví" />
         <variable id="nakoupeno" type="boolean" value="false" />
     </variables>
     

@@ -55,6 +55,7 @@
         <activity
             android:name="cz.robyer.gamework.activity.TestingActivity"
             android:label="@string/title_activity_testing"
+            android:windowSoftInputMode="stateHidden|adjustResize"
             android:parentActivityName="cz.robyer.gamework.activity.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -68,6 +69,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="cz.robyer.gamework.activity.TestingActivity" />
         </activity>
+
+        <service
+            android:name="cz.robyer.gamework.GameService"
+            android:enabled="true"
+            android:exported="false" >
+        </service>
 
         <activity
             android:name="cz.robyer.gamework.activity.GameMapActivity"

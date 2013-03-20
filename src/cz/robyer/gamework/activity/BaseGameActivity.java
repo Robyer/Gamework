@@ -2,26 +2,43 @@ package cz.robyer.gamework.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Toast;
 import cz.robyer.gamework.GameEvent;
 import cz.robyer.gamework.GameEventListener;
 import cz.robyer.gamework.GameService;
 import cz.robyer.gamework.R;
+import cz.robyer.gamework.util.IntentFactory;
 
-public abstract class BaseGameActivity extends BaseActivity implements GameEventListener {
-
+public abstract class BaseGameActivity extends FragmentActivity implements GameEventListener {
+	private static final String TAG = BaseGameActivity.class.getSimpleName();
+	
+	protected boolean backClicked = false;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		checkGameRunning();
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();		
+		checkGameRunning();
+		overridePendingTransition(0,0);
 		
+		backClicked = false;		
+	}
+	
+	protected void checkGameRunning() {
 		if (!GameService.running) {
 			Intent intent = new Intent(this, MainActivity.class);
 			startActivity(intent);
 			finish(); // TODO: Is this okay to be here? Or should we use completely different approach?
 		}
-		
-		initButtons();
 	}
 	
 	/*@Override
@@ -31,12 +48,13 @@ public abstract class BaseGameActivity extends BaseActivity implements GameEvent
 		return true;
 	}*/
 
-	private void initButtons() {
+	protected void initButtons() {
 
 		final OnClickListener listener = new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
+				Log.d("BaseGameActivity", "onClick buttons bar");
 				Class<?> cls = null;
 				if (v.getId() == R.id.btn_map)
 					cls = GameMapActivity.class;
@@ -53,7 +71,11 @@ public abstract class BaseGameActivity extends BaseActivity implements GameEvent
 				if (cls == null || cls == this.getClass())
 					return;
 				
-				Intent intent = new Intent(getParent(), cls);
+				Intent intent = new Intent(getApplicationContext(), cls);
+				intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT) // TODO: hope this works as i want		
+						.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION) // should be cool
+					;
+					
 				startActivity(intent);
 			}
 		};
@@ -83,6 +105,28 @@ public abstract class BaseGameActivity extends BaseActivity implements GameEvent
 		case UPDATED_TIME:
 			break;
 		}
+	}
+	
+	protected GameService getGame() {
+		return GameService.getInstance();
+	}
+	
+	@Override
+	public void onBackPressed() {			
+		if (!backClicked) {
+			backClicked = true;
+			Toast.makeText(getApplicationContext(), R.string.press_back_again_to_quit, Toast.LENGTH_LONG).show();			
+			return;
+		}
+
+		stopService(IntentFactory.createGameServiceIntent(getApplicationContext()));
+		
+		Intent startMain = new Intent(Intent.ACTION_MAIN);
+		startMain.addCategory(Intent.CATEGORY_HOME);
+		startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(startMain);
+		
+		//super.onBackPressed();
 	}
 
 }

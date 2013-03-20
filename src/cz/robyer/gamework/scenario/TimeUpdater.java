@@ -4,6 +4,7 @@ import android.util.Log;
 import cz.robyer.gamework.hook.Hook;
 
 public class TimeUpdater extends HookableObject {
+	private static final String TAG = TimeUpdater.class.getSimpleName();
 	
 	public TimeUpdater(Scenario scenario) {
 		super("Gamework:TIME");
@@ -11,7 +12,7 @@ public class TimeUpdater extends HookableObject {
 	}
 	
 	public void updateTime(long time) {
-		Log.d("TimeUpdater", "Updating time (" + time + ")");		
+		Log.d(TAG, "Updating time (" + time + ")");		
 		callHooks(time);
 	}
 	
