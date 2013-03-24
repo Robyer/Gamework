@@ -7,10 +7,10 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
-import cz.robyer.gamework.GameEvent;
-import cz.robyer.gamework.GameEventListener;
-import cz.robyer.gamework.GameService;
 import cz.robyer.gamework.R;
+import cz.robyer.gamework.game.GameEvent;
+import cz.robyer.gamework.game.GameEventListener;
+import cz.robyer.gamework.game.GameService;
 import cz.robyer.gamework.util.IntentFactory;
 
 public abstract class BaseGameActivity extends FragmentActivity implements GameEventListener {
@@ -61,7 +61,7 @@ public abstract class BaseGameActivity extends FragmentActivity implements GameE
 				else if (v.getId() == R.id.btn_messages)
 					cls = GameMessagesActivity.class;
 				else if (v.getId() == R.id.btn_tasks)
-					cls = GameTasksActivity.class;
+					cls = GameObjectivesActivity.class;
 				else if (v.getId() == R.id.btn_inventory)
 					cls = GameInventoryActivity.class;
 				else if (v.getId() == R.id.btn_settings)

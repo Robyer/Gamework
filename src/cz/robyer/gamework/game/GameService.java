@@ -1,4 +1,4 @@
- package cz.robyer.gamework;
+ package cz.robyer.gamework.game;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -16,6 +16,7 @@ import android.os.IBinder;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
+import cz.robyer.gamework.R;
 import cz.robyer.gamework.activity.GameMapActivity;
 import cz.robyer.gamework.activity.TestingActivity;
 import cz.robyer.gamework.constants.Constants;

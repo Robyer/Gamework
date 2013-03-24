@@ -1,4 +1,4 @@
-package cz.robyer.gamework;
+package cz.robyer.gamework.game;
 
 import java.util.WeakHashMap;
 

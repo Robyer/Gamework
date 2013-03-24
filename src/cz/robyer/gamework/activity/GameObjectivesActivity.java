@@ -1,11 +1,11 @@
 package cz.robyer.gamework.activity;
 
 import android.os.Bundle;
-import cz.robyer.gamework.GameEvent;
 import cz.robyer.gamework.R;
+import cz.robyer.gamework.game.GameEvent;
 
-public class GameTasksActivity extends BaseGameActivity {
-	private static final String TAG = GameTasksActivity.class.getSimpleName();
+public class GameObjectivesActivity extends BaseGameActivity {
+	private static final String TAG = GameObjectivesActivity.class.getSimpleName();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

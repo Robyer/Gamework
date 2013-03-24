@@ -10,6 +10,7 @@ public class HtmlReaction extends Reaction {
 
 	@Override
 	public void action() {
+		//getScenario().getHandler().
 		// TODO Auto-generated method stub
 	}
 

@@ -1,5 +1,6 @@
-package cz.robyer.gamework;
+package cz.robyer.gamework.game;
 
+import cz.robyer.gamework.R;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;

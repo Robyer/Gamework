@@ -14,9 +14,9 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolygonOptions;
 
-import cz.robyer.gamework.GameEvent;
-import cz.robyer.gamework.GameService;
 import cz.robyer.gamework.R;
+import cz.robyer.gamework.game.GameEvent;
+import cz.robyer.gamework.game.GameService;
 import cz.robyer.gamework.scenario.Scenario;
 import cz.robyer.gamework.scenario.area.Area;
 import cz.robyer.gamework.scenario.area.MultiPointArea;

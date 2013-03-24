@@ -1,4 +1,4 @@
-package cz.robyer.gamework;
+package cz.robyer.gamework.game;
 
 public enum GameEvent {
   GAME_START,
@@ -9,7 +9,7 @@ public enum GameEvent {
   GAME_QUIT,
   UPDATED_LOCATION,
   UPDATED_TIME,
-  UPDATED_TASKS,
+  UPDATED_OBJECTIVES,
   UPDATED_MESSAGES,
   UPDATED_INVENTORY,
 }

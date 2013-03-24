@@ -71,7 +71,7 @@
         </activity>
 
         <service
-            android:name="cz.robyer.gamework.GameService"
+            android:name="cz.robyer.gamework.game.GameService"
             android:enabled="true"
             android:exported="false" >
         </service>
@@ -85,7 +85,7 @@
             android:label="@string/title_activity_game_messages" >
         </activity>
         <activity
-            android:name="cz.robyer.gamework.activity.GameTasksActivity"
+            android:name="cz.robyer.gamework.activity.GameObjectivesActivity"
             android:label="@string/title_activity_game_tasks" >
         </activity>
         <activity

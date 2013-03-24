@@ -1,6 +1,6 @@
 package cz.robyer.gamework.util;
 
-import cz.robyer.gamework.GameService;
+import cz.robyer.gamework.game.GameService;
 import android.content.Context;
 import android.content.Intent;
 

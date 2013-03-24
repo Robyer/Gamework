@@ -14,7 +14,7 @@ import android.util.Xml;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import cz.robyer.gamework.GameEvent;
+import cz.robyer.gamework.game.GameEvent;
 import cz.robyer.gamework.hook.Condition;
 import cz.robyer.gamework.hook.Hook;
 import cz.robyer.gamework.scenario.area.Area;

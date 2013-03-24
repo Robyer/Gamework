@@ -1,7 +1,7 @@
 package cz.robyer.gamework.scenario;
 
 import android.content.Context;
-import cz.robyer.gamework.GameEventHandler;
+import cz.robyer.gamework.game.GameEventHandler;
 import cz.robyer.gamework.util.Log;
 
 public abstract class BaseObject {

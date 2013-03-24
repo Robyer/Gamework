@@ -1,6 +1,6 @@
 package cz.robyer.gamework.scenario.reaction;
 
-import cz.robyer.gamework.GameEvent;
+import cz.robyer.gamework.game.GameEvent;
 
 public class EventReaction extends Reaction {
 	protected GameEvent value;
