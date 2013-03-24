@@ -3,6 +3,7 @@ package cz.robyer.gamework.scenario.variable;
 import java.security.InvalidParameterException;
 
 import cz.robyer.gamework.scenario.reaction.VariableReaction;
+import cz.robyer.gamework.util.Log;
 
 public class DecimalVariable extends Variable {
 	protected int value;
@@ -39,9 +40,11 @@ public class DecimalVariable extends Variable {
 	}
 	
 	public void setLimit(int min, int max) {
-		if (min > max)
+		if (min > max) {
+			Log.e(TAG, String.format("Minimum value (%d) must be lower than maximum value (%d)", min, max));
 			throw new InvalidParameterException("Minimum value must be lower than maximum value.");
-		
+		}
+	
 		this.min = min;
 		this.max = max;
 	}

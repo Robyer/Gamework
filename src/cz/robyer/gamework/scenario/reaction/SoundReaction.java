@@ -7,8 +7,6 @@ import android.util.Log;
 import cz.robyer.gamework.scenario.Scenario;
 
 public class SoundReaction extends Reaction {
-	private static final String TAG = SoundReaction.class.getSimpleName();
-	
 	protected String value;
 	protected int soundId = -1;
 	protected float volume = 1.0f;
@@ -32,7 +30,7 @@ public class SoundReaction extends Reaction {
 				soundId = getScenario().getSoundPool().load(descriptor, 1);
 				descriptor.close();
 			} catch (IOException e) {
-				Log.e(TAG, "Can't load sound '" + value + "'");
+				Log.e(TAG, String.format("Can't load sound '%s'", value));
 			}			
 		}
 	}

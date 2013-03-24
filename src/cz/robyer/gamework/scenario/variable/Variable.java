@@ -8,11 +8,6 @@ public abstract class Variable extends HookableObject {
 		super(id);
 	}
 	
-	/*public void callHooks() {
-		// TODO
-		Log.i("Variable", "Changed value of variable '" + id + "'.");
-	}*/
-	
 	public abstract void modify(int type, String value);
 	
 }

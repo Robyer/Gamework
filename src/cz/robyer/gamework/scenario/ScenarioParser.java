@@ -88,10 +88,19 @@ public class ScenarioParser {
     private XmlPullParser parser;
     private Scenario scenario;
     
-	public static Scenario fromFile(Context context, String filename) {
+    public static Scenario fromFile(Context context, String filename) {
+    	return fromFile(context, filename, false);
+    }
+    
+    public static Scenario fromAsset(Context context, String filename) {
+    	return fromAsset(context, filename, false);
+    }
+    
+	public static Scenario fromFile(Context context, String filename, boolean aboutOnly) {
+		Log.i(TAG, String.format("Loading %1s from file '%2s'", (aboutOnly ? "info" : "scenario"), filename));
 		Scenario scenario = null;
 		try {
-			ScenarioParser parser = new ScenarioParser(context, false);
+			ScenarioParser parser = new ScenarioParser(context, aboutOnly);
 			File file = context.getFileStreamPath(filename);
 			InputStream stream = new BufferedInputStream(new FileInputStream(file));
 			scenario = parser.parse(stream, false);
@@ -102,12 +111,13 @@ public class ScenarioParser {
 		return scenario;
 	}
 	
-	public static Scenario fromAsset(Context context, String filename) {
+	public static Scenario fromAsset(Context context, String filename, boolean aboutOnly) {
+		Log.i(TAG, String.format("Loading %1s from asset '%2s'", (aboutOnly ? "info" : "scenario"), filename));
 		Scenario scenario = null;
 		try {
 			ScenarioParser parser = new ScenarioParser(context, false);
 			InputStream stream = context.getAssets().open(filename);
-			scenario = parser.parse(stream, false);
+			scenario = parser.parse(stream, aboutOnly);
 			stream.close(); // TODO: put this into finally?
 		} catch (Exception e) {
 			Log.e(TAG, e.getMessage(), e);
@@ -138,7 +148,7 @@ public class ScenarioParser {
 	        	if (name.equalsIgnoreCase("about")) {
 	        		readScenario();
 	        	} else {
-	        		throw new IllegalStateException("First child in <scenario> must be <about>.");
+	        		throw new IllegalStateException("First child in <scenario> must be <about>");
 	        	}
 	        	
 	        	if (aboutOnly)
@@ -161,7 +171,7 @@ public class ScenarioParser {
 	}
 	
 	private void skip() throws XmlPullParserException, IOException {
-	    Log.i(TAG, "Skipping unknown child.");
+	    Log.d(TAG, "Skipping unknown child");
 		if (parser.getEventType() != XmlPullParser.START_TAG) {
 	        throw new IllegalStateException();
 	    }
@@ -179,7 +189,7 @@ public class ScenarioParser {
 	}
 
 	private void readHooks() throws XmlPullParserException, IOException {
-		Log.i(TAG, "Reading hooks");
+		Log.d(TAG, "Reading hooks");
 
 		parser.require(XmlPullParser.START_TAG, ns, "hooks");
 		while (parser.next() != XmlPullParser.END_TAG) {
@@ -207,7 +217,7 @@ public class ScenarioParser {
 	        	} else if (type.equalsIgnoreCase(HOOK_TYPE_VARIABLE)) {
 	        		itype = Hook.TYPE_VARIABLE;
 	        	} else {
-	        		Log.e(TAG, "Hook of type '" + type + "' is unknown.");
+	        		Log.e(TAG, "Hook of type '" + type + "' is unknown");
 	        		skip();
 	        		return;
 	        	}
@@ -221,7 +231,7 @@ public class ScenarioParser {
         				Hook hook = readTrigger(itype, value);
         				scenario.addHook(hook, itype, value);
         			} else {
-        				Log.e(TAG, "Expected <trigger>, got <" + parser.getName() + ">.");
+        				Log.e(TAG, "Expected <trigger>, got <" + parser.getName() + ">");
         				skip();
         			}
         		}
@@ -250,7 +260,7 @@ public class ScenarioParser {
 		} else if (conditions.equalsIgnoreCase(TRIGGER_CONDITIONS_ANY)) {
 			conditions_type = Hook.CONDITIONS_ANY;
 		} else {
-			Log.i(TAG, "Conditions='" + conditions + "' is unknown. Used no conditions.");
+			Log.d(TAG, "Conditions='" + conditions + "' is unknown. Used no conditions");
 			conditions_type = Hook.CONDITIONS_NONE;
 		}
 		
@@ -259,7 +269,7 @@ public class ScenarioParser {
 			runs = Integer.parseInt(run);
 				
 		hook = new Hook(hook_type, hook_value, reaction, conditions_type, runs);
-		Log.i(TAG, "- Trigger reaction='" + reaction + "' conditions='" + conditions + "' run='" + runs + "'.");
+		Log.d(TAG, "- Trigger reaction='" + reaction + "' conditions='" + conditions + "' run='" + runs + "'");
 
 		while (parser.next() != XmlPullParser.END_TAG) {
 			if (parser.getEventType() != XmlPullParser.START_TAG) {
@@ -287,18 +297,18 @@ public class ScenarioParser {
 				} else if (type.equalsIgnoreCase(CONDITION_TYPE_SMALLEREQUALS)) {
 					itype = Condition.TYPE_SMALLEREQUALS;
 				} else {
-					Log.e(TAG, "Condition of type '" + type + "' is unknown.");
+					Log.e(TAG, "Condition of type '" + type + "' is unknown");
 	        		skip();
 	        		continue;
 				}
 				
-				Log.i(TAG, "\\- Condition type='" + type + "' variable='" + variable + "' value='" + value + "'.");
+				Log.d(TAG, "--- Condition type='" + type + "' variable='" + variable + "' value='" + value + "'");
 				hook.addCondition(new Condition(itype, variable, value));
 				
 				parser.nextTag();
 				parser.require(XmlPullParser.END_TAG, ns, "condition");
 			} else {
-				Log.e(TAG, "Expected <condition>, got <" + parser.getName() + ">.");
+				Log.e(TAG, "Expected <condition>, got <" + parser.getName() + ">");
 				skip();
 			}
 		}
@@ -308,7 +318,7 @@ public class ScenarioParser {
 	}
 
 	private void readReactions() throws XmlPullParserException, IOException {
-		Log.i(TAG, "Reading reactions.");
+		Log.d(TAG, "Reading reactions");
 		
 		parser.require(XmlPullParser.START_TAG, ns, "reactions");
 		while (parser.next() != XmlPullParser.END_TAG) {
@@ -325,7 +335,7 @@ public class ScenarioParser {
 	        	String type = parser.getAttributeValue(null, "type");
 	        	
 	        	if (type.equalsIgnoreCase(REACTION_TYPE_MULTI)) {
-	        		Log.i(TAG, "Got MultiReaction id='" + id + "'.");
+	        		Log.d(TAG, "Got MultiReaction id='" + id + "'");
 	        		
 	        		reaction = new MultiReaction(id);
 	        		
@@ -337,7 +347,7 @@ public class ScenarioParser {
 	        			if (parser.getName().equalsIgnoreCase("reaction")) {
 		        			((MultiReaction)reaction).addReaction(readReaction(""));
 	        			} else {
-	        				Log.e(TAG, "Expected <reaction>, got <" + parser.getName() + ">.");
+	        				Log.e(TAG, "Expected <reaction>, got <" + parser.getName() + ">");
 	        				skip();
 	        			}
 	        		}
@@ -363,7 +373,7 @@ public class ScenarioParser {
 		String value = parser.getAttributeValue(null, "value"); // null for game reactions
 		String variable = parser.getAttributeValue(null, "variable"); // only for variable reactions, null otherwise
 		
-		Log.i(TAG, "Got Reaction id='" + id + "' type='" + type + "'.");
+		Log.d(TAG, "Got Reaction id='" + id + "' type='" + type + "'");
 		
 		if (type.equalsIgnoreCase(REACTION_TYPE_SOUND)) {
 			reaction = new SoundReaction(id, value);
@@ -392,7 +402,7 @@ public class ScenarioParser {
     			reaction = new EventReaction(id, GameEvent.GAME_LOSE);
     		}
     	} else {
-    		Log.e(TAG, "Reaction of type '" + type + "' is unknown.");
+    		Log.e(TAG, "Reaction of type '" + type + "' is unknown");
     		skip();
     		return null;
     	}
@@ -404,7 +414,7 @@ public class ScenarioParser {
 	}
 
 	private void readVariables() throws XmlPullParserException, IOException {
-		Log.i(TAG, "Reading variables.");
+		Log.d(TAG, "Reading variables");
 		
 		parser.require(XmlPullParser.START_TAG, ns, "variables");
 		while (parser.next() != XmlPullParser.END_TAG) {
@@ -424,7 +434,7 @@ public class ScenarioParser {
 	        		String value = parser.getAttributeValue(null, "value");
 	        		
 	        		variable = BooleanVariable.fromString(id, value);
-	        		Log.i(TAG, "Got BooleanVariable.");
+	        		Log.d(TAG, "Got BooleanVariable");
 	        		
 	        		parser.nextTag();
 	        	} else if (type.equalsIgnoreCase(VAR_TYPE_DECIMAL)) {
@@ -433,11 +443,11 @@ public class ScenarioParser {
 	        		String max = parser.getAttributeValue(null, "max");
 	        		
 	        		variable = DecimalVariable.fromString(id, value, min, max);
-	        		Log.i(TAG, "Got DecimalVariable.");
+	        		Log.d(TAG, "Got DecimalVariable");
 	        		
 	        		parser.nextTag();
 	        	} else {
-	        		Log.e(TAG, "Variable of type '" + type + "' is unknown.");
+	        		Log.e(TAG, "Variable of type '" + type + "' is unknown");
 	        		skip();
 	        		continue;
 	        	}
@@ -452,7 +462,7 @@ public class ScenarioParser {
 	}
 
 	private void readAreas() throws XmlPullParserException, IOException {
-		Log.i(TAG, "Reading areas.");
+		Log.d(TAG, "Reading areas");
 		
 		parser.require(XmlPullParser.START_TAG, ns, "areas");
 		while (parser.next() != XmlPullParser.END_TAG) {
@@ -476,9 +486,9 @@ public class ScenarioParser {
 	        		if (latitude != null && longitude != null && radius != null) {
 		        		LatLng point = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
 		        		area = new PointArea(id, point, Integer.parseInt(radius));
-		        		Log.i(TAG, "Got PointArea");
+		        		Log.d(TAG, "Got PointArea");
 	        		} else {
-	        			Log.e(TAG, "Area type point must contains lat, lon and radius.");
+	        			Log.e(TAG, "Area type point must contains lat, lon and radius");
 	        		}
 	        			        		
 	        		parser.nextTag();
@@ -492,9 +502,9 @@ public class ScenarioParser {
 	        		if (latitude != null && longitude != null && radius != null && value != null && soundRadius != null) {
 		        		LatLng point = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
 		        		area = new SoundArea(id, point, Integer.parseInt(radius), value, Integer.parseInt(soundRadius));
-		        		Log.i(TAG, "Got SoundArea");
+		        		Log.d(TAG, "Got SoundArea");
 	        		} else {
-	        			Log.e(TAG, "Area type soundArea must contains lat, lon, radius, value and soundRadius.");
+	        			Log.e(TAG, "Area type soundArea must contains lat, lon, radius, value and soundRadius");
 	        		}
 	        			        		
 	        		parser.nextTag();
@@ -513,20 +523,20 @@ public class ScenarioParser {
 			        		if (latitude != null && longitude != null) {
 				        		LatLng point = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
 				        		((MultiPointArea)area).addPoint(point);
-				        		Log.i(TAG, "Got PointArea->Point.");
+				        		Log.d(TAG, "Got PointArea->Point");
 			        		} else {
-			        			Log.e(TAG, "Point must contains lat and lon.");
+			        			Log.e(TAG, "Point must contains lat and lon");
 			        		}
 			        		
 			        		parser.nextTag();
 	        			} else {
-	        				Log.e(TAG, "Expected <point>, got <" + parser.getName() + ">.");
+	        				Log.e(TAG, "Expected <point>, got <" + parser.getName() + ">");
 	        				skip();
 	        			}
 	        		}
 	        		
 	        	} else {
-	        		Log.e(TAG, "Area of type '" + type + "' is unknown.");
+	        		Log.e(TAG, "Area of type '" + type + "' is unknown");
 	        		skip();
 	        		continue;
 	        	}
@@ -541,7 +551,7 @@ public class ScenarioParser {
 	}
 
 	private void readScenario() throws XmlPullParserException, IOException {
-		Log.i(TAG, "Reading about.");
+		Log.d(TAG, "Reading about");
 		
 		parser.require(XmlPullParser.START_TAG, ns, "about");
 		

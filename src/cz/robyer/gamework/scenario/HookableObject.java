@@ -7,8 +7,6 @@ import android.util.Log;
 import cz.robyer.gamework.hook.Hook;
 
 public class HookableObject extends IdentificableObject {
-	private static final String TAG = HookableObject.class.getSimpleName();
-	
 	protected List<Hook> hooks;
 	
 	public HookableObject(String id) {
