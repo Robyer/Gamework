@@ -66,7 +66,7 @@ public class Scenario {
 		if (areas == null)
 			areas = new HashMap<String, Area>();
 		else if (areas.containsKey(id))
-			Log.w(TAG, "Duplicit definition of area id='" + id + "'.");
+			Log.w(TAG, "Duplicit definition of area id='" + id + "'");
 		
 		areas.put(id, area);
 		area.setScenario(this);
@@ -88,7 +88,7 @@ public class Scenario {
 		if (variables == null)
 			variables = new HashMap<String, Variable>();
 		else if (variables.containsKey(id))
-			Log.w(TAG, "Duplicit definition of variable id='" + id + "'.");
+			Log.w(TAG, "Duplicit definition of variable id='" + id + "'");
 		
 		variables.put(id, variable);
 		variable.setScenario(this);
@@ -107,7 +107,7 @@ public class Scenario {
 		if (reactions == null)
 			reactions = new HashMap<String, Reaction>();
 		else if (reactions.containsKey(id))
-			Log.w(TAG, "Duplicit definition of reaction id='" + id + "'.");
+			Log.w(TAG, "Duplicit definition of reaction id='" + id + "'");
 		
 		reactions.put(id, reaction);
 		reaction.setScenario(this);
@@ -140,12 +140,12 @@ public class Scenario {
 		case Hook.TYPE_TIME:
 			hookable = timeUpdater;
 			break;
-			// TODO: add locationUpdater?
 		}
 
 		if (hookable != null) {
 			hooks.add(hook);
 			hook.setScenario(this);
+			hook.setParent(hookable);
 			hookable.addHook(hook);
 		} else {
 			// TODO: throw exception?

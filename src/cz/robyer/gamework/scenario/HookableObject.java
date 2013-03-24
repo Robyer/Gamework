@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.util.Log;
 import cz.robyer.gamework.hook.Hook;
+import cz.robyer.gamework.scenario.variable.Variable;
 
 public class HookableObject extends IdentificableObject {
 	protected List<Hook> hooks;
@@ -20,11 +21,11 @@ public class HookableObject extends IdentificableObject {
 		hooks.add(hook);
 	}
 	
-	protected void callHooks() {
-		Log.d(TAG, "Calling all hooks.");
+	protected void callHooks(Variable variable) {
+		Log.d(TAG, "Calling all hooks");
 		if (hooks != null) {
 			for (Hook h : hooks) {
-				h.call();
+				h.call(variable);
 			}
 		}
 	}

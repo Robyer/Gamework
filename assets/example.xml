@@ -118,11 +118,11 @@
 	        		- <číslo> = počet spuštění, kolikrát se může spustit
          	-->
             <trigger reaction="prohra" conditions="ALL">
-                <condition type="equals" variable="health" value="0" />
+                <condition type="equals" value="0" />
             </trigger>
             
             <trigger reaction="vibrace">
-                <condition type="equals" variable="health" value="0" />
+                <condition type="equals" value="0" />
         	</trigger>    
         </hook>
         <hook type="area_enter" value="albert">

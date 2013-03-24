@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.robyer.gamework.scenario.BaseObject;
+import cz.robyer.gamework.scenario.HookableObject;
 import cz.robyer.gamework.scenario.Scenario;
 import cz.robyer.gamework.scenario.reaction.Reaction;
+import cz.robyer.gamework.scenario.variable.Variable;
 import cz.robyer.gamework.util.Log;
 
 public class Hook extends BaseObject {
@@ -29,6 +31,7 @@ public class Hook extends BaseObject {
 	protected String value; 
 	protected String reaction;
 	protected List<Condition> conditions;
+	protected HookableObject parent;
 	
 	public Hook(int type, String value, String reaction, int conditions_type, int runs) {
 		super();
@@ -56,6 +59,19 @@ public class Hook extends BaseObject {
 			}
 	}
 	
+	public void setParent(HookableObject parent) {
+		this.parent = parent;
+	}
+	
+	public HookableObject getParent() {
+		if (parent == null) {
+			Log.e(TAG, "No parent is attached");
+			throw new RuntimeException();
+		}
+
+		return parent;
+	}
+	
 	public int getType() {
 		return type;
 	}
@@ -73,10 +89,11 @@ public class Hook extends BaseObject {
 		if (conditions == null)
 			conditions = new ArrayList<Condition>();
 		
+		condition.setParent(this);
 		conditions.add(condition);
 	}
-	
-	public void call() {
+
+	public void call(Variable variable) {
 		Reaction reaction = scenario.getReaction(this.reaction);
 		if (reaction != null) {
 			boolean valid = false;
@@ -89,7 +106,7 @@ public class Hook extends BaseObject {
 				valid = true;
 				if (conditions != null)
 					for (Condition condition : conditions) {
-						if (!condition.isValid()) {
+						if (!condition.isValid(variable)) {
 							valid = false;
 							break;
 						}
@@ -98,7 +115,7 @@ public class Hook extends BaseObject {
 			case CONDITIONS_ANY:
 				if (conditions != null)
 					for (Condition condition : conditions) {
-						if (condition.isValid()) {
+						if (condition.isValid(variable)) {
 							valid = true;
 							break;
 						}

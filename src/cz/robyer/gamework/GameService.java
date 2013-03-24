@@ -81,7 +81,7 @@ public class GameService extends Service implements GameEventListener, LocationL
     	
     	if (running) {
     		// game is already running, do nothing
-    		Log.i(TAG, "Game is already running.");
+    		Log.i(TAG, "Game is already running");
     		Toast.makeText(getApplicationContext(), "Game is already running.", Toast.LENGTH_LONG).show();
     		return 0;    		
     	}
@@ -89,11 +89,11 @@ public class GameService extends Service implements GameEventListener, LocationL
     	String filename = intent.getStringExtra("filename");
     	scenario = ScenarioParser.fromAsset(getApplicationContext(), filename);
     	if (scenario == null) {
-    		Log.e(TAG, "Scenario '" + filename + "' wasn't loaded.");
+    		Log.e(TAG, "Scenario '" + filename + "' wasn't loaded");
     		return 0;
     	}
     	
-    	Log.i(TAG, "Scenario '" + filename + "' was loaded.");
+    	Log.i(TAG, "Scenario '" + filename + "' was loaded");
     	
     	running = true;
     	scenario.setHandler(eventHandler);

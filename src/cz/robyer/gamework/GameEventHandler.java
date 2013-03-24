@@ -24,7 +24,7 @@ public class GameEventHandler implements GameEventBroadcaster {
  	}
 	
 	public synchronized void clearListeners() {
-		Log.d(TAG, "Clearing GameEventListeners.");
+		Log.d(TAG, "Clearing GameEventListeners");
 		listeners.clear();
 	}
 	
@@ -36,7 +36,7 @@ public class GameEventHandler implements GameEventBroadcaster {
 	    }
 	
 	    if (Log.loggingEnabled()) {
-	    	Log.println(severity, TAG, "Broadcasting event " + event.name() + " to " + listeners.size() + " listeners.");
+	    	Log.println(severity, TAG, "Broadcasting event " + event.name() + " to " + listeners.size() + " listeners");
 	    }
 	
 	    for (GameEventListener listener : listeners.keySet()) {

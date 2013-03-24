@@ -44,7 +44,7 @@ public abstract class Area extends HookableObject {
 			}
 				
 			if (valid)
-				h.call();
+				h.call(null);
 		}
 	}
 

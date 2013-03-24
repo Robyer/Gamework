@@ -19,7 +19,7 @@ public abstract class BaseObject {
 	
 	public Context getContext() {
 		if (context == null) {
-			Log.e("BaseObject", "BaseObject '" + this + "' is not attached to any Scenario.");
+			Log.e("BaseObject", "BaseObject '" + this + "' is not attached to any Scenario");
 			throw new RuntimeException();
 		}
 		
@@ -28,7 +28,7 @@ public abstract class BaseObject {
 	
 	public Scenario getScenario() {
 		if (scenario == null) {
-			Log.e("BaseObject", "BaseObject '" + this + "' is not attached to any Scenario.");
+			Log.e("BaseObject", "BaseObject '" + this + "' is not attached to any Scenario");
 			throw new RuntimeException();
 		}
 			

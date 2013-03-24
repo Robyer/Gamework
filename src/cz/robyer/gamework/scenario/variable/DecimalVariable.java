@@ -42,7 +42,7 @@ public class DecimalVariable extends Variable {
 	public void setLimit(int min, int max) {
 		if (min > max) {
 			Log.e(TAG, String.format("Minimum value (%d) must be lower than maximum value (%d)", min, max));
-			throw new InvalidParameterException("Minimum value must be lower than maximum value.");
+			throw new InvalidParameterException("Minimum value must be lower than maximum value");
 		}
 	
 		this.min = min;
@@ -81,7 +81,7 @@ public class DecimalVariable extends Variable {
 		}
 		
 		checkLimit();
-		callHooks(); // TODO: call hooks
+		callHooks(this);
 	}
 
 }

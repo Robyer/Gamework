@@ -4,8 +4,11 @@ import cz.robyer.gamework.scenario.BaseObject;
 import cz.robyer.gamework.scenario.variable.BooleanVariable;
 import cz.robyer.gamework.scenario.variable.DecimalVariable;
 import cz.robyer.gamework.scenario.variable.Variable;
+import cz.robyer.gamework.util.Log;
 
 public class Condition extends BaseObject {
+	public static final String TAG = Condition.class.getSimpleName();
+	
 	public static final int TYPE_EQUALS = 0;
 	public static final int TYPE_NOTEQUALS = 1;
 	public static final int TYPE_GREATER = 3;
@@ -16,6 +19,10 @@ public class Condition extends BaseObject {
 	protected int type;
 	protected String variable;
 	protected String value;
+	protected Hook parent;
+	
+	// holds Variable object from scenario to optimize access time
+	protected Variable var;
 	
 	public Condition(int type, String variable, String value) {
 		super();
@@ -28,8 +35,36 @@ public class Condition extends BaseObject {
 		return type;
 	}
 	
-	public boolean isValid() {
-		Variable variable = getScenario().getVariable(this.variable);
+	public void setParent(Hook parent) {
+		this.parent = parent;
+	}
+	
+	public Hook getParent() {
+		if (parent == null) {
+			Log.e(TAG, "No parent is attached");
+			throw new RuntimeException();
+		}
+
+		return parent;
+	}
+	
+	private Variable getVariable() {
+		if (var == null)
+			var = getScenario().getVariable(variable);
+		
+		return var;
+	}
+	
+	public boolean isValid(Variable variable) {
+		// If this condition has defined own variable, we use that
+		if (this.variable.length() > 0)
+			variable = getVariable();
+		
+		if (variable == null) {
+			Log.e(TAG, "Variable to check is null");
+			throw new RuntimeException();
+		}
+		
 		boolean valid = false;
 		
 		if (variable instanceof BooleanVariable) {

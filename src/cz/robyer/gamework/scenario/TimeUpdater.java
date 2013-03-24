@@ -2,9 +2,12 @@ package cz.robyer.gamework.scenario;
 
 import android.util.Log;
 import cz.robyer.gamework.hook.Hook;
+import cz.robyer.gamework.scenario.variable.DecimalVariable;
 
 public class TimeUpdater extends HookableObject {
 	private static final String TAG = TimeUpdater.class.getSimpleName();
+	
+	private DecimalVariable variable = new DecimalVariable("", 0);
 	
 	public TimeUpdater(Scenario scenario) {
 		super("Gamework:TIME");
@@ -20,10 +23,11 @@ public class TimeUpdater extends HookableObject {
 		if (hooks == null)
 			return;
 		
-		long secs = time / 1000; // from mili to seconds
-		boolean isMinute = (secs % 60 == 0);
-		boolean isHour = (secs % 3600 == 0);
-		
+		time /= 1000; // from mili to seconds
+		int seconds = (int)(time % 60);
+		int minutes = (int)(time / 60);
+		int hours = (int)(time / 3600);
+	
 		for (Hook h : hooks) {
 			boolean valid = false;
 				
@@ -31,16 +35,19 @@ public class TimeUpdater extends HookableObject {
 			case Hook.TYPE_TIME:				
 				if (h.getValue().equalsIgnoreCase("second")) {
 					valid = true;
+					variable.setValue(seconds);
 				} else if (h.getValue().equalsIgnoreCase("minute")) {
-					valid = isMinute;
+					valid = (seconds == 0);
+					variable.setValue(minutes);
 				} else if (h.getValue().equalsIgnoreCase("hour")) {
-					valid = isHour;
+					valid = (seconds == 0 && minutes == 0);
+					variable.setValue(hours);
 				}
 				break;
 			}
 			
 			if (valid)
-				h.call();
+				h.call(variable);
 		}
 	}
 	

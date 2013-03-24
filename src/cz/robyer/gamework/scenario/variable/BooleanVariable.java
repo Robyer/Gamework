@@ -37,6 +37,6 @@ public class BooleanVariable extends Variable {
 			break;
 		}
 		
-		callHooks(); // TODO: call hooks
+		callHooks(this);
 	}
 }
