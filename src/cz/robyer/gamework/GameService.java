@@ -1,4 +1,4 @@
-package cz.robyer.gamework;
+ package cz.robyer.gamework;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -96,6 +96,7 @@ public class GameService extends Service implements GameEventListener, LocationL
     	Log.i(TAG, "Scenario '" + filename + "' was loaded.");
     	
     	running = true;
+    	scenario.setHandler(eventHandler);
     	registerListener(this);
     	start = SystemClock.uptimeMillis();
     		// system time clock: System.currentTimeMillis()

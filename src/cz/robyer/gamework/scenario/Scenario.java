@@ -49,7 +49,7 @@ public class Scenario {
 		return handler;
 	}
 	
-	private void setHandler(GameEventHandler handler) {
+	public void setHandler(GameEventHandler handler) {
 		this.handler = handler;
 	}
 
