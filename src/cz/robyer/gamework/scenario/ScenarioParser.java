@@ -100,10 +100,10 @@ public class ScenarioParser {
 		Log.i(TAG, String.format("Loading %1s from file '%2s'", (aboutOnly ? "info" : "scenario"), filename));
 		Scenario scenario = null;
 		try {
-			ScenarioParser parser = new ScenarioParser(context, aboutOnly);
+			ScenarioParser parser = new ScenarioParser(context, false);
 			File file = context.getFileStreamPath(filename);
 			InputStream stream = new BufferedInputStream(new FileInputStream(file));
-			scenario = parser.parse(stream, false);
+			scenario = parser.parse(stream, aboutOnly);
 			stream.close(); // TODO: put this into finally?
 		} catch (Exception e) {
 			Log.e(TAG, e.getMessage(), e);
