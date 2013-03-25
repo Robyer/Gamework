@@ -15,23 +15,43 @@
 	    android:scaleType="fitCenter"
         android:src="@drawable/icon_map" />
 	
-	<ImageButton
-	    android:id="@+id/btn_messages"
+	<FrameLayout
 	    android:layout_height="match_parent"
-	    android:layout_width="0dp"
-	    android:layout_weight="1"
-	    android:contentDescription="Messages"
-	    android:scaleType="fitCenter"
-        android:src="@drawable/icon_message" />
+		android:layout_width="0dp"
+		android:layout_weight="1" >
+		
+		<ImageButton
+		    android:id="@+id/btn_messages"
+		    android:layout_width="match_parent"
+		    android:layout_height="match_parent"
+		    android:contentDescription="Messages"
+		    android:scaleType="fitCenter"
+	        android:src="@drawable/icon_message" />
+		
+		<TextView 
+		        android:id="@+id/text_map"
+		        style="@style/CountIcon" />
+		
+	</FrameLayout>
 	
-	<ImageButton
-	    android:id="@+id/btn_tasks"
+	<FrameLayout
 	    android:layout_height="match_parent"
-	    android:layout_width="0dp"
-	    android:layout_weight="1"
-	    android:contentDescription="Tasks"
-	    android:scaleType="fitCenter"
-        android:src="@drawable/icon_tasks" />
+		android:layout_width="0dp"
+		android:layout_weight="1" >
+		
+		<ImageButton
+		    android:id="@+id/btn_tasks"
+		    android:layout_width="match_parent"
+		    android:layout_height="match_parent"
+		    android:contentDescription="Tasks"
+		    android:scaleType="fitCenter"
+		    android:src="@drawable/icon_tasks" />
+		
+		<TextView 
+		        android:id="@+id/text_map"
+		        style="@style/CountIcon" />
+		
+	</FrameLayout>
 	
 	<ImageButton
 	    android:id="@+id/btn_inventory"
