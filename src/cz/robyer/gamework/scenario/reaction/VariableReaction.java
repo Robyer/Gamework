@@ -1,5 +1,6 @@
 package cz.robyer.gamework.scenario.reaction;
 
+import android.util.Log;
 import cz.robyer.gamework.scenario.variable.Variable;
 
 public class VariableReaction extends Reaction {
@@ -26,7 +27,10 @@ public class VariableReaction extends Reaction {
 	@Override
 	public void action() {
 		Variable var = getScenario().getVariable(variable);
-		var.modify(type, value); // TODO: improve effectivity somehow? (not convert from String all the time?)
+		if (var != null)
+			var.modify(type, value); // TODO: improve effectivity somehow? (not convert from String all the time?)
+		else
+			Log.e(TAG, String.format("Variable '%s' is null", variable));
 	}
 
 }

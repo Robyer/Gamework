@@ -31,6 +31,15 @@ public class Condition extends BaseObject {
 		this.value = value;
 	}
 	
+	@Override
+	public boolean onScenarioLoaded() {
+		var = getScenario().getVariable(variable);
+		if (var == null)
+			Log.e(TAG, String.format("Variable '%s' is null", variable));
+		
+		return var != null;
+	}
+	
 	public int getType() {
 		return type;
 	}
@@ -48,17 +57,10 @@ public class Condition extends BaseObject {
 		return parent;
 	}
 	
-	private Variable getVariable() {
-		if (var == null)
-			var = getScenario().getVariable(variable);
-		
-		return var;
-	}
-	
 	public boolean isValid(Variable variable) {
 		// If this condition has defined own variable, we use that
 		if (this.variable.length() > 0)
-			variable = getVariable();
+			variable = var;
 		
 		if (variable == null) {
 			Log.e(TAG, "Variable to check is null");

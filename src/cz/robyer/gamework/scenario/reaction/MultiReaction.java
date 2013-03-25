@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.robyer.gamework.scenario.Scenario;
+import cz.robyer.gamework.util.Log;
 
 public class MultiReaction extends Reaction {
 
@@ -13,6 +14,7 @@ public class MultiReaction extends Reaction {
 		super(id);
 	}
 	
+	@Override
 	public void setScenario(Scenario scenario) {
 		super.setScenario(scenario);
 	
@@ -23,12 +25,18 @@ public class MultiReaction extends Reaction {
 	}
 		
 	public void addReaction(Reaction reaction) {
-		if (reaction != null) {
-			if (reactions == null)
-				reactions = new ArrayList<Reaction>();
-			
-			reactions.add(reaction);
+		if (reaction == null) {
+			Log.w(TAG, "addReaction() with null reaction");
+			return;
 		}
+		
+		if (reactions == null)
+			reactions = new ArrayList<Reaction>();
+
+		if (isAttached())
+			reaction.setScenario(scenario);
+		
+		reactions.add(reaction);
 	}
 	
 	@Override

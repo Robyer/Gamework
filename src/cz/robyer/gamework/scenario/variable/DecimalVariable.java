@@ -76,7 +76,7 @@ public class DecimalVariable extends Variable {
 			this.value /= value;
 			break;
 		default:
-			// TODO: not supported exception
+			Log.e(TAG, "Not supported VariableReaction type");
 			break;
 		}
 		

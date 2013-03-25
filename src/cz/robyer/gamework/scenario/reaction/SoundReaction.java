@@ -21,6 +21,7 @@ public class SoundReaction extends Reaction {
 		return value;
 	}
 	
+	@Override
 	public void setScenario(Scenario scenario) {
 		super.setScenario(scenario);
 		
@@ -31,7 +32,7 @@ public class SoundReaction extends Reaction {
 				descriptor.close();
 			} catch (IOException e) {
 				Log.e(TAG, String.format("Can't load sound '%s'", value));
-			}			
+			}
 		}
 	}
 	

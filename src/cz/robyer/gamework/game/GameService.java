@@ -30,7 +30,7 @@ public class GameService extends Service implements GameEventListener, LocationL
 	public static boolean running; // signalizing that instance of GameService exists
 	private static GameService instance;
 	
-	private GameEventHandler eventHandler = new GameEventHandler();
+	private GameHandler gameHandler = new GameHandler();
 	
 	private Scenario scenario;
 	Status status = Status.GAME_STOPPED;
@@ -55,16 +55,16 @@ public class GameService extends Service implements GameEventListener, LocationL
 		public void run() {
 			// TODO: when game will be pausable, this need to be improved (gameTime must being incremented)
 			time = SystemClock.uptimeMillis() - start;
-			eventHandler.broadcastEvent(GameEvent.UPDATED_TIME);
+			gameHandler.broadcastEvent(GameEvent.UPDATED_TIME);
 		}
 	};
 	
 	public boolean registerListener(GameEventListener listener) {
-    	return eventHandler.addListener(listener);
+    	return gameHandler.addListener(listener);
     }
     
     public boolean unregisterListener(GameEventListener listener) {
-    	return eventHandler.removeListener(listener);
+    	return gameHandler.removeListener(listener);
     }
     
     @Override
@@ -97,7 +97,7 @@ public class GameService extends Service implements GameEventListener, LocationL
     	Log.i(TAG, "Scenario '" + filename + "' was loaded");
     	
     	running = true;
-    	scenario.setHandler(eventHandler);
+    	scenario.setHandler(gameHandler);
     	registerListener(this);
     	start = SystemClock.uptimeMillis();
     		// system time clock: System.currentTimeMillis()
@@ -116,7 +116,7 @@ public class GameService extends Service implements GameEventListener, LocationL
     	if (location == null)
     		location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
     	if (location != null)
-    		eventHandler.broadcastEvent(GameEvent.UPDATED_LOCATION);
+    		gameHandler.broadcastEvent(GameEvent.UPDATED_LOCATION);
     	// }
     	
     	Intent gameIntent = new Intent(getApplicationContext(), GameMapActivity.class);
@@ -139,7 +139,7 @@ public class GameService extends Service implements GameEventListener, LocationL
     	Log.i(TAG, "onDestroy()");    	    	
     	
     	running = false;
-    	eventHandler.clearListeners();
+    	gameHandler.clearListeners();
     	
 		timer.cancel();
 		timer.purge();
@@ -175,7 +175,7 @@ public class GameService extends Service implements GameEventListener, LocationL
     public void onLocationChanged(Location location) {
     	this.location = location;
 
-    	eventHandler.broadcastEvent(GameEvent.UPDATED_LOCATION);    	    	
+    	gameHandler.broadcastEvent(GameEvent.UPDATED_LOCATION);    	    	
     }
 	
 	@Override public void onProviderDisabled(String provider) {}
@@ -196,7 +196,7 @@ public class GameService extends Service implements GameEventListener, LocationL
     	        .setContentTitle("Gamework - playing")    	        
     	        .setStyle(new NotificationCompat.BigTextStyle()
     	        				.bigText(String.format(
-    	        	        			"Game time: %1s\nGame location: %2s, %3s",
+    	        	        			"Game time: %s\nGame location: %s, %s",
     	        	        			time/1000,
     	        	        			location != null ? location.getLatitude() : "-",
     	        	        			location != null ? location.getLongitude() : "-"

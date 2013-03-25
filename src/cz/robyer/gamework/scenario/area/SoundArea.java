@@ -25,6 +25,7 @@ public class SoundArea extends PointArea {
 		this.soundRadius = soundRadius;
 	}
 	
+	@Override
 	public void setScenario(Scenario scenario) {
 		super.setScenario(scenario);
 		

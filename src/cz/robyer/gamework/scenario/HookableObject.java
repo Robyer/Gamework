@@ -19,6 +19,7 @@ public class HookableObject extends IdentificableObject {
 			hooks = new ArrayList<Hook>();
 		
 		hooks.add(hook);
+		hook.setParent(this);
 	}
 	
 	protected void callHooks(Variable variable) {

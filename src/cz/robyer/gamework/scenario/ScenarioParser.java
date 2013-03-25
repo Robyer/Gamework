@@ -22,7 +22,7 @@ import cz.robyer.gamework.scenario.area.MultiPointArea;
 import cz.robyer.gamework.scenario.area.PointArea;
 import cz.robyer.gamework.scenario.area.SoundArea;
 import cz.robyer.gamework.scenario.reaction.EventReaction;
-import cz.robyer.gamework.scenario.reaction.HtmlReaction;
+import cz.robyer.gamework.scenario.reaction.MessageReaction;
 import cz.robyer.gamework.scenario.reaction.MultiReaction;
 import cz.robyer.gamework.scenario.reaction.Reaction;
 import cz.robyer.gamework.scenario.reaction.SoundReaction;
@@ -50,7 +50,7 @@ public class ScenarioParser {
 	public static final String REACTION_TYPE_MULTI = "multi";
 	public static final String REACTION_TYPE_SOUND = "sound";
 	public static final String REACTION_TYPE_VIBRATE = "vibrate";
-	public static final String REACTION_TYPE_HTML = "html";
+	public static final String REACTION_TYPE_MESSAGE = "message";
 	public static final String REACTION_TYPE_VAR_SET = "var_set";
 	public static final String REACTION_TYPE_VAR_INC = "var_increment";
 	public static final String REACTION_TYPE_VAR_DEC = "var_decrement";
@@ -97,7 +97,7 @@ public class ScenarioParser {
     }
     
 	public static Scenario fromFile(Context context, String filename, boolean aboutOnly) {
-		Log.i(TAG, String.format("Loading %1s from file '%2s'", (aboutOnly ? "info" : "scenario"), filename));
+		Log.i(TAG, String.format("Loading %s from file '%s'", (aboutOnly ? "info" : "scenario"), filename));
 		Scenario scenario = null;
 		try {
 			ScenarioParser parser = new ScenarioParser(context, false);
@@ -112,7 +112,7 @@ public class ScenarioParser {
 	}
 	
 	public static Scenario fromAsset(Context context, String filename, boolean aboutOnly) {
-		Log.i(TAG, String.format("Loading %1s from asset '%2s'", (aboutOnly ? "info" : "scenario"), filename));
+		Log.i(TAG, String.format("Loading %s from asset '%s'", (aboutOnly ? "info" : "scenario"), filename));
 		Scenario scenario = null;
 		try {
 			ScenarioParser parser = new ScenarioParser(context, false);
@@ -167,6 +167,7 @@ public class ScenarioParser {
 	    	}
 	    }
 	    
+	    scenario.onLoaded();
 	    return scenario;
 	}
 	
@@ -217,7 +218,7 @@ public class ScenarioParser {
 	        	} else if (type.equalsIgnoreCase(HOOK_TYPE_VARIABLE)) {
 	        		itype = Hook.TYPE_VARIABLE;
 	        	} else {
-	        		Log.e(TAG, "Hook of type '" + type + "' is unknown");
+	        		Log.e(TAG, "Hook type '" + type + "' is unknown");
 	        		skip();
 	        		return;
 	        	}
@@ -229,7 +230,7 @@ public class ScenarioParser {
         			
         			if (parser.getName().equalsIgnoreCase("trigger")) {
         				Hook hook = readTrigger(itype, value);
-        				scenario.addHook(hook, itype, value);
+        				scenario.addHook(hook);
         			} else {
         				Log.e(TAG, "Expected <trigger>, got <" + parser.getName() + ">");
         				skip();
@@ -269,7 +270,7 @@ public class ScenarioParser {
 			runs = Integer.parseInt(run);
 				
 		hook = new Hook(hook_type, hook_value, reaction, conditions_type, runs);
-		Log.d(TAG, "- Trigger reaction='" + reaction + "' conditions='" + conditions + "' run='" + runs + "'");
+		Log.d(TAG, "Got trigger reaction='" + reaction + "' conditions='" + conditions + "' run='" + runs + "'");
 
 		while (parser.next() != XmlPullParser.END_TAG) {
 			if (parser.getEventType() != XmlPullParser.START_TAG) {
@@ -297,12 +298,12 @@ public class ScenarioParser {
 				} else if (type.equalsIgnoreCase(CONDITION_TYPE_SMALLEREQUALS)) {
 					itype = Condition.TYPE_SMALLEREQUALS;
 				} else {
-					Log.e(TAG, "Condition of type '" + type + "' is unknown");
+					Log.e(TAG, "Condition type '" + type + "' is unknown");
 	        		skip();
 	        		continue;
 				}
 				
-				Log.d(TAG, "--- Condition type='" + type + "' variable='" + variable + "' value='" + value + "'");
+				Log.d(TAG, "- Condition type='" + type + "' variable='" + variable + "' value='" + value + "'");
 				hook.addCondition(new Condition(itype, variable, value));
 				
 				parser.nextTag();
@@ -379,8 +380,8 @@ public class ScenarioParser {
 			reaction = new SoundReaction(id, value);
     	} else if (type.equalsIgnoreCase(REACTION_TYPE_VIBRATE)) {
     		reaction = new VibrateReaction(id, Integer.parseInt(value));
-    	} else if (type.equalsIgnoreCase(REACTION_TYPE_HTML)) {
-    		reaction = new HtmlReaction(id, value);
+    	} else if (type.equalsIgnoreCase(REACTION_TYPE_MESSAGE)) {
+    		reaction = new MessageReaction(id, value);
     	} else if (type.equalsIgnoreCase(REACTION_TYPE_VAR_DEC)) {
     		reaction = new VariableReaction(id, VariableReaction.DECREMENT, variable, value);
     	} else if (type.equalsIgnoreCase(REACTION_TYPE_VAR_DIV)) {
@@ -402,7 +403,7 @@ public class ScenarioParser {
     			reaction = new EventReaction(id, GameEvent.GAME_LOSE);
     		}
     	} else {
-    		Log.e(TAG, "Reaction of type '" + type + "' is unknown");
+    		Log.e(TAG, "Reaction type '" + type + "' is unknown");
     		skip();
     		return null;
     	}
@@ -447,7 +448,7 @@ public class ScenarioParser {
 	        		
 	        		parser.nextTag();
 	        	} else {
-	        		Log.e(TAG, "Variable of type '" + type + "' is unknown");
+	        		Log.e(TAG, "Variable type '" + type + "' is unknown");
 	        		skip();
 	        		continue;
 	        	}
@@ -536,7 +537,7 @@ public class ScenarioParser {
 	        		}
 	        		
 	        	} else {
-	        		Log.e(TAG, "Area of type '" + type + "' is unknown");
+	        		Log.e(TAG, "Area type '" + type + "' is unknown");
 	        		skip();
 	        		continue;
 	        	}

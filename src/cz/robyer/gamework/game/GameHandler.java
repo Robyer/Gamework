@@ -4,8 +4,8 @@ import java.util.WeakHashMap;
 
 import cz.robyer.gamework.util.Log;
 
-public class GameEventHandler implements GameEventBroadcaster {
-	private static final String TAG = GameEventHandler.class.getSimpleName();
+public class GameHandler implements GameEventBroadcaster {
+	private static final String TAG = GameHandler.class.getSimpleName();
 	
 	// We use a weak hash map to ensure that if an object is added to this as a
 	// listener, but never removes itself, we won't keep it from being
@@ -44,5 +44,10 @@ public class GameEventHandler implements GameEventBroadcaster {
 	    		listener.receiveEvent(event);
 	    	}
 	    }
+	}
+
+	public long getGameTime() {
+		// TODO: return game time somehow from GameService
+		return 0;
 	}
 }

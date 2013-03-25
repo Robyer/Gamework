@@ -1,6 +1,7 @@
 package cz.robyer.gamework.scenario.variable;
 
 import cz.robyer.gamework.scenario.reaction.VariableReaction;
+import cz.robyer.gamework.util.Log;
 
 public class BooleanVariable extends Variable {
 	protected boolean value;
@@ -33,7 +34,7 @@ public class BooleanVariable extends Variable {
 			this.value = !this.value;
 			break;
 		default:
-			// TODO: not supported exception
+			Log.e(TAG, "Not supported VariableReaction type");
 			break;
 		}
 		

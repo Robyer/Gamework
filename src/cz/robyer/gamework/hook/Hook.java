@@ -13,12 +13,13 @@ import cz.robyer.gamework.util.Log;
 public class Hook extends BaseObject {
 	private static final String TAG = Hook.class.getSimpleName();
 	
+	// TODO: refactor to enums?
 	public static final int TYPE_AREA = 0;
 	public static final int TYPE_AREA_ENTER = 1;
 	public static final int TYPE_AREA_LEAVE = 2;
 	public static final int TYPE_VARIABLE = 3;
 	public static final int TYPE_TIME = 4;
-	
+
 	public static final int CONDITIONS_NONE = 0;
 	public static final int CONDITIONS_ANY = 1;
 	public static final int CONDITIONS_ALL = 2;
@@ -32,6 +33,9 @@ public class Hook extends BaseObject {
 	protected String reaction;
 	protected List<Condition> conditions;
 	protected HookableObject parent;
+	
+	
+	protected Reaction react;
 	
 	public Hook(int type, String value, String reaction, int conditions_type, int runs) {
 		super();
@@ -50,6 +54,7 @@ public class Hook extends BaseObject {
 		this(type, value, reaction, CONDITIONS_NONE, RUN_ALWAYS);
 	}
 	
+	@Override
 	public void setScenario(Scenario scenario) {
 		super.setScenario(scenario);
 	
@@ -57,6 +62,15 @@ public class Hook extends BaseObject {
 			for (Condition c : conditions) {
 				c.setScenario(scenario);
 			}
+	}
+	
+	@Override
+	public boolean onScenarioLoaded() {
+		react = scenario.getReaction(reaction);
+		if (react == null)
+			Log.e(TAG, String.format("Reaction '%s' is null", reaction));
+		
+		return react != null;
 	}
 	
 	public void setParent(HookableObject parent) {
@@ -89,51 +103,56 @@ public class Hook extends BaseObject {
 		if (conditions == null)
 			conditions = new ArrayList<Condition>();
 		
+		if (isAttached())
+			condition.setScenario(scenario);
+		
 		condition.setParent(this);
 		conditions.add(condition);
 	}
 
 	public void call(Variable variable) {
-		Reaction reaction = scenario.getReaction(this.reaction);
-		if (reaction != null) {
-			boolean valid = false;
-			
-			switch (conditions_type) {
-			case CONDITIONS_NONE:
-				valid = true;
-				break;
-			case CONDITIONS_ALL:
-				valid = true;
-				if (conditions != null)
-					for (Condition condition : conditions) {
-						if (!condition.isValid(variable)) {
-							valid = false;
-							break;
-						}
-					}
-				break;
-			case CONDITIONS_ANY:
-				if (conditions != null)
-					for (Condition condition : conditions) {
-						if (condition.isValid(variable)) {
-							valid = true;
-							break;
-						}
-					}
-				break;
-			}
-			
-			if (runs != RUN_ALWAYS) {
-				if (runs > 0) {
-					runs--;
-				} else {
-					valid = false;
-				}
-			}
-			
-			if (valid)
-				reaction.action();
+		if (react == null) {
+			Log.e(TAG, "Reaction to call is null");
+			throw new RuntimeException();
 		}
+		
+		boolean valid = false;
+			
+		switch (conditions_type) {
+		case CONDITIONS_NONE:
+			valid = true;
+			break;
+		case CONDITIONS_ALL:
+			valid = true;
+			if (conditions != null)
+				for (Condition condition : conditions) {
+					if (!condition.isValid(variable)) {
+						valid = false;
+						break;
+					}
+				}
+			break;
+		case CONDITIONS_ANY:
+			if (conditions != null)
+				for (Condition condition : conditions) {
+					if (condition.isValid(variable)) {
+						valid = true;
+						break;
+					}
+				}
+			break;
+		}
+		
+		if (runs != RUN_ALWAYS) {
+			if (runs > 0) {
+				runs--;
+			} else {
+				valid = false;
+			}
+		}
+		
+		if (valid)
+			react.action();
 	}
 
 }

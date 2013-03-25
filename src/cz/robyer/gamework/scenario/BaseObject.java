@@ -1,7 +1,7 @@
 package cz.robyer.gamework.scenario;
 
 import android.content.Context;
-import cz.robyer.gamework.game.GameEventHandler;
+import cz.robyer.gamework.game.GameHandler;
 import cz.robyer.gamework.util.Log;
 
 public abstract class BaseObject {
@@ -11,6 +11,13 @@ public abstract class BaseObject {
 	public void setScenario(Scenario scenario) {
 		this.scenario = scenario;
 		this.context = scenario.getContext();
+	}
+
+	/**
+	 * @return false if error occured
+	 */
+	public boolean onScenarioLoaded() {
+		return true;
 	}
 	
 	public boolean isAttached() {
@@ -35,10 +42,10 @@ public abstract class BaseObject {
 		return scenario;
 	}
 	
-	public GameEventHandler getHandler() {
-		GameEventHandler handler = getScenario().getHandler();
+	public GameHandler getHandler() {
+		GameHandler handler = getScenario().getHandler();
 		if (handler == null) {
-			Log.e("BaseObject", "Scenario have attached no GameEventHandler");
+			Log.e("BaseObject", "Scenario have attached no GameHandler");
 			throw new RuntimeException();
 		}
 		
