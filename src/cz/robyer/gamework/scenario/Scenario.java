@@ -153,7 +153,7 @@ public class Scenario {
 	}
 	
 	public String getDescription() {
-		return getContext().getResources().getString(R.string.scenarioInfo,
+		return getContext().getResources().getString(R.string.scenario_info,
 			info.getAuthor(),
 			info.getVersion(),
 			info.getLocation(),

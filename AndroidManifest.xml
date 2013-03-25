@@ -55,8 +55,8 @@
         <activity
             android:name="cz.robyer.gamework.activity.TestingActivity"
             android:label="@string/title_activity_testing"
-            android:windowSoftInputMode="stateHidden|adjustResize"
-            android:parentActivityName="cz.robyer.gamework.activity.MainActivity" >
+            android:parentActivityName="cz.robyer.gamework.activity.MainActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="cz.robyer.gamework.activity.Main" />
@@ -95,6 +95,14 @@
         <activity
             android:name="cz.robyer.gamework.activity.GameSettingsActivity"
             android:label="@string/title_activity_game_settings" >
+        </activity>
+        <activity
+            android:name="cz.robyer.gamework.activity.MessageActivity"
+            android:label="@string/title_activity_show_message"
+            android:parentActivityName="cz.robyer.gamework.activity.GameMessagesActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="cz.robyer.gamework.activity.GameMessagesActivity" />
         </activity>
     </application>
 
