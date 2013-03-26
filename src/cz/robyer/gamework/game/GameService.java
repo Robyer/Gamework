@@ -119,7 +119,7 @@ public class GameService extends Service implements GameEventListener, LocationL
     		gameHandler.broadcastEvent(GameEvent.UPDATED_LOCATION);
     	// }
     	
-    	Intent gameIntent = new Intent(getApplicationContext(), GameMapActivity.class);
+    	Intent gameIntent = new Intent(this, GameMapActivity.class);
     	gameIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     	startActivity(gameIntent);    	
     	

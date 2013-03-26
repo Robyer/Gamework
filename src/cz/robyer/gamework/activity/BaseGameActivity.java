@@ -71,7 +71,7 @@ public abstract class BaseGameActivity extends FragmentActivity implements GameE
 				if (cls == null || cls == this.getClass())
 					return;
 				
-				Intent intent = new Intent(getApplicationContext(), cls);
+				Intent intent = new Intent(BaseGameActivity.this, cls);
 				intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT) // TODO: hope this works as i want		
 						.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION) // should be cool
 					;
