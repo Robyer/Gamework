@@ -6,6 +6,10 @@ import android.content.res.AssetFileDescriptor;
 import android.util.Log;
 import cz.robyer.gamework.scenario.Scenario;
 
+/**
+ * 
+ * @author Robert Pösel
+ */
 public class SoundReaction extends Reaction {
 	protected String value;
 	protected int soundId = -1;

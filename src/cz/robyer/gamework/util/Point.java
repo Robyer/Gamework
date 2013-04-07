@@ -1,9 +1,13 @@
 package cz.robyer.gamework.util;
 
+/**
+ * 
+ * @author Robert Pösel
+ */
 public class Point {
 
 	/**
-	 * Slightly modified version from http://www.androidsnippets.com/distance-between-two-gps-coordinates-in-meter
+	 * Slightly modified version of code from http://www.androidsnippets.com/distance-between-two-gps-coordinates-in-meter
 	 * @return Distance in meters between given coordinates
 	 */
 	public static double distanceBetween(double latFrom, double lonFrom, double latTo, double lonTo) {
@@ -23,5 +27,5 @@ public class Point {
 	    
 	    return ellipsoidRadius * tt * 1000;
 	}
-	
+
 }

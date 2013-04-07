@@ -4,30 +4,47 @@ import java.util.WeakHashMap;
 
 import cz.robyer.gamework.util.Log;
 
+/**
+ * Handler for broadcasting {@link GameEvent}s.
+ * @author Robert Pösel
+ */
 public class GameHandler implements GameEventBroadcaster {
 	private static final String TAG = GameHandler.class.getSimpleName();
 	
-	// We use a weak hash map to ensure that if an object is added to this as a
-	// listener, but never removes itself, we won't keep it from being
-	// garbage collected.
-	private final WeakHashMap<GameEventListener, Boolean> listeners =
-			new WeakHashMap<GameEventListener, Boolean>();
+	private final WeakHashMap<GameEventListener, Boolean> listeners = new WeakHashMap<GameEventListener, Boolean>();
 
+	/**
+	 * Add listener.
+	 * @param listener
+	 * @return true if listener was added or false if it already existed
+	 */
 	public synchronized boolean addListener(GameEventListener listener) {
 		Log.d(TAG, "Adding GameEventListener " + listener.toString());
 		return (listeners.put(listener, true) == null);
 	}
 	
+	/**
+	 * Remove registered listener.
+	 * @param listener to remove
+	 * @return true when listener was removed or false if it did not existed
+	 */
 	public synchronized boolean removeListener(GameEventListener listener) {
 		Log.d(TAG, "Removing GameEventListener " + listener.toString());
 		return (listeners.remove(listener) != null);
  	}
 	
+	/**
+	 * Removes all registered listeners.
+	 */
 	public synchronized void clearListeners() {
 		Log.d(TAG, "Clearing GameEventListeners");
 		listeners.clear();
 	}
 	
+	/**
+	 * Broadcasts {@link GameEvent} to all registered listeners.
+	 */
+	@Override
 	public synchronized void broadcastEvent(GameEvent event) {
 		int severity = android.util.Log.INFO;
 		if (event == GameEvent.UPDATED_LOCATION ||

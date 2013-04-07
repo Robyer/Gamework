@@ -104,6 +104,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="cz.robyer.gamework.activity.GameMessagesActivity" />
         </activity>
+        <activity
+            android:name="cz.robyer.gamework.activity.SettingsActivity"
+            android:label="@string/title_activity_settings" >
+        </activity>
     </application>
 
 </manifest>

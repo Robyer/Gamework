@@ -2,6 +2,10 @@ package cz.robyer.gamework.scenario.reaction;
 
 import cz.robyer.gamework.scenario.IdentificableObject;
 
+/**
+ * 
+ * @author Robert Pösel
+ */
 public abstract class Reaction extends IdentificableObject {
 	
 	public Reaction(String id) {

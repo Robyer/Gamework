@@ -5,6 +5,10 @@ import java.util.List;
 
 import com.google.android.gms.maps.model.LatLng;
 
+/**
+ * 
+ * @author Robert Pösel
+ */
 public class MultiPointArea extends Area {
 	protected List<LatLng> points;
 	protected double minLat;

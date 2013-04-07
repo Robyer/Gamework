@@ -5,6 +5,10 @@ import android.os.Vibrator;
 
 // TODO: patterns, repeations, etc. - http://android.konreu.com/developer-how-to/vibration-examples-for-android-phone-development/
 
+/**
+ * 
+ * @author Robert Pösel
+ */
 public class VibrateReaction extends Reaction {
 	protected int value = 100;
 	

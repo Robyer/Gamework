@@ -1,5 +1,9 @@
 package cz.robyer.gamework.scenario;
 
+/**
+ * Base identificable object.
+ * @author Robert Pösel
+ */
 public abstract class IdentificableObject extends BaseObject {
 	protected final String id;
 	protected final String TAG;

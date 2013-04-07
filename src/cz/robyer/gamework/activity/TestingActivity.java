@@ -1,19 +1,9 @@
 package cz.robyer.gamework.activity;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.Intent;
 import android.location.Location;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -28,6 +18,11 @@ import cz.robyer.gamework.scenario.Scenario;
 import cz.robyer.gamework.scenario.reaction.Reaction;
 import cz.robyer.gamework.util.IntentFactory;
 
+/**
+ * Activity only for testing and debug different features.
+ * TODO: this activity shouldn't be in final application.
+ * @author Robert Pösel
+ */
 public class TestingActivity extends Activity implements GameEventListener {
 	private static final String TAG = TestingActivity.class.getSimpleName();
 	private TextView myLatitude, myLongitude, time_text;
@@ -36,10 +31,6 @@ public class TestingActivity extends Activity implements GameEventListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_testing);
-
-		// Show the Up button in the action bar.
-		setupActionBar();
-			
 		initButtons();
 	}
 
@@ -111,44 +102,8 @@ public class TestingActivity extends Activity implements GameEventListener {
 		return GameService.getInstance();
 	}
 	
-	private void showNotification(int id, String title, String content) {
-		NotificationCompat.Builder mBuilder =
-		        new NotificationCompat.Builder(this)
-		        .setSmallIcon(R.drawable.ic_launcher)
-		        .setContentTitle(title)
-		        .setContentText(content);
-		
-		// Creates an explicit intent for an Activity in your app
-		Intent resultIntent = new Intent(this, TestingActivity.class);
-
-		// The stack builder object will contain an artificial back stack for the
-		// started Activity.
-		// This ensures that navigating backward from the Activity leads out of
-		// your application to the Home screen.
-		TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-		// Adds the back stack for the Intent (but not the Intent itself)
-		stackBuilder.addParentStack(TestingActivity.class);
-		// Adds the Intent that starts the Activity to the top of the stack
-		stackBuilder.addNextIntent(resultIntent);
-		PendingIntent resultPendingIntent =
-		        stackBuilder.getPendingIntent(
-		            0,
-		            PendingIntent.FLAG_UPDATE_CURRENT
-		        );
-		mBuilder.setContentIntent(resultPendingIntent);
-		NotificationManager mNotificationManager =
-		    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-		// mId allows you to update the notification later on.
-		mNotificationManager.notify(id, mBuilder.build());
-	}
-	
-	private void hideNotification(int id) {
-		NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-		mNotificationManager.cancel(id);
-	}
-	
 	private void initButtons() {
-		// Start/Stop timer
+		// start/stop timer
 		Button btn_timer = (Button)findViewById(R.id.btn_game);
 		
 		btn_timer.setText(GameService.running ? "Stop game" : "Start game");
@@ -204,33 +159,6 @@ public class TestingActivity extends Activity implements GameEventListener {
 				}
 			}
 		});
-	}
-	
-	/**
-	 * Set up the {@link android.app.ActionBar}, if the API is available.
-	 */
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	private void setupActionBar() {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			getActionBar().setDisplayHomeAsUpEnabled(true);
-		}
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			// This ID represents the Home or Up button. In the case of this
-			// activity, the Up button is shown. Use NavUtils to allow users
-			// to navigate up one level in the application structure. For
-			// more details, see the Navigation pattern on Android Design:
-			//
-			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
-			//
-			NavUtils.navigateUpFromSameTask(this);
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
 	}
 
 	@Override

@@ -4,6 +4,10 @@ import android.content.Context;
 import cz.robyer.gamework.game.GameHandler;
 import cz.robyer.gamework.util.Log;
 
+/**
+ * This is base object for scenario.
+ * @author Robert Pösel
+ */
 public abstract class BaseObject {
 	protected Scenario scenario;
 	protected Context context;
@@ -14,6 +18,7 @@ public abstract class BaseObject {
 	}
 
 	/**
+	 * This is called when scenario loaded all objects.
 	 * @return false if error occured
 	 */
 	public boolean onScenarioLoaded() {
@@ -41,7 +46,7 @@ public abstract class BaseObject {
 			
 		return scenario;
 	}
-	
+
 	public GameHandler getHandler() {
 		GameHandler handler = getScenario().getHandler();
 		if (handler == null) {

@@ -11,6 +11,10 @@ import com.google.android.gms.maps.model.LatLng;
 import cz.robyer.gamework.scenario.Scenario;
 import cz.robyer.gamework.util.Point;
 
+/**
+ * 
+ * @author Robert Pösel
+ */
 public class SoundArea extends PointArea {
 	protected String value;
 	protected int soundId = -1;

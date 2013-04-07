@@ -4,6 +4,10 @@ import android.util.Log;
 import cz.robyer.gamework.hook.Hook;
 import cz.robyer.gamework.scenario.HookableObject;
 
+/**
+ * 
+ * @author Robert Pösel
+ */
 public abstract class Area extends HookableObject {
 	protected boolean inArea = false;
 	

@@ -3,6 +3,10 @@ package cz.robyer.gamework.scenario.reaction;
 import android.util.Log;
 import cz.robyer.gamework.scenario.message.Message;
 
+/**
+ * 
+ * @author Robert Pösel
+ */
 public class MessageReaction extends Reaction {
 	protected String value;
 	protected Message message;

@@ -23,6 +23,11 @@ import cz.robyer.gamework.scenario.area.MultiPointArea;
 import cz.robyer.gamework.scenario.area.PointArea;
 import cz.robyer.gamework.scenario.area.SoundArea;
 
+/**
+ * Represents game map with showed areas and player position.
+ * @author Robert Pösel
+ *
+ */
 public class GameMapActivity extends BaseGameActivity {
 	private static final String TAG = GameMapActivity.class.getSimpleName();
 	private GoogleMap map;
@@ -96,6 +101,9 @@ public class GameMapActivity extends BaseGameActivity {
 		return true;
 	}
 	
+	/**
+	 * Checks UPDATED_LOCATION event and updates player position on map.
+	 */
 	public void receiveEvent(GameEvent event) {
 		super.receiveEvent(event);
 		

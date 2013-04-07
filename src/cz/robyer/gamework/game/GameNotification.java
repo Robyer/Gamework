@@ -15,12 +15,7 @@ import android.support.v4.app.NotificationCompat;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 
-/**
- * Helper class for showing and canceling game notifications.
- * <p>
- * This class makes heavy use of the {@link NotificationCompat.Builder} helper
- * class to create notifications in a backward-compatible way.
- */
+// TODO: refactor or remove
 public class GameNotification {
 	/**
 	 * The unique identifier for this type of notification.

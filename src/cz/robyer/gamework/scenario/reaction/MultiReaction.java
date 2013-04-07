@@ -6,6 +6,10 @@ import java.util.List;
 import cz.robyer.gamework.scenario.Scenario;
 import cz.robyer.gamework.util.Log;
 
+/**
+ * 
+ * @author Robert Pösel
+ */
 public class MultiReaction extends Reaction {
 
 	protected List<Reaction> reactions;

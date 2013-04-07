@@ -1,5 +1,9 @@
 package cz.robyer.gamework.game;
 
+/**
+ * Represents game event.
+ * @author Robert Pösel
+ */
 public enum GameEvent {
   GAME_START,
   GAME_PAUSE,

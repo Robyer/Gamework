@@ -5,6 +5,10 @@ import java.security.InvalidParameterException;
 import cz.robyer.gamework.scenario.reaction.VariableReaction;
 import cz.robyer.gamework.util.Log;
 
+/**
+ * Represents numeric decimal variable.
+ * @author Robert Pösel
+ */
 public class DecimalVariable extends Variable {
 	protected int value;
 	protected int min = 0;

@@ -24,10 +24,15 @@ import cz.robyer.gamework.scenario.Scenario;
 import cz.robyer.gamework.scenario.ScenarioParser;
 import cz.robyer.gamework.util.Log;
 
+/**
+ * Main service object representing whole game.
+ * @author Robert Pösel
+ */
 public class GameService extends Service implements GameEventListener, LocationListener {		
 	private static final String TAG = GameService.class.getSimpleName();
 	
-	public static boolean running; // signalizing that instance of GameService exists
+	/** signalize that instance of GameService exists */
+	public static boolean running;
 	private static GameService instance;
 	
 	private GameHandler gameHandler = new GameHandler();
@@ -59,10 +64,16 @@ public class GameService extends Service implements GameEventListener, LocationL
 		}
 	};
 	
+	/**
+	 * Shortcur for registering {@link GameEventListener}s.
+	 */
 	public boolean registerListener(GameEventListener listener) {
     	return gameHandler.addListener(listener);
     }
     
+	/**
+	 * Shortcur for unregistering {@link GameEventListener}s.
+	 */
     public boolean unregisterListener(GameEventListener listener) {
     	return gameHandler.removeListener(listener);
     }
@@ -106,6 +117,7 @@ public class GameService extends Service implements GameEventListener, LocationL
     	timer = new Timer();
     	timer.schedule(timerTask, 1000, 1000);
     	    	
+    	// shows persistent notification for this service
     	showForegroundNotification(true);
     	
     	locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
@@ -151,27 +163,45 @@ public class GameService extends Service implements GameEventListener, LocationL
 		instance = null;
     }
     
+    /**
+     * Returns last saved location of user.
+     */
     public Location getLocation() {
     	return location;
     }
     
+    /**
+     * Returns actual {@link Scenario}.
+     */
     public Scenario getScenario() {
     	return scenario;
     }
     
+    /**
+     * Returns actual game time.
+     */
     public long getTime() {
     	return time;
     }
     
+    /**
+     * Returns actual status of game.
+     */
     public Status getStatus() {
     	return status;
     }
     
+    /**
+     * Returns instance of this game.
+     */
     public static GameService getInstance() {
     	return instance;
     }
 	
-	@Override
+	/**
+	 * Get and broadcast new user location.
+	 */
+    @Override
     public void onLocationChanged(Location location) {
     	this.location = location;
 
@@ -182,6 +212,10 @@ public class GameService extends Service implements GameEventListener, LocationL
 	@Override public void onProviderEnabled(String provider) {}
 	@Override public void onStatusChanged(String provider, int status, Bundle extras) {}
 	
+	/**
+	 * Show or update this service's notification.
+	 * @param show notification as foreground notification?
+	 */
 	private void showForegroundNotification(boolean foreground) {
     	// Creates an explicit intent for an Activity in your app
     	Intent notificationIntent = new Intent(this, TestingActivity.class) // TODO: GameActivity
@@ -213,6 +247,9 @@ public class GameService extends Service implements GameEventListener, LocationL
     		
 	}
 	
+	/**
+	 * Received game event handling.
+	 */
     @Override
 	public void receiveEvent(GameEvent event) {
     	

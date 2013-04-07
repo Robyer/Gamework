@@ -10,6 +10,10 @@ import cz.robyer.gamework.scenario.reaction.Reaction;
 import cz.robyer.gamework.scenario.variable.Variable;
 import cz.robyer.gamework.util.Log;
 
+/**
+ * Represents hook which is activated when some game state (variable, time,...) is changed.
+ * @author Robert Pösel
+ */
 public class Hook extends BaseObject {
 	private static final String TAG = Hook.class.getSimpleName();
 	
@@ -33,7 +37,6 @@ public class Hook extends BaseObject {
 	protected String reaction;
 	protected List<Condition> conditions;
 	protected HookableObject parent;
-	
 	
 	protected Reaction react;
 	
@@ -110,6 +113,10 @@ public class Hook extends BaseObject {
 		conditions.add(condition);
 	}
 
+	/**
+	 * Run reaction if conditions and other conditions (runs) are valid.
+	 * @param variable which was changed (and which runned this hook)
+	 */
 	public void call(Variable variable) {
 		if (react == null) {
 			Log.e(TAG, "Reaction to call is null");

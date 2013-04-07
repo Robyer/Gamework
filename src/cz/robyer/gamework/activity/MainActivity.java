@@ -8,6 +8,10 @@ import android.widget.Button;
 import android.widget.Toast;
 import cz.robyer.gamework.R;
 
+/**
+ * This is the main activity of application.
+ * @author Robert Pösel
+ */
 public class MainActivity extends BaseActivity {
 	private static final String TAG = MainActivity.class.getSimpleName();
 	
@@ -15,7 +19,13 @@ public class MainActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+		initButtons();
+	}
+	
+	/**
+	 * Init handlers for main buttons.
+	 */
+	private void initButtons() {
 		((Button)findViewById(R.id.btn_testing)).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -43,12 +53,5 @@ public class MainActivity extends BaseActivity {
 			}
 		});
 	}
-
-/*	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}*/
 
 }

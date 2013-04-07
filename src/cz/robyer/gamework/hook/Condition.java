@@ -6,6 +6,10 @@ import cz.robyer.gamework.scenario.variable.DecimalVariable;
 import cz.robyer.gamework.scenario.variable.Variable;
 import cz.robyer.gamework.util.Log;
 
+/**
+ * Represents condition for {@link Hook}.
+ * @author Robert Pösel
+ */
 public class Condition extends BaseObject {
 	public static final String TAG = Condition.class.getSimpleName();
 	
@@ -21,9 +25,15 @@ public class Condition extends BaseObject {
 	protected String value;
 	protected Hook parent;
 	
-	// holds Variable object from scenario to optimize access time
+	/** holds Variable object from scenario to optimize access time */
 	protected Variable var;
 	
+	/**
+	 * Basic constructor.
+	 * @param type of condition
+	 * @param id of variable for condition, could be empty
+	 * @param value to be compared with value of variable
+	 */
 	public Condition(int type, String variable, String value) {
 		super();
 		this.type = type;
@@ -57,6 +67,11 @@ public class Condition extends BaseObject {
 		return parent;
 	}
 	
+	/**
+	 * Checks if this condition pass.
+	 * @param variable which was changed (and which called our hook)
+	 * @return true if this condition is valid, false otherwise
+	 */
 	public boolean isValid(Variable variable) {
 		// If this condition has defined own variable, we use that
 		if (this.variable.length() > 0)

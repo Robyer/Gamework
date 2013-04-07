@@ -2,6 +2,10 @@ package cz.robyer.gamework.scenario.reaction;
 
 import cz.robyer.gamework.game.GameEvent;
 
+/**
+ * 
+ * @author Robert Pösel
+ */
 public class EventReaction extends Reaction {
 	protected GameEvent value;
 	

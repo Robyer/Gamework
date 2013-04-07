@@ -2,7 +2,6 @@ package cz.robyer.gamework.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -13,9 +12,14 @@ import cz.robyer.gamework.game.GameEventListener;
 import cz.robyer.gamework.game.GameService;
 import cz.robyer.gamework.util.IntentFactory;
 
-public abstract class BaseGameActivity extends FragmentActivity implements GameEventListener {
+/**
+ * This is base activity for all game activities.
+ * @author Robert Pösel
+ */
+public abstract class BaseGameActivity extends BaseActivity implements GameEventListener {
 	private static final String TAG = BaseGameActivity.class.getSimpleName();
 	
+	/** Helper for quitting activity by second press of 'back' */
 	protected boolean backClicked = false;
 	
 	@Override
@@ -28,11 +32,27 @@ public abstract class BaseGameActivity extends FragmentActivity implements GameE
 	protected void onResume() {
 		super.onResume();		
 		checkGameRunning();
-		overridePendingTransition(0,0);
-		
-		backClicked = false;		
+		overridePendingTransition(0,0); // disable animations
+
+		/** Register listening to game events */
+		getGame().registerListener(this);			
+
+		// reset 'back' clicked helper
+		backClicked = false;
 	}
 	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		
+		/** Unregister listening to game events */
+		if (GameService.running)
+			getGame().unregisterListener(this);		
+	}
+	
+	/**
+	 * If {@link GameService} is not running then finish this activity and start MainActivity.
+	 */
 	protected void checkGameRunning() {
 		if (!GameService.running) {
 			Intent intent = new Intent(this, MainActivity.class);
@@ -48,6 +68,9 @@ public abstract class BaseGameActivity extends FragmentActivity implements GameE
 		return true;
 	}*/
 
+	/**
+	 * Init buttons bar and handlers for buttons.
+	 */
 	protected void initButtons() {
 
 		final OnClickListener listener = new OnClickListener() {
@@ -67,14 +90,13 @@ public abstract class BaseGameActivity extends FragmentActivity implements GameE
 				else if (v.getId() == R.id.btn_settings)
 					cls = GameSettingsActivity.class;
 				
-				// ignore unknown buttons or same activity
+				// ignore unknown buttons and link to same activity
 				if (cls == null || cls == this.getClass())
 					return;
 				
 				Intent intent = new Intent(BaseGameActivity.this, cls);
-				intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT) // TODO: hope this works as i want		
-						.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION) // should be cool
-					;
+				intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)		
+						.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 					
 				startActivity(intent);
 			}
@@ -88,9 +110,11 @@ public abstract class BaseGameActivity extends FragmentActivity implements GameE
 			buttons.findViewById(R.id.btn_inventory).setOnClickListener(listener);
 			buttons.findViewById(R.id.btn_settings).setOnClickListener(listener);
 		}
-		
 	}
 	
+	/* (non-Javadoc)
+	 * @see cz.robyer.gamework.game.GameEventListener#receiveEvent(cz.robyer.gamework.game.GameEvent)
+	 */
 	@Override
 	public void receiveEvent(GameEvent event) {
 		// TODO: think up and implement
@@ -107,10 +131,17 @@ public abstract class BaseGameActivity extends FragmentActivity implements GameE
 		}
 	}
 	
+	/**
+	 * Shortcut for getting instance of {@link GameService}.
+	 * @return instance
+	 */
 	protected GameService getGame() {
 		return GameService.getInstance();
 	}
 	
+	/**
+	 * Quit application on second 'back' press.
+	 */
 	@Override
 	public void onBackPressed() {			
 		if (!backClicked) {

@@ -1,5 +1,9 @@
 package cz.robyer.gamework.scenario;
 
+/**
+ * Represents basic informations about {@link Scenario}.
+ * @author Robert Pösel
+ */
 public class ScenarioInfo {
 
 	protected final String title;

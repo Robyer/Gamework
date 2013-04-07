@@ -1,5 +1,9 @@
 package cz.robyer.gamework.util;
 
+/**
+ * Logging class.
+ * @author Robert Pösel
+ */
 public class Log {
   
 	private static final boolean debug = true;

@@ -4,6 +4,10 @@ import com.google.android.gms.maps.model.LatLng;
 
 import cz.robyer.gamework.util.Point;
 
+/**
+ * 
+ * @author Robert Pösel
+ */
 public class PointArea extends Area {
 	protected static int LEAVE_RADIUS = 3;
 	

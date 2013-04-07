@@ -21,6 +21,7 @@ import cz.robyer.gamework.scenario.area.Area;
 import cz.robyer.gamework.scenario.area.MultiPointArea;
 import cz.robyer.gamework.scenario.area.PointArea;
 import cz.robyer.gamework.scenario.area.SoundArea;
+import cz.robyer.gamework.scenario.message.Message;
 import cz.robyer.gamework.scenario.reaction.EventReaction;
 import cz.robyer.gamework.scenario.reaction.MessageReaction;
 import cz.robyer.gamework.scenario.reaction.MultiReaction;
@@ -33,6 +34,10 @@ import cz.robyer.gamework.scenario.variable.DecimalVariable;
 import cz.robyer.gamework.scenario.variable.Variable;
 import cz.robyer.gamework.util.Log;
 
+/**
+ * 
+ * @author Robert Pösel
+ */
 public class ScenarioParser {
 	private static final String TAG = ScenarioParser.class.getSimpleName();
     private static final String ns = null; // We don't use namespaces
@@ -162,6 +167,8 @@ public class ScenarioParser {
 			    	readReactions();
 				else if (name.equalsIgnoreCase("hooks"))
 					readHooks();
+				else if (name.equalsIgnoreCase("messages"))
+					readMessages();
 		        else
 		            skip();
 	    	}
@@ -172,7 +179,7 @@ public class ScenarioParser {
 	}
 	
 	private void skip() throws XmlPullParserException, IOException {
-	    Log.d(TAG, "Skipping unknown child");
+	    Log.d(TAG, "Skipping unknown child '" + parser.getName() + "'");
 		if (parser.getEventType() != XmlPullParser.START_TAG) {
 	        throw new IllegalStateException();
 	    }
@@ -545,6 +552,46 @@ public class ScenarioParser {
 	        	scenario.addArea(id, area);
 	        	
 	        	parser.require(XmlPullParser.END_TAG, ns, "area");
+	        } else {
+	        	skip();
+	        }
+	    }
+	}
+	
+	private void readMessages() throws XmlPullParserException, IOException {
+		Log.d(TAG, "Reading messages");
+		
+		parser.require(XmlPullParser.START_TAG, ns, "messages");
+		while (parser.next() != XmlPullParser.END_TAG) {
+			if (parser.getEventType() != XmlPullParser.START_TAG) {
+	            continue;
+	        }
+			
+			Message message = null;
+	        String name = parser.getName();
+
+	        if (name.equalsIgnoreCase("message")) {
+	        	parser.require(XmlPullParser.START_TAG, ns, "message");
+	        	String id = parser.getAttributeValue(null, "id");
+	        	String type = parser.getAttributeValue(null, "type");
+	        	String title = parser.getAttributeValue(null, "title");
+	        	String value = parser.getAttributeValue(null, "value");
+	        	
+	        	// if () {
+	        	
+	        	message = new Message(id, title, value);
+        		Log.d(TAG, "Got Message");
+        		parser.nextTag();
+
+	        	/*} else {
+	        		Log.e(TAG, "Message type '" + type + "' is unknown");
+	        		skip();
+	        		continue;
+	        	}*/
+	        	
+	        	scenario.addMessage(id, message);
+	        	
+	        	parser.require(XmlPullParser.END_TAG, ns, "message");
 	        } else {
 	        	skip();
 	        }

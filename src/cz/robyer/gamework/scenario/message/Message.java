@@ -4,7 +4,11 @@ import cz.robyer.gamework.game.GameEvent;
 import cz.robyer.gamework.game.GameHandler;
 import cz.robyer.gamework.scenario.IdentificableObject;
 
-public abstract class Message extends IdentificableObject {
+/**
+ * 
+ * @author Robert Pösel
+ */
+public class Message extends IdentificableObject {
 	protected String title;
 	protected String value;
 	protected Status status;

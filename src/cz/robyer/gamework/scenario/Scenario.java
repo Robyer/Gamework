@@ -17,6 +17,10 @@ import cz.robyer.gamework.scenario.message.Message;
 import cz.robyer.gamework.scenario.reaction.Reaction;
 import cz.robyer.gamework.scenario.variable.Variable;
 
+/**
+ * Represents definition of a whole game - objects and behaviors.
+ * @author Robert Pösel
+ */
 public class Scenario {
 	private static final String TAG = Scenario.class.getSimpleName();
 	
@@ -257,5 +261,5 @@ public class Scenario {
 			Log.e(TAG, "Scenario contains errors");
 			// TODO: hmm, or better? put some logging functions into Scenario itself, which will log errors also into file, etc. - oh, maybe not in scenario, but in BaseObject itself... - hm, or not baseobject but keep it here? for errors that are "scenario-related" = chyby v xml definici, ne moje chyby pøi vývoji tady, ty logovat normálnì jen do konzole (tzn. chyby jako scenario is not attached jsou moje)
 	}
-	
+
 }

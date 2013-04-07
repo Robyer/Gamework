@@ -4,6 +4,10 @@ import android.app.Activity;
 import android.webkit.JavascriptInterface;
 import android.widget.Toast;
 
+/**
+ * Helper class for connect javascript in webview with java methods.
+ * @author Robert Pösel
+ */
 public class JavaScriptHandler {
 	
 	Activity parent;

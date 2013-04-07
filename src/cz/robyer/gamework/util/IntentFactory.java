@@ -4,6 +4,10 @@ import cz.robyer.gamework.game.GameService;
 import android.content.Context;
 import android.content.Intent;
 
+/**
+ * Helper class for easily creating {@link Intent}s.
+ * @author Robert Pösel
+ */
 public class IntentFactory {
 	
 	public static Intent createGameServiceIntent(Context context) {

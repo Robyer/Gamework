@@ -3,6 +3,10 @@ package cz.robyer.gamework.scenario.variable;
 import cz.robyer.gamework.scenario.reaction.VariableReaction;
 import cz.robyer.gamework.util.Log;
 
+/**
+ * Represents variable with only 2 states - true and false.
+ * @author Robert Pösel
+ */
 public class BooleanVariable extends Variable {
 	protected boolean value;
 	

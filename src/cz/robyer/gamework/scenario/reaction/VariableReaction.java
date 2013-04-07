@@ -3,6 +3,10 @@ package cz.robyer.gamework.scenario.reaction;
 import android.util.Log;
 import cz.robyer.gamework.scenario.variable.Variable;
 
+/**
+ * 
+ * @author Robert Pösel
+ */
 public class VariableReaction extends Reaction {
 	public static final int SET = 0;
 	// decimals only

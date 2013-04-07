@@ -4,6 +4,10 @@ import android.util.Log;
 import cz.robyer.gamework.hook.Hook;
 import cz.robyer.gamework.scenario.variable.DecimalVariable;
 
+/**
+ * 
+ * @author Robert Pösel
+ */
 public class TimeUpdater extends HookableObject {
 	private static final String TAG = TimeUpdater.class.getSimpleName();
 	
