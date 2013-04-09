@@ -17,7 +17,7 @@
     </about>
    
     <tasks>
-        <!-- TODO: vymyslet -->
+        <!-- TODO -->
     </tasks>
     
     <messages>
@@ -56,7 +56,7 @@
     <reactions>
         <!--
         	Types:
-        	- sound (path to file) - a co hlasitost? případně zvuky od frameworku... Gamework:SHOT atd.
+        	- sound (path to file) - TODO: hlasitost? zvuky od frameworku? Gamework:SHOT atd.
         	- vibrate (strength = 1-10)
         	- html (path to file)
         	- ...
@@ -100,6 +100,7 @@
             <reaction type="sound" value="sounds/prohra.mp3" />
             <reaction type="event" value="GAME_LOSE" />
         </reaction>
+        <reaction id="activity" type="activity" value="" />
         <reaction id="nakup" type="multi">
             <reaction type="sound" value="sounds/nakup.mp3" />
             <reaction type="var_set" variable="nakoupeno" value="true" />

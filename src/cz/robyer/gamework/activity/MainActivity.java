@@ -43,7 +43,13 @@ public class MainActivity extends BaseActivity {
 		
 		((Button)findViewById(R.id.btn_play)).setOnClickListener(notImplementedListener);		
 		((Button)findViewById(R.id.btn_scenarios)).setOnClickListener(notImplementedListener);
-		((Button)findViewById(R.id.btn_options)).setOnClickListener(notImplementedListener);
+		((Button)findViewById(R.id.btn_options)).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+				startActivity(intent);
+			}
+		});
 		
 		((Button)findViewById(R.id.btn_help)).setOnClickListener(new OnClickListener() {
 			@Override

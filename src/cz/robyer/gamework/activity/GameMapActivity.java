@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CircleOptions;
@@ -89,6 +91,11 @@ public class GameMapActivity extends BaseGameActivity {
 	        	    	Thing thing = entry.getValue();
 	        	    	...
 	        		}*/
+		        	
+		        	map.setMyLocationEnabled(true);
+		        	LatLng pos = new LatLng(game.getLocation().getLatitude(), game.getLocation().getLongitude());
+		        	CameraUpdate update = CameraUpdateFactory.newLatLngZoom(pos, 10);
+		        	map.moveCamera(update);
 	    		}
 	        }
 	    }
