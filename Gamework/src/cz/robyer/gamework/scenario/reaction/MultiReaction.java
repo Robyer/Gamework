@@ -3,6 +3,7 @@ package cz.robyer.gamework.scenario.reaction;
 import java.util.ArrayList;
 import java.util.List;
 
+import cz.robyer.gamework.hook.Condition;
 import cz.robyer.gamework.scenario.Scenario;
 import cz.robyer.gamework.util.Log;
 
@@ -26,6 +27,18 @@ public class MultiReaction extends Reaction {
 			for (Reaction r : reactions) {
 				r.setScenario(scenario);
 			}
+	}
+	
+	@Override
+	public boolean onScenarioLoaded() {
+		boolean ok = true;
+		if (reactions != null)
+			for (Reaction r : reactions) {
+				if (!r.onScenarioLoaded())
+					ok = false;
+			}
+		
+		return ok;
 	}
 		
 	public void addReaction(Reaction reaction) {

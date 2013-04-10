@@ -29,7 +29,7 @@ public class MessageReaction extends Reaction {
 	public void action() {
 		if (message == null) {
 			Log.e(TAG, "Message to process is null");
-			throw new RuntimeException();
+			return;
 		}
 		
 		message.activate();

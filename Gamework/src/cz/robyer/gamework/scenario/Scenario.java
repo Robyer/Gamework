@@ -203,6 +203,7 @@ public class Scenario {
 	}
 
 	private void initializeHooks() {
+		Log.i(TAG, "Initializing hooks");
 		for (Hook hook : hooks) {
 			HookableObject hookable = null;
 			String type = null;
@@ -236,6 +237,8 @@ public class Scenario {
 	 * Called after whole scenario was loaded (all game items are present).
 	 */
 	public void onLoaded() {
+		Log.i(TAG, "Scenario objects was loaded");
+		
 		initializeHooks();
 		
 		boolean ok = true;
@@ -257,7 +260,9 @@ public class Scenario {
 				ok = false;
 		
 		if (!ok)
-			Log.e(TAG, "Scenario contains errors");
+			Log.e(TAG, "onScenarioLoaded() finished with errors");
+		else
+			Log.i(TAG, "onScenarioLoaded() finished without errors");
 			// TODO: hmm, or better? put some logging functions into Scenario itself, which will log errors also into file, etc. - oh, maybe not in scenario, but in BaseObject itself... - hm, or not baseobject but keep it here? for errors that are "scenario-related" = chyby v xml definici, ne moje chyby pøi vývoji tady, ty logovat normálnì jen do konzole (tzn. chyby jako scenario is not attached jsou moje)
 	}
 

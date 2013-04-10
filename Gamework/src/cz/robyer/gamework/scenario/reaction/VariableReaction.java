@@ -21,16 +21,27 @@ public class VariableReaction extends Reaction {
 	protected String value;
 	protected int type;
 	
+	/** holds Variable object from scenario to optimize access time */
+	protected Variable var;
+	
 	public VariableReaction(String id, int type, String variable, String value) {
 		super(id);
 		this.type = type;
 		this.variable = variable;
 		this.value = value;
 	}
+	
+	@Override
+	public boolean onScenarioLoaded() {
+		var = getScenario().getVariable(variable);
+		if (var == null)
+			Log.e(TAG, String.format("Variable '%s' is null", variable));
+		
+		return var != null;
+	}
 
 	@Override
 	public void action() {
-		Variable var = getScenario().getVariable(variable);
 		if (var != null)
 			var.modify(type, value); // TODO: improve effectivity somehow? (not convert from String all the time?)
 		else

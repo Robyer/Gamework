@@ -25,9 +25,6 @@ public class Condition extends BaseObject {
 	protected String value;
 	protected Hook parent;
 	
-	/** holds Variable object from scenario to optimize access time */
-	protected Variable var;
-	
 	/**
 	 * Basic constructor.
 	 * @param type of condition
@@ -39,15 +36,6 @@ public class Condition extends BaseObject {
 		this.type = type;
 		this.variable = variable;
 		this.value = value;
-	}
-	
-	@Override
-	public boolean onScenarioLoaded() {
-		var = getScenario().getVariable(variable);
-		if (var == null)
-			Log.e(TAG, String.format("Variable '%s' is null", variable));
-		
-		return var != null;
 	}
 	
 	public int getType() {
@@ -76,7 +64,7 @@ public class Condition extends BaseObject {
 		// If this condition has defined own variable, we use that
 		if (this.variable.length() > 0) {
 			Log.d(TAG, String.format("This condition uses own variable '%s'.", this.variable));
-			variable = var;
+			variable = getScenario().getVariable(this.variable);
 		}
 		
 		if (variable == null) {

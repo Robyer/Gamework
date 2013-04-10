@@ -351,7 +351,7 @@ public class ScenarioParser {
 	        	        }
 	        			
 	        			if (parser.getName().equalsIgnoreCase("reaction")) {
-		        			((MultiReaction)reaction).addReaction(readReaction(""));
+		        			((MultiReaction)reaction).addReaction(readReaction(null));
 	        			} else {
 	        				Log.e(TAG, "Expected <reaction>, got <" + parser.getName() + ">");
 	        				skip();
@@ -379,7 +379,10 @@ public class ScenarioParser {
 		String value = parser.getAttributeValue(null, "value"); // null for game reactions
 		String variable = parser.getAttributeValue(null, "variable"); // only for variable reactions, null otherwise
 		
-		Log.d(TAG, "Got Reaction id='" + id + "' type='" + type + "'");
+		if (id != null)
+			Log.d(TAG, "Got Reaction id='" + id + "' type='" + type + "' value='" + value + "'");
+		else
+			Log.d(TAG, "Got Reaction type='" + type + "' value='" + value + "'");
 		
 		if (type.equalsIgnoreCase(REACTION_TYPE_SOUND)) {
 			reaction = new SoundReaction(id, value);

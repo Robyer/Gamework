@@ -73,7 +73,15 @@ public class Hook extends BaseObject {
 		if (react == null)
 			Log.e(TAG, String.format("Reaction '%s' is null", reaction));
 		
-		return react != null;
+		boolean ok = react != null;
+		
+		if (conditions != null)
+			for (Condition c : conditions) {
+				if (!c.onScenarioLoaded())
+					ok = false;
+			}
+		
+		return ok;
 	}
 	
 	public void setParent(HookableObject parent) {
@@ -120,7 +128,7 @@ public class Hook extends BaseObject {
 	public void call(Variable variable) {
 		if (react == null) {
 			Log.e(TAG, "Reaction to call is null");
-			throw new RuntimeException();
+			return;
 		}
 		
 		boolean valid = false;
