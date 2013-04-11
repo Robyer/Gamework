@@ -46,7 +46,7 @@ public abstract class BaseGameActivity extends BaseActivity implements GameEvent
 		super.onPause();
 		
 		/** Unregister listening to game events */
-		if (GameService.running)
+		if (GameService.isRunning())
 			getGame().unregisterListener(this);		
 	}
 	
@@ -54,7 +54,8 @@ public abstract class BaseGameActivity extends BaseActivity implements GameEvent
 	 * If {@link GameService} is not running then finish this activity and start MainActivity.
 	 */
 	protected void checkGameRunning() {
-		if (!GameService.running) {
+		if (!GameService.isRunning()) {
+			Log.w(TAG, "Game is not running, quitting activity");
 			Intent intent = new Intent(this, MainActivity.class);
 			startActivity(intent);
 			finish(); // TODO: Is this okay to be here? Or should we use completely different approach?

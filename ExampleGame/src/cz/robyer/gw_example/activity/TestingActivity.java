@@ -10,14 +10,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import cz.robyer.gw_example.R;
-import cz.robyer.gw_example.util.IntentFactory;
 import cz.robyer.gamework.game.GameEvent;
 import cz.robyer.gamework.game.GameEventListener;
 import cz.robyer.gamework.game.GameService;
 import cz.robyer.gamework.scenario.Scenario;
-import cz.robyer.gamework.scenario.ScenarioInfo;
 import cz.robyer.gamework.scenario.reaction.Reaction;
+import cz.robyer.gw_example.R;
+import cz.robyer.gw_example.util.IntentFactory;
 
 /**
  * Activity only for testing and debug different features.
@@ -51,7 +50,7 @@ public class TestingActivity extends Activity implements GameEventListener {
 	protected void onResume() {
 		super.onResume();
 		
-		if (GameService.running)
+		if (GameService.isRunning())
 			getGame().registerListener(this);		
 	}
 	
@@ -59,7 +58,7 @@ public class TestingActivity extends Activity implements GameEventListener {
 	protected void onPause() {
 		super.onPause();
 		
-		if (GameService.running)
+		if (GameService.isRunning())
 			getGame().unregisterListener(this);		
 	}
 	
@@ -73,7 +72,7 @@ public class TestingActivity extends Activity implements GameEventListener {
 	private void updateLocation() {
 		runOnUiThread(new Runnable() {
 			public void run() {
-				if (GameService.running) {
+				if (GameService.isRunning()) {
 					Location loc = getGame().getLocation();
 					if (loc != null) {				
 						myLatitude.setText(String.valueOf(loc.getLatitude()) + " (" + loc.getProvider() + ")");
@@ -87,7 +86,7 @@ public class TestingActivity extends Activity implements GameEventListener {
 	private void updateTime() {
 		runOnUiThread(new Runnable() {
 			public void run() {
-				if (GameService.running) {					
+				if (GameService.isRunning()) {					
 					long time = getGame().getTime();
 					int seconds = (int) (time / 1000);
 					int minutes = seconds / 60;
@@ -107,7 +106,7 @@ public class TestingActivity extends Activity implements GameEventListener {
 		// start/stop timer
 		Button btn_timer = (Button)findViewById(R.id.btn_game);
 		
-		btn_timer.setText(GameService.running ? "Stop game" : "Start game");
+		btn_timer.setText(GameService.isRunning() ? "Stop game" : "Start game");
 		
 		btn_timer.setOnClickListener(new OnClickListener() {
 			@Override

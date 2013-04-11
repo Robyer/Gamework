@@ -4,8 +4,8 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import cz.robyer.gw_example.service.JavaScriptHandler;
 import cz.robyer.gw_example.R;
-import cz.robyer.gamework.service.JavaScriptHandler;
 
 /**
  * Represents help with informations of how to use this application.

@@ -3,7 +3,6 @@ package cz.robyer.gamework.scenario.reaction;
 import java.util.ArrayList;
 import java.util.List;
 
-import cz.robyer.gamework.hook.Condition;
 import cz.robyer.gamework.scenario.Scenario;
 import cz.robyer.gamework.util.Log;
 

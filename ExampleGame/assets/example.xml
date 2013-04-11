@@ -21,9 +21,8 @@
     </tasks>
     
     <messages>
-        <message id="test" type="text" title="Testovací zpráva" value="messages/test.txt" />
-        <message id="welcome" type="html" title="Welcome to game!" value="messages/welcome.html" />
-        <message id="dead" type="text" title="Nyní jste mrtev" value="messages/dead.txt" />
+        <message id="test" title="Testovací zpráva" value="messages/test.txt" />
+        <message id="welcome" title="Welcome to game!" value="messages/welcome.html" />
     </messages>
     
     <areas>
@@ -96,7 +95,6 @@
         </reaction>
         <reaction id="prohra" type="multi">
             <reaction type="vibrate" value="1400" /> <!-- TODO: use "reference" type to another reaction? -->
-            <reaction type="message" value="dead" />
             <reaction type="sound" value="sounds/prohra.mp3" />
             <reaction type="event" value="GAME_LOSE" />
         </reaction>

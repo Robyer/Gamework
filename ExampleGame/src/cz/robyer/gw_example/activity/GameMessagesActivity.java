@@ -38,7 +38,8 @@ public class GameMessagesActivity extends BaseGameActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Intent intent = new Intent(GameMessagesActivity.this, MessageActivity.class);
-				
+				startActivity(intent);
+
 				Toast.makeText(getApplicationContext(), "Click ListItem Number " + position + ", id " + id, Toast.LENGTH_LONG).show();
 			}
 		});

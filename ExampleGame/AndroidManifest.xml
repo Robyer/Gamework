@@ -103,7 +103,7 @@
         </activity>
         
         <service
-            android:name="cz.robyer.gamework.game.GameService"
+            android:name="cz.robyer.gw_example.game.GameService"
             android:enabled="true"
             android:exported="false" >
         </service>

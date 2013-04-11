@@ -142,9 +142,9 @@ public class ScenarioParser {
 	    parser.require(XmlPullParser.START_TAG, ns, "scenario");
 	    
 	    while (parser.next() != XmlPullParser.END_TAG) {
-	        if (parser.getEventType() != XmlPullParser.START_TAG) {
+	        if (parser.getEventType() != XmlPullParser.START_TAG)
 	            continue;
-	        }
+
 	        String name = parser.getName();
 
 	        if (scenario == null) {
@@ -199,13 +199,10 @@ public class ScenarioParser {
 
 		parser.require(XmlPullParser.START_TAG, ns, "hooks");
 		while (parser.next() != XmlPullParser.END_TAG) {
-			if (parser.getEventType() != XmlPullParser.START_TAG) {
+			if (parser.getEventType() != XmlPullParser.START_TAG)
 	            continue;
-	        }
-			
-			String name = parser.getName();
 
-	        if (name.equalsIgnoreCase("hook")) {
+	        if (parser.getName().equalsIgnoreCase("hook")) {
 	        	parser.require(XmlPullParser.START_TAG, ns, "hook");
 	        	
 	        	String type = parser.getAttributeValue(null, "type");
@@ -229,9 +226,8 @@ public class ScenarioParser {
 	        	}
 	        	
 	        	while (parser.next() != XmlPullParser.END_TAG) {
-        			if (parser.getEventType() != XmlPullParser.START_TAG) {
+        			if (parser.getEventType() != XmlPullParser.START_TAG)
         	            continue;
-        	        }
         			
         			if (parser.getName().equalsIgnoreCase("trigger")) {
         				Hook hook = readTrigger(itype, value);
@@ -278,9 +274,8 @@ public class ScenarioParser {
 		Log.d(TAG, "Got trigger reaction='" + reaction + "' conditions='" + conditions + "' run='" + runs + "'");
 
 		while (parser.next() != XmlPullParser.END_TAG) {
-			if (parser.getEventType() != XmlPullParser.START_TAG) {
+			if (parser.getEventType() != XmlPullParser.START_TAG)
 	            continue;
-	        }
 			
 			if (parser.getName().equalsIgnoreCase("condition")) {
 				parser.require(XmlPullParser.START_TAG, ns, "condition");
@@ -328,27 +323,23 @@ public class ScenarioParser {
 		
 		parser.require(XmlPullParser.START_TAG, ns, "reactions");
 		while (parser.next() != XmlPullParser.END_TAG) {
-			if (parser.getEventType() != XmlPullParser.START_TAG) {
+			if (parser.getEventType() != XmlPullParser.START_TAG)
 	            continue;
-	        }
 			
 			Reaction reaction = null;
-	        String name = parser.getName();
 
-	        if (name.equalsIgnoreCase("reaction")) {
+	        if (parser.getName().equalsIgnoreCase("reaction")) {
 	        	parser.require(XmlPullParser.START_TAG, ns, "reaction");
 	        	String id = parser.getAttributeValue(null, "id");
 	        	String type = parser.getAttributeValue(null, "type");
 	        	
 	        	if (type.equalsIgnoreCase(REACTION_TYPE_MULTI)) {
-	        		Log.d(TAG, "Got MultiReaction id='" + id + "'");
-	        		
+	        		Log.d(TAG, "Got MultiReaction id='" + id + "'");	
 	        		reaction = new MultiReaction(id);
 	        		
 	        		while (parser.next() != XmlPullParser.END_TAG) {
-	        			if (parser.getEventType() != XmlPullParser.START_TAG) {
+	        			if (parser.getEventType() != XmlPullParser.START_TAG)
 	        	            continue;
-	        	        }
 	        			
 	        			if (parser.getName().equalsIgnoreCase("reaction")) {
 		        			((MultiReaction)reaction).addReaction(readReaction(null));
@@ -357,7 +348,6 @@ public class ScenarioParser {
 	        				skip();
 	        			}
 	        		}
-	        		
 	        	} else {
 	        		reaction = readReaction(id);
 	        	}
@@ -417,7 +407,6 @@ public class ScenarioParser {
     	}
     		
 		parser.nextTag();
-
     	parser.require(XmlPullParser.END_TAG, ns, "reaction");
     	return reaction;
 	}
@@ -427,17 +416,14 @@ public class ScenarioParser {
 		
 		parser.require(XmlPullParser.START_TAG, ns, "variables");
 		while (parser.next() != XmlPullParser.END_TAG) {
-			if (parser.getEventType() != XmlPullParser.START_TAG) {
+			if (parser.getEventType() != XmlPullParser.START_TAG)
 	            continue;
-	        }
-			
-			Variable variable = null;
-	        String name = parser.getName();
 
-	        if (name.equalsIgnoreCase("variable")) {
+	        if (parser.getName().equalsIgnoreCase("variable")) {
 	        	parser.require(XmlPullParser.START_TAG, ns, "variable");
 	        	String id = parser.getAttributeValue(null, "id");
 	        	String type = parser.getAttributeValue(null, "type");
+	        	Variable variable = null;
 	        	
 	        	if (type.equalsIgnoreCase(VAR_TYPE_BOOLEAN)) {
 	        		String value = parser.getAttributeValue(null, "value");
@@ -475,17 +461,14 @@ public class ScenarioParser {
 		
 		parser.require(XmlPullParser.START_TAG, ns, "areas");
 		while (parser.next() != XmlPullParser.END_TAG) {
-			if (parser.getEventType() != XmlPullParser.START_TAG) {
+			if (parser.getEventType() != XmlPullParser.START_TAG)
 	            continue;
-	        }
-			
-			Area area = null;
-	        String name = parser.getName();
 
-	        if (name.equalsIgnoreCase("area")) {
+	        if (parser.getName().equalsIgnoreCase("area")) {
 	        	parser.require(XmlPullParser.START_TAG, ns, "area");
 	        	String id = parser.getAttributeValue(null, "id");
 	        	String type = parser.getAttributeValue(null, "type");
+	        	Area area = null;
 	        	
 	        	if (type.equalsIgnoreCase(AREA_TYPE_POINT)) {
 	        		String latitude = parser.getAttributeValue(null, "lat");
@@ -521,9 +504,8 @@ public class ScenarioParser {
 	        		area = new MultiPointArea(id);
 	        		
 	        		while (parser.next() != XmlPullParser.END_TAG) {
-	        			if (parser.getEventType() != XmlPullParser.START_TAG) {
+	        			if (parser.getEventType() != XmlPullParser.START_TAG)
 	        	            continue;
-	        	        }
 	        		
 	        			if (parser.getName().equalsIgnoreCase("point")) {			
 			        		String latitude = parser.getAttributeValue(null, "lat");
@@ -563,35 +545,21 @@ public class ScenarioParser {
 		Log.d(TAG, "Reading messages");
 		
 		parser.require(XmlPullParser.START_TAG, ns, "messages");
-		while (parser.next() != XmlPullParser.END_TAG) {
-			if (parser.getEventType() != XmlPullParser.START_TAG) {
-	            continue;
-	        }
-			
-			Message message = null;
-	        String name = parser.getName();
 
-	        if (name.equalsIgnoreCase("message")) {
+		while (parser.next() != XmlPullParser.END_TAG) {
+			if (parser.getEventType() != XmlPullParser.START_TAG)
+	            continue;
+
+	        if (parser.getName().equalsIgnoreCase("message")) {
 	        	parser.require(XmlPullParser.START_TAG, ns, "message");
 	        	String id = parser.getAttributeValue(null, "id");
-	        	String type = parser.getAttributeValue(null, "type");
 	        	String title = parser.getAttributeValue(null, "title");
 	        	String value = parser.getAttributeValue(null, "value");
 	        	
-	        	// if () {
-	        	
-	        	message = new Message(id, title, value);
-        		Log.d(TAG, "Got Message");
+	        	Log.d(TAG, "Got Message");
+        		scenario.addMessage(id, new Message(id, title, value));
+        		
         		parser.nextTag();
-
-	        	/*} else {
-	        		Log.e(TAG, "Message type '" + type + "' is unknown");
-	        		skip();
-	        		continue;
-	        	}*/
-	        	
-	        	scenario.addMessage(id, message);
-	        	
 	        	parser.require(XmlPullParser.END_TAG, ns, "message");
 	        } else {
 	        	skip();
@@ -612,9 +580,9 @@ public class ScenarioParser {
 		String difficulty = null;
 		
 		while (parser.next() != XmlPullParser.END_TAG) {
-	        if (parser.getEventType() != XmlPullParser.START_TAG) {
+	        if (parser.getEventType() != XmlPullParser.START_TAG)
 	            continue;
-	        }
+
 	        String name = parser.getName();
 	        if (name.equals("title")) {
 	            title = readText("title");

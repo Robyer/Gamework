@@ -2,7 +2,7 @@ package cz.robyer.gw_example.util;
 
 import android.content.Context;
 import android.content.Intent;
-import cz.robyer.gamework.game.GameService;
+import cz.robyer.gw_example.game.GameService;
 
 /**
  * Helper class for easily creating {@link Intent}s.

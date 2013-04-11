@@ -11,10 +11,4 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     
-    <service
-        android:name="cz.robyer.gamework.game.GameService"
-        android:enabled="true"
-    	android:exported="false" >
-	</service>
-    
 </manifest>

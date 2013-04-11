@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -92,11 +93,14 @@ public class GameMapActivity extends BaseGameActivity {
 	        	    	Thing thing = entry.getValue();
 	        	    	...
 	        		}*/
-		        	
 		        	map.setMyLocationEnabled(true);
-		        	LatLng pos = new LatLng(game.getLocation().getLatitude(), game.getLocation().getLongitude());
-		        	CameraUpdate update = CameraUpdateFactory.newLatLngZoom(pos, 10);
-		        	map.moveCamera(update);
+
+		        	Location loc = game.getLocation();
+		        	if (loc != null) {
+		        		LatLng pos = new LatLng(loc.getLatitude(), loc.getLongitude());
+		        		CameraUpdate update = CameraUpdateFactory.newLatLngZoom(pos, 10);
+		        		map.moveCamera(update);
+		        	}
 	    		}
 	        }
 	    }
