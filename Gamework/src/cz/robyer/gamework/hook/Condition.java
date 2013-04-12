@@ -62,7 +62,7 @@ public class Condition extends BaseObject {
 	 */
 	public boolean isValid(Variable variable) {
 		// If this condition has defined own variable, we use that
-		if (this.variable.length() > 0) {
+		if (this.variable != null) {
 			Log.d(TAG, String.format("This condition uses own variable '%s'.", this.variable));
 			variable = getScenario().getVariable(this.variable);
 		}
