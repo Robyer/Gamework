@@ -19,6 +19,7 @@ import cz.robyer.gamework.scenario.area.MultiPointArea;
 import cz.robyer.gamework.scenario.area.PointArea;
 import cz.robyer.gamework.scenario.area.SoundArea;
 import cz.robyer.gamework.scenario.message.Message;
+import cz.robyer.gamework.scenario.reaction.ActivityReaction;
 import cz.robyer.gamework.scenario.reaction.EventReaction;
 import cz.robyer.gamework.scenario.reaction.MessageReaction;
 import cz.robyer.gamework.scenario.reaction.MultiReaction;
@@ -61,6 +62,7 @@ public class ScenarioParser {
 	public static final String REACTION_TYPE_VAR_DIV = "var_divide";
 	public static final String REACTION_TYPE_VAR_NEG = "var_negate";
 	public static final String REACTION_TYPE_EVENT = "event";
+	public static final String REACTION_TYPE_ACTIVITY = "activity";
 	
 	// Events constants
 	public static final String EVENT_GAME_START = "game_start";
@@ -400,6 +402,8 @@ public class ScenarioParser {
     		} else if (value.equalsIgnoreCase(EVENT_GAME_LOSE)) {
     			reaction = new EventReaction(id, GameEvent.GAME_LOSE);
     		}
+    	} else if (type.equalsIgnoreCase(REACTION_TYPE_ACTIVITY)) {
+    		reaction = new ActivityReaction(id, value);
     	} else {
     		Log.e(TAG, "Reaction type '" + type + "' is unknown");
     		skip();

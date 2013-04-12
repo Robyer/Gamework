@@ -98,7 +98,8 @@
             <reaction type="sound" value="sounds/prohra.mp3" />
             <reaction type="event" value="GAME_LOSE" />
         </reaction>
-        <reaction id="activity" type="activity" value="" />
+        <reaction id="help" type="activity" value="cz.robyer.gw_example.activity.HelpActivity" />
+        <reaction id="noactivity" type="activity" value="a.b.cy.random" />
         <reaction id="nakup" type="multi">
             <reaction type="sound" value="sounds/nakup.mp3" />
             <reaction type="var_set" variable="nakoupeno" value="true" />
