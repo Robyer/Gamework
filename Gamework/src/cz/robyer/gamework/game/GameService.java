@@ -4,6 +4,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -241,8 +242,13 @@ public abstract class GameService extends Service implements GameEventListener, 
 	 * Show or update this service's notification.
 	 * This method uses {@link #getGameNotification()} to get notification.
 	 */
-	public final void refreshNotification() {
-		startForeground(Constants.NOTIFICATION_GAMEPLAY, getGameNotification());
+	public final void refreshNotification(boolean foreground) {
+		if (foreground) {
+			startForeground(Constants.NOTIFICATION_GAMEPLAY, getGameNotification());
+		} else {
+    		NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+   			mNotificationManager.notify(Constants.NOTIFICATION_GAMEPLAY, getGameNotification());
+    	}
 	}
 
 	/**
@@ -272,12 +278,10 @@ public abstract class GameService extends Service implements GameEventListener, 
     	case UPDATED_LOCATION:
     		if (location != null)
     			scenario.onLocationUpdate(location.getLatitude(), location.getLongitude());
-    		refreshNotification();
     		break;
     		
     	case UPDATED_TIME:
     		scenario.onTimeUpdate(time);
-    		refreshNotification();
     		break;
     	}
     	

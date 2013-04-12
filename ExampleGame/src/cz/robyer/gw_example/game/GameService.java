@@ -5,10 +5,9 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.location.Location;
 import android.support.v4.app.NotificationCompat;
-import android.widget.Toast;
 import cz.robyer.gamework.game.GameEvent;
 import cz.robyer.gamework.util.Log;
-import cz.robyer.gw_example.activity.GameMapActivity;
+import cz.robyer.gw_example.R;
 import cz.robyer.gw_example.activity.TestingActivity;
 
 public class GameService extends cz.robyer.gamework.game.GameService {
@@ -28,7 +27,7 @@ public class GameService extends cz.robyer.gamework.game.GameService {
 //    			.setOnlyAlertOnce(true)
 //    			.setOngoing(true)
     			.setWhen(getStartTime())
-    	        ////.setSmallIcon(R.drawable.ic_stat_game)
+    	        .setSmallIcon(R.drawable.ic_stat_game)
     	        .setContentIntent(PendingIntent.getActivity(this, 0, notificationIntent, 0))
     	        .setContentTitle("Gamework - playing")    	        
     	        .setStyle(new NotificationCompat.BigTextStyle()
@@ -73,7 +72,7 @@ public class GameService extends cz.robyer.gamework.game.GameService {
     	  
     	case UPDATED_LOCATION:
     	case UPDATED_TIME:
-    		refreshNotification();
+    		refreshNotification(false);
     		break;
     	}
 
