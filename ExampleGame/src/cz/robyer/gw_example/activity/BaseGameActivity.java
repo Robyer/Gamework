@@ -6,11 +6,11 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
-import cz.robyer.gw_example.R;
-import cz.robyer.gw_example.util.IntentFactory;
 import cz.robyer.gamework.game.GameEvent;
 import cz.robyer.gamework.game.GameEventListener;
 import cz.robyer.gamework.game.GameService;
+import cz.robyer.gw_example.R;
+import cz.robyer.gw_example.util.IntentFactory;
 
 /**
  * This is base activity for all game activities.
@@ -57,6 +57,7 @@ public abstract class BaseGameActivity extends BaseActivity implements GameEvent
 		if (!GameService.isRunning()) {
 			Log.w(TAG, "Game is not running, quitting activity");
 			Intent intent = new Intent(this, MainActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(intent);
 			finish(); // TODO: Is this okay to be here? Or should we use completely different approach?
 		}
@@ -123,7 +124,6 @@ public abstract class BaseGameActivity extends BaseActivity implements GameEvent
 		case GAME_LOSE:
 		case GAME_PAUSE:
 		case GAME_QUIT:
-		case GAME_RESUME:
 		case GAME_START:
 		case GAME_WIN:
 		case UPDATED_LOCATION:

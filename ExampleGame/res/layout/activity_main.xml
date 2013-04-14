@@ -17,25 +17,26 @@
 	    android:id="@+id/btn_testing"
 	    />
     
+<!--
+    	 
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/select_game"
+        />
+    
+    <Spinner
+	    android:id="@+id/game_spinner"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content" />
+	    
+-->
+	    
 	<Button
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:text="@string/play_game"
 	    android:id="@+id/btn_play"
-	    />
-	
-	<Button
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:text="@string/scenarios"
-	    android:id="@+id/btn_scenarios"
-	    />
-	
-	<Button
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:text="@string/options"
-	    android:id="@+id/btn_options"
 	    />
 	
 	<Button

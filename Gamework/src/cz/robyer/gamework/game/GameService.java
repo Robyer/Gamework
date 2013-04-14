@@ -30,26 +30,18 @@ public abstract class GameService extends Service implements GameEventListener, 
 	private static boolean running;
 	private static GameService instance;
 	
-	private GameHandler gameHandler = new GameHandler();
-	
 	private Scenario scenario;
-	Status status = Status.GAME_STOPPED;
+	private GameStatus status = GameStatus.GAME_NONE;
+	protected final GameHandler gameHandler = new GameHandler();
 	
 	private Timer timer; // http://stackoverflow.com/questions/4597690/android-timer-how
-	private long time;
-	private long start;
-	private Location location;
+	private long start, time;
 	
 	private LocationManager locationManager;
+	private Location location;
 	
-	// TODO: do something with this or remove it
-	protected enum Status {
-		GAME_STOPPED, 	// game has not started yet
-		GAME_LOADING, 	// game is loading needed resources
-		GAME_WAITING,	// game is waiting for starting event (player must stand on particular location, etc.) 
-		GAME_RUNNING,	// game was started and is running 
-		GAME_FINISHED,	// game was completed (either won or failed)
-	};
+	/** help variable for incrementing time value. */
+	private long lastTime;
 	
 	/**
 	 * Shortcut for registering {@link GameEventListener}s.
@@ -71,55 +63,51 @@ public abstract class GameService extends Service implements GameEventListener, 
     	Log.i(TAG, "onCreate()");
     	
     	instance = this;
+    	running = true;
     	locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
     }
       
     @Override
     public final int onStartCommand(Intent intent, int flags, int startId) {
     	Log.i(TAG, "onStartCommand()");
-    	
-    	if (running) {
+
+		// TODO: allow starting new game also when in GAME_WON, GAME_LOST status?
+    	if (status != GameStatus.GAME_NONE) {
     		// game is already running, do nothing
     		Log.i(TAG, "Game is already running");
     		onGameStart(false, intent);
     		return 0;    		
     	}
     	
+    	status = GameStatus.GAME_LOADING;
     	String filename = intent.getStringExtra("filename");
     	scenario = ScenarioParser.fromAsset(getApplicationContext(), filename);
     	if (scenario == null) {
     		Log.e(TAG, "Scenario '" + filename + "' wasn't loaded");
+    		status = GameStatus.GAME_NONE;
     		return 0;
     	}
     	
     	Log.i(TAG, "Scenario '" + filename + "' was loaded");
-    	
-    	running = true;
+
     	scenario.setHandler(gameHandler);
     	registerListener(this);
-    	start = SystemClock.uptimeMillis();
-    		// system time clock: System.currentTimeMillis()
-    		// uptime clock (not ticking in deep sleep): SystemClock.uptimeMillis();
     	
-    	timer = new Timer();
-    	timer.schedule(new TimerTask() {
-    		@Override
-    		public void run() {
-    			time = calcGameTime();
-    			gameHandler.broadcastEvent(GameEvent.UPDATED_TIME);
-    		}
-    	}, 1000, 1000);
+    	start = lastTime = SystemClock.uptimeMillis();
+    	time = 0;
+    	
+    	status = GameStatus.GAME_WAITING;
     	    	
     	// make this service foreground and show notification
     	startForeground(Constants.NOTIFICATION_GAMEPLAY, getGameNotification());
     	
-    	// register to get location updates
+    	// register getting location updates
     	locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
 		
 		onGameStart(true, intent);
     	
-    	// The service is starting, due to a call to startService()
+    	// service is starting, due to a call to startService()
         return START_NOT_STICKY; // or START_REDELIVER_INTENT?
     }
     
@@ -131,24 +119,25 @@ public abstract class GameService extends Service implements GameEventListener, 
 
     @Override
     public final void onDestroy() {
-        // The service is no longer used and is being destroyed
-    	Log.i(TAG, "onDestroy()");    	    	
+        // service is no longer used and is being destroyed
+    	Log.i(TAG, "onDestroy()");
     	
     	running = false;
+    	instance = null;
+    	
     	gameHandler.clearListeners();
     	
-		timer.cancel();
-		timer.purge();
-		timer = null;
+    	locationManager.removeUpdates(this);
 		
-		locationManager.removeUpdates(this);
-		location = null;
-		
-		instance = null;
+    	if (timer != null) {
+    		timer.cancel();
+			timer.purge();
+    	}
     }
     
     /**
-     * @return true if instance of GameService exists. 
+     * Returns info whether instance of service exists or not.
+     * @return true if instance of GameService exists, false otherwise.
      */
     public static final boolean isRunning() {
 		return running;
@@ -167,15 +156,7 @@ public abstract class GameService extends Service implements GameEventListener, 
     public final Scenario getScenario() {
     	return scenario;
     }
-    
-	/**
-	 * Calculates time between start of game and present.
-	 * @return time in milliseconds
-	 */
-	protected long calcGameTime() {
-		return SystemClock.uptimeMillis() - start;
-	}
-    
+
     /**
      * Returns time when game started.
      * @return
@@ -194,7 +175,7 @@ public abstract class GameService extends Service implements GameEventListener, 
     /**
      * Returns actual status of game.
      */
-    public final Status getStatus() {
+    public final GameStatus getStatus() {
     	return status;
     }
     
@@ -204,6 +185,15 @@ public abstract class GameService extends Service implements GameEventListener, 
     public static final GameService getInstance() {
     	return instance;
     }
+    
+    /**
+	 * Calculate and update actual game time.
+	 */
+	private final void updateGameTime() {
+		long now = SystemClock.uptimeMillis();
+		time += now - lastTime;
+		lastTime = now;
+	}
 	
 	/**
 	 * Gets and broadcasts new user location.
@@ -233,7 +223,7 @@ public abstract class GameService extends Service implements GameEventListener, 
 	protected abstract void onGameStart(boolean starting, Intent intent);
 	
 	/**
-	 * This method is called every time there is new event received.
+	 * This method is called every time when there was new event received.
 	 * @param event
 	 */
 	protected abstract void onEvent(GameEvent event);
@@ -258,30 +248,71 @@ public abstract class GameService extends Service implements GameEventListener, 
 	public final void receiveEvent(GameEvent event) {
     	
     	switch (event) {
-    	case GAME_QUIT:
-    		stopSelf();
-    		break;
-    	
     	case GAME_START:
-    		break;
+    		if (status != GameStatus.GAME_WAITING && status != GameStatus.GAME_PAUSED) {
+    			Log.w(TAG, "Game can't be started in '" + status + "' state. Only GAME_WAITING and GAME_PAUSED allowed");
+    			break;
+    		}
+    		lastTime = SystemClock.uptimeMillis();
     		
-    	case GAME_RESUME:
-    		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-    		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+    		if (timer == null) {
+	    		timer = new Timer();
+	        	timer.schedule(new TimerTask() {
+	        		@Override
+	        		public void run() {
+	        			updateGameTime();
+	        			gameHandler.broadcastEvent(GameEvent.UPDATED_TIME);
+	        		}
+	        	}, 1000, 1000);
+    		}
+	        	
+        	// requesting location updates was already done if game service is in waiting state
+        	if (status != GameStatus.GAME_WAITING) {
+        		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+        	}
+        	
+        	status = GameStatus.GAME_RUNNING;
     		break;
     	
     	case GAME_PAUSE:
     	case GAME_WIN:
     	case GAME_LOSE:
+    		if (status != GameStatus.GAME_RUNNING) {
+    			Log.w(TAG, "Game can't be paused/won/lost in '" + status + "' state. Only GAME_RUNNING allowed");
+    			break;
+    		}    		
+    		locationManager.removeUpdates(this);
+    		
+    		if (timer != null) {
+    			timer.cancel();
+    			timer.purge();
+    			timer = null;
+    		}
+    		
+    		// TODO: improve this madness
+    		if (event == GameEvent.GAME_PAUSE)
+    			status = GameStatus.GAME_PAUSED;
+    		else if (event == GameEvent.GAME_WIN)
+    			status = GameStatus.GAME_WON;
+    		else if (event == GameEvent.GAME_LOSE)
+    			status = GameStatus.GAME_LOST;
+    		
    	  		break;
-    	  
+   	  		
+    	case GAME_QUIT:
+    		stopSelf();
+    		status = GameStatus.GAME_NONE;
+    		break;
+   	  		
     	case UPDATED_LOCATION:
-    		if (location != null)
+    		if (status == GameStatus.GAME_RUNNING && location != null)
     			scenario.onLocationUpdate(location.getLatitude(), location.getLongitude());
     		break;
     		
     	case UPDATED_TIME:
-    		scenario.onTimeUpdate(time);
+    		if (status == GameStatus.GAME_RUNNING)
+    			scenario.onTimeUpdate(time);
     		break;
     	}
     	

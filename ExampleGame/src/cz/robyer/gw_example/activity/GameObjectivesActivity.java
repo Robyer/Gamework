@@ -2,7 +2,6 @@ package cz.robyer.gw_example.activity;
 
 import android.os.Bundle;
 import cz.robyer.gw_example.R;
-import cz.robyer.gamework.game.GameEvent;
 
 /**
  * Represents list of game objectives (tasks)
@@ -21,7 +20,7 @@ public class GameObjectivesActivity extends BaseGameActivity {
 	/**
 	 * Checks UPDATED_OBJECTIVES event and updates objectives list.
 	 */
-	@Override
+	/*@Override
 	public void receiveEvent(GameEvent event) {
 		// TODO: think up and implement
 		switch (event) {
@@ -29,6 +28,6 @@ public class GameObjectivesActivity extends BaseGameActivity {
 			break;
 		}
 		super.receiveEvent(event);
-	}
+	}*/
 
 }

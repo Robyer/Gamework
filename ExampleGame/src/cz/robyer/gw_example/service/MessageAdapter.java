@@ -1,9 +1,5 @@
 package cz.robyer.gw_example.service;
 
-import android.content.Context;
-import android.widget.ArrayAdapter;
-import cz.robyer.gamework.scenario.message.Message;
-
 /**
  * 
  * @author Robert Pösel
@@ -16,6 +12,5 @@ public class MessageAdapter /*extends ArrayAdapter<Message>*/ {
 		super(context, textViewResourceId);
 		// TODO Auto-generated constructor stub
 	}*/
-
 	
 }

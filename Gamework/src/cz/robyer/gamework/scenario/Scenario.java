@@ -157,15 +157,15 @@ public class Scenario {
 	}
 	
 	public List<Message> getVisibleMessages() {
+		// TODO: Refactor this. Keep visibleMessages array persistent in Scenario so it won't be created every time when requested.
 		List<Message> list = new ArrayList<Message>();
 		for (Message m : messages.values()) {
-			//if (m.isVisible())
+			if (m.isVisible())
 				list.add(m);
 		}
 		return list;
 	}
 
-	
 	public void addHook(Hook hook) {
 		if (hook == null) {
 			Log.w(TAG, "addHook() with null hook");
@@ -174,16 +174,6 @@ public class Scenario {
 		
 		hooks.add(hook);
 		hook.setScenario(this);
-	}
-	
-	public String getDescription() {
-		return "";/*getContext().getResources().getString(R.string.scenario_info,
-			info.getAuthor(),
-			info.getVersion(),
-			info.getLocation(),
-			info.getDuration(),
-			info.getDifficulty()
-		);*/// TODO!
 	}
 
 	public ScenarioInfo getInfo() {

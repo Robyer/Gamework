@@ -9,10 +9,9 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
-import cz.robyer.gw_example.R;
 import cz.robyer.gamework.game.GameEvent;
 import cz.robyer.gamework.scenario.message.Message;
+import cz.robyer.gw_example.R;
 
 /**
  * Represents list of game messages.
@@ -20,38 +19,44 @@ import cz.robyer.gamework.scenario.message.Message;
  */
 public class GameMessagesActivity extends BaseGameActivity {
 	private static final String TAG = GameMessagesActivity.class.getSimpleName();
+
+	ArrayAdapter<Message> adapter;
+	List<Message> messages;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game_messages);
 		super.initButtons();
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
 		
 		ListView list = (ListView)findViewById(R.id.list_messages);
-			
-		final List<Message> messages = getGame().getScenario().getVisibleMessages();
 		
-		ArrayAdapter<Message> adapter = new ArrayAdapter<Message>(this, android.R.layout.simple_list_item_1, android.R.id.text1, messages);
-
+		messages = getGame().getScenario().getVisibleMessages();
+		adapter = new ArrayAdapter<Message>(this, android.R.layout.simple_list_item_1, android.R.id.text1, messages);
+		
 		list.setAdapter(adapter);
 		list.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Intent intent = new Intent(GameMessagesActivity.this, MessageActivity.class);
+				intent.putExtra("position", position);
+				intent.putExtra("id", id);
 				startActivity(intent);
-
-				Toast.makeText(getApplicationContext(), "Click ListItem Number " + position + ", id " + id, Toast.LENGTH_LONG).show();
 			}
 		});
-		
-		refreshList();
 	}
 	
 	/**
 	 * Refreshes list of messages.
 	 */
 	public void refreshList() {
-		ListView list = (ListView)findViewById(R.id.list_messages);
+		messages = getGame().getScenario().getVisibleMessages();
+		adapter.notifyDataSetChanged();
 	}
 	
 	/**

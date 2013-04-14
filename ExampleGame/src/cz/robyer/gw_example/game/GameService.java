@@ -7,6 +7,7 @@ import android.location.Location;
 import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 import cz.robyer.gamework.game.GameEvent;
+import cz.robyer.gamework.game.GameStatus;
 import cz.robyer.gamework.util.Log;
 import cz.robyer.gw_example.R;
 import cz.robyer.gw_example.activity.GameMapActivity;
@@ -46,7 +47,7 @@ public class GameService extends cz.robyer.gamework.game.GameService {
 	}
 
 	/* (non-Javadoc)
-	 * @see cz.robyer.gamework.game.GameService#onGameStarted()
+	 * @see cz.robyer.gamework.game.GameService#onGameStart(boolean, android.content.Intent)
 	 */
 	@Override
 	protected void onGameStart(boolean starting, Intent intent) {
@@ -64,15 +65,16 @@ public class GameService extends cz.robyer.gamework.game.GameService {
 	protected void onEvent(GameEvent event) {
     	
     	switch (event) {
+    	case UPDATED_LOCATION:
+   			if (getStatus() == GameStatus.GAME_WAITING) {
+   				gameHandler.broadcastEvent(GameEvent.GAME_START);
+   			}
+   			
     	case GAME_QUIT:
     	case GAME_START:
-    	case GAME_RESUME:
     	case GAME_PAUSE:
     	case GAME_WIN:
     	case GAME_LOSE:
-   	  		break;
-    	  
-    	case UPDATED_LOCATION:
     	case UPDATED_TIME:
     		refreshNotification(false);
     		break;
