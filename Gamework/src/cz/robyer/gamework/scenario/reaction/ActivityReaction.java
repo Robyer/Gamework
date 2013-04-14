@@ -1,10 +1,7 @@
 package cz.robyer.gamework.scenario.reaction;
 
-import java.util.List;
-
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.util.Log;
 
 /**
@@ -46,8 +43,7 @@ public class ActivityReaction extends Reaction {
 	}
 	
 	private boolean isCallable(Intent intent) {
-        List<ResolveInfo> list = getContext().getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
-        return list.size() > 0;
+        return getContext().getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY) != null;
 	}
 
 }
