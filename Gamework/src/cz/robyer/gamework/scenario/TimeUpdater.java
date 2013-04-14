@@ -5,7 +5,7 @@ import cz.robyer.gamework.hook.Hook;
 import cz.robyer.gamework.scenario.variable.DecimalVariable;
 
 /**
- * 
+ * TimeUpdater distributes time events ({@link #updateTime(long)}) to hooked scenario objects.
  * @author Robert Pösel
  */
 public class TimeUpdater extends HookableObject {
@@ -13,6 +13,10 @@ public class TimeUpdater extends HookableObject {
 	
 	private DecimalVariable variable = new DecimalVariable("", 0);
 	
+	/**
+	 * Class constructor.
+	 * @param scenario to be attached to.
+	 */
 	public TimeUpdater(Scenario scenario) {
 		super("Gamework:TIME");
 		this.scenario = scenario;
@@ -23,6 +27,10 @@ public class TimeUpdater extends HookableObject {
 		callHooks(time);
 	}
 	
+	/**
+	 * Call attached hooks with actual time value.
+	 * @param time - actual time value.
+	 */
 	protected void callHooks(long time) {
 		if (hooks == null)
 			return;

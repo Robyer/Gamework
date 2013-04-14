@@ -8,14 +8,14 @@ import cz.robyer.gamework.hook.Hook;
 import cz.robyer.gamework.scenario.variable.Variable;
 
 /**
- * Base hookable object. It could contain list of attached hooks.
+ * Base hookable object which contains a list of attached hooks.
  * @author Robert Pösel
  */
 public class HookableObject extends IdentificableObject {
 	protected List<Hook> hooks;
 	
 	/**
-	 * Constructor.
+	 * Class constructor.
 	 * @param id of object
 	 */
 	public HookableObject(String id) {
@@ -23,7 +23,7 @@ public class HookableObject extends IdentificableObject {
 	}
 	
 	/**
-	 * Add new hook to attach.
+	 * Add new hook to be attached.
 	 * @param hook
 	 */
 	public void addHook(Hook hook) {
