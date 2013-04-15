@@ -12,6 +12,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.content.Context;
 import android.util.Xml;
 import cz.robyer.gamework.game.GameEvent;
+import cz.robyer.gamework.game.GameEvent.EventType;
 import cz.robyer.gamework.hook.Condition;
 import cz.robyer.gamework.hook.Hook;
 import cz.robyer.gamework.scenario.area.Area;
@@ -396,11 +397,11 @@ public class ScenarioParser {
     		reaction = new VariableReaction(id, VariableReaction.SET, variable, value);
     	} else if (type.equalsIgnoreCase(REACTION_TYPE_EVENT)) {
     		if (value.equalsIgnoreCase(EVENT_GAME_START)) {
-    			reaction = new EventReaction(id, GameEvent.GAME_START);
+    			reaction = new EventReaction(id, EventType.GAME_START);
     		} else if (value.equalsIgnoreCase(EVENT_GAME_WIN)) {
-    			reaction = new EventReaction(id, GameEvent.GAME_WIN);
+    			reaction = new EventReaction(id, EventType.GAME_WIN);
     		} else if (value.equalsIgnoreCase(EVENT_GAME_LOSE)) {
-    			reaction = new EventReaction(id, GameEvent.GAME_LOSE);
+    			reaction = new EventReaction(id, EventType.GAME_LOSE);
     		}
     	} else if (type.equalsIgnoreCase(REACTION_TYPE_ACTIVITY)) {
     		reaction = new ActivityReaction(id, value);

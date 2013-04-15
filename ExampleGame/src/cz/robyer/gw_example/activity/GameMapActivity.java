@@ -119,7 +119,7 @@ public class GameMapActivity extends BaseGameActivity {
 	public void receiveEvent(GameEvent event) {
 		super.receiveEvent(event);
 		
-		switch (event) {
+		switch (event.type) {
 		case UPDATED_LOCATION:
 			// TODO: update position of user on map
 	    	//myLatitude.setText(String.valueOf(location.getLatitude()));

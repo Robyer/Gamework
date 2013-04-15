@@ -65,7 +65,7 @@ public class GameMessagesActivity extends BaseGameActivity {
 	@Override
 	public void receiveEvent(GameEvent event) {
 		// TODO: think up and implement
-		switch (event) {
+		switch (event.type) {
 		case UPDATED_MESSAGES:
 			refreshList();
 			break;

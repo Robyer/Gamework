@@ -1,6 +1,7 @@
 package cz.robyer.gamework.scenario.reaction;
 
 import cz.robyer.gamework.game.GameEvent;
+import cz.robyer.gamework.game.GameEvent.EventType;
 
 /**
  * 
@@ -12,6 +13,10 @@ public class EventReaction extends Reaction {
 	public EventReaction(String id, GameEvent value) {
 		super(id);
 		this.value = value;
+	}
+	
+	public EventReaction(String id, EventType type) {
+		this(id, new GameEvent(type));
 	}
 
 	@Override

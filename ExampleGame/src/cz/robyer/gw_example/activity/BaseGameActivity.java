@@ -120,7 +120,7 @@ public abstract class BaseGameActivity extends BaseActivity implements GameEvent
 	@Override
 	public void receiveEvent(GameEvent event) {
 		// TODO: think up and implement
-		switch (event) {
+		switch (event.type) {
 		case GAME_LOSE:
 		case GAME_PAUSE:
 		case GAME_QUIT:

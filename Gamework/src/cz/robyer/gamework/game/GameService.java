@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.SystemClock;
 import cz.robyer.gamework.constants.Constants;
+import cz.robyer.gamework.game.GameEvent.EventType;
 import cz.robyer.gamework.scenario.Scenario;
 import cz.robyer.gamework.scenario.ScenarioParser;
 import cz.robyer.gamework.util.Log;
@@ -196,7 +197,7 @@ public abstract class GameService extends Service implements GameEventListener, 
     @Override
     public final void onLocationChanged(Location location) {
     	this.location = location;
-    	gameHandler.broadcastEvent(GameEvent.UPDATED_LOCATION);    	    	
+    	gameHandler.broadcastEvent(EventType.UPDATED_LOCATION);
     }
 
 	@Override public final void onProviderDisabled(String provider) {}
@@ -256,7 +257,7 @@ public abstract class GameService extends Service implements GameEventListener, 
         		@Override
         		public void run() {
         			updateGameTime();
-        			gameHandler.broadcastEvent(GameEvent.UPDATED_TIME);
+        			gameHandler.broadcastEvent(EventType.UPDATED_TIME);
         		}
         	}, 1000, 1000);
 		}
@@ -282,7 +283,7 @@ public abstract class GameService extends Service implements GameEventListener, 
     @Override
 	public final void receiveEvent(GameEvent event) {
     	
-    	switch (event) {
+    	switch (event.type) {
     	case GAME_START:
     		if (status != GameStatus.GAME_WAITING && status != GameStatus.GAME_PAUSED) {
     			Log.w(TAG, "Game can't be started in '" + status + "' state. Only GAME_WAITING and GAME_PAUSED allowed");
@@ -308,9 +309,9 @@ public abstract class GameService extends Service implements GameEventListener, 
     		}    		
     		stopAllUpdates();
 
-    		if (event == GameEvent.GAME_WIN)
+    		if (event.type == EventType.GAME_WIN)
     			status = GameStatus.GAME_WON;
-    		else if (event == GameEvent.GAME_LOSE)
+    		else if (event.type == EventType.GAME_LOSE)
     			status = GameStatus.GAME_LOST;
     		else
     			status = GameStatus.GAME_PAUSED;

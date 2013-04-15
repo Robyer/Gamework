@@ -2,6 +2,7 @@ package cz.robyer.gamework.game;
 
 import java.util.WeakHashMap;
 
+import cz.robyer.gamework.game.GameEvent.EventType;
 import cz.robyer.gamework.util.Log;
 
 /**
@@ -47,13 +48,13 @@ public class GameHandler implements GameEventBroadcaster {
 	@Override
 	public synchronized void broadcastEvent(GameEvent event) {
 		int severity = android.util.Log.INFO;
-		if (event == GameEvent.UPDATED_LOCATION ||
-			event == GameEvent.UPDATED_TIME) {
+		if (event.type == EventType.UPDATED_LOCATION ||
+			event.type == EventType.UPDATED_TIME) {
 			severity = android.util.Log.DEBUG;
 	    }
 	
 	    if (Log.loggingEnabled()) {
-	    	Log.println(severity, TAG, "Broadcasting event " + event.name() + " to " + listeners.size() + " listeners");
+	    	Log.println(severity, TAG, "Broadcasting event " + event.type.name() + " to " + listeners.size() + " listeners");
 	    }
 	
 	    for (GameEventListener listener : listeners.keySet()) {
@@ -61,6 +62,14 @@ public class GameHandler implements GameEventBroadcaster {
 	    		listener.receiveEvent(event);
 	    	}
 	    }
+	}
+	
+	/**
+	 * Broadcasts {@link GameEvent} to all registered listeners.
+	 * @param type
+	 */
+	public synchronized void broadcastEvent(EventType type) {
+		broadcastEvent(new GameEvent(type));
 	}
 
 	public long getGameTime() {

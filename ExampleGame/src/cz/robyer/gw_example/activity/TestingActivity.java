@@ -163,7 +163,7 @@ public class TestingActivity extends Activity implements GameEventListener {
 
 	@Override
 	public void receiveEvent(GameEvent event) {
-		switch (event) {
+		switch (event.type) {
 		case UPDATED_TIME:
 			updateTime();
 			break;

@@ -7,6 +7,7 @@ import android.location.Location;
 import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 import cz.robyer.gamework.game.GameEvent;
+import cz.robyer.gamework.game.GameEvent.EventType;
 import cz.robyer.gamework.game.GameStatus;
 import cz.robyer.gamework.util.Log;
 import cz.robyer.gw_example.R;
@@ -64,10 +65,10 @@ public class GameService extends cz.robyer.gamework.game.GameService {
 	@Override
 	protected void onEvent(GameEvent event) {
     	
-    	switch (event) {
+    	switch (event.type) {
     	case UPDATED_LOCATION:
    			if (getStatus() == GameStatus.GAME_WAITING) {
-   				gameHandler.broadcastEvent(GameEvent.GAME_START);
+   				gameHandler.broadcastEvent(EventType.GAME_START);
    			}
    			
     	case GAME_QUIT:
