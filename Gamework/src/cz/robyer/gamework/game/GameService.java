@@ -34,7 +34,7 @@ public abstract class GameService extends Service implements GameEventListener, 
 	private GameStatus status = GameStatus.GAME_NONE;
 	protected final GameHandler gameHandler = new GameHandler();
 	
-	private Timer timer; // http://stackoverflow.com/questions/4597690/android-timer-how
+	private Timer timer;
 	private long start, time;
 	
 	private LocationManager locationManager;
@@ -75,6 +75,7 @@ public abstract class GameService extends Service implements GameEventListener, 
     	if (status != GameStatus.GAME_NONE) {
     		// game is already running, do nothing
     		Log.i(TAG, "Game is already running");
+    		// inform about game was already started
     		onGameStart(false, intent);
     		return 0;    		
     	}
@@ -102,9 +103,9 @@ public abstract class GameService extends Service implements GameEventListener, 
     	startForeground(Constants.NOTIFICATION_GAMEPLAY, getGameNotification());
     	
     	// register getting location updates
-    	locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+    	startLocationUpdates();
 		
+    	// inform about game starting
 		onGameStart(true, intent);
     	
     	// service is starting, due to a call to startService()
@@ -126,13 +127,7 @@ public abstract class GameService extends Service implements GameEventListener, 
     	instance = null;
     	
     	gameHandler.clearListeners();
-    	
-    	locationManager.removeUpdates(this);
-		
-    	if (timer != null) {
-    		timer.cancel();
-			timer.purge();
-    	}
+    	stopAllUpdates();
     }
     
     /**
@@ -203,7 +198,7 @@ public abstract class GameService extends Service implements GameEventListener, 
     	this.location = location;
     	gameHandler.broadcastEvent(GameEvent.UPDATED_LOCATION);    	    	
     }
-	
+
 	@Override public final void onProviderDisabled(String provider) {}
 	@Override public final void onProviderEnabled(String provider) {}
 	@Override public final void onStatusChanged(String provider, int status, Bundle extras) {}
@@ -240,6 +235,46 @@ public abstract class GameService extends Service implements GameEventListener, 
    			mNotificationManager.notify(Constants.NOTIFICATION_GAMEPLAY, getGameNotification());
     	}
 	}
+	
+	/**
+	 * Starts requesting location updates.
+	 */
+	private final void startLocationUpdates() {
+		if (locationManager != null) {    		
+    		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+    		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+    	}
+	}
+	
+	/**
+	 * Creates and starts timer (if not exists already) for getting time updates.
+	 */
+	private final void startTimeUpdates() {
+		if (timer == null) {
+    		timer = new Timer();
+        	timer.schedule(new TimerTask() {
+        		@Override
+        		public void run() {
+        			updateGameTime();
+        			gameHandler.broadcastEvent(GameEvent.UPDATED_TIME);
+        		}
+        	}, 1000, 1000);
+		}
+	}
+	
+	/**
+	 * Stops location and time updates.
+	 */
+	private final void stopAllUpdates() {
+		if (locationManager != null)
+			locationManager.removeUpdates(this);
+		
+		if (timer != null) {
+			timer.cancel();
+			timer.purge();
+			timer = null;
+		}
+	}
 
 	/**
 	 * Received game event handling.
@@ -255,22 +290,11 @@ public abstract class GameService extends Service implements GameEventListener, 
     		}
     		lastTime = SystemClock.uptimeMillis();
     		
-    		if (timer == null) {
-	    		timer = new Timer();
-	        	timer.schedule(new TimerTask() {
-	        		@Override
-	        		public void run() {
-	        			updateGameTime();
-	        			gameHandler.broadcastEvent(GameEvent.UPDATED_TIME);
-	        		}
-	        	}, 1000, 1000);
-    		}
-	        	
+    		startTimeUpdates();
+    			
         	// requesting location updates was already done if game service is in waiting state
-        	if (status != GameStatus.GAME_WAITING) {
-        		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-        		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
-        	}
+        	if (status != GameStatus.GAME_WAITING)
+        		startLocationUpdates();
         	
         	status = GameStatus.GAME_RUNNING;
     		break;
@@ -282,21 +306,14 @@ public abstract class GameService extends Service implements GameEventListener, 
     			Log.w(TAG, "Game can't be paused/won/lost in '" + status + "' state. Only GAME_RUNNING allowed");
     			break;
     		}    		
-    		locationManager.removeUpdates(this);
-    		
-    		if (timer != null) {
-    			timer.cancel();
-    			timer.purge();
-    			timer = null;
-    		}
-    		
-    		// TODO: improve this madness
-    		if (event == GameEvent.GAME_PAUSE)
-    			status = GameStatus.GAME_PAUSED;
-    		else if (event == GameEvent.GAME_WIN)
+    		stopAllUpdates();
+
+    		if (event == GameEvent.GAME_WIN)
     			status = GameStatus.GAME_WON;
     		else if (event == GameEvent.GAME_LOSE)
     			status = GameStatus.GAME_LOST;
+    		else
+    			status = GameStatus.GAME_PAUSED;
     		
    	  		break;
    	  		
