@@ -29,6 +29,7 @@ public class ActivityReaction extends Reaction {
 	public boolean onScenarioLoaded() {
 		intent = new Intent();
 		intent.setClassName(getContext(), value);
+		intent.putExtra("reaction", id); // distribute reaction id to the activity
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		
 		if (!isCallable(intent)) {
