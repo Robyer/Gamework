@@ -42,6 +42,9 @@ public class GameMapActivity extends BaseGameActivity {
 		setContentView(R.layout.activity_game_map);		
 		super.initButtons();
 		
+		if (!GameService.isRunning())
+			return;
+		
 		if (map == null) {
 	        map = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
 	        // Check if we were successful in obtaining the map.
@@ -51,7 +54,6 @@ public class GameMapActivity extends BaseGameActivity {
 	            // The Map is verified. It is now safe to manipulate the map.
 	        	//map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 	        	
-	        	// TODO: here we should be certain that game service is running (checked in BaseGameActivity), so it's useless this check again   
 	        	GameService game = getGame();	        	
 	        	Scenario scenario = null;
 	    		if (game != null)

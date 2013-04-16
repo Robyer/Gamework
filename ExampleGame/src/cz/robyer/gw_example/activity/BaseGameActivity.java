@@ -35,7 +35,8 @@ public abstract class BaseGameActivity extends BaseActivity implements GameEvent
 		overridePendingTransition(0,0); // disable animations
 
 		/** Register listening to game events */
-		getGame().registerListener(this);			
+		if (GameService.isRunning())
+			getGame().registerListener(this);
 
 		// reset 'back' clicked helper
 		backClicked = false;
