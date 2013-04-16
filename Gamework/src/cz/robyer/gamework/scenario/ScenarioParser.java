@@ -441,7 +441,11 @@ public class ScenarioParser {
 	        		String min = parser.getAttributeValue(null, "min");
 	        		String max = parser.getAttributeValue(null, "max");
 	        		
-	        		variable = DecimalVariable.fromString(id, value, min, max);
+	        		if (min != null && max != null)
+	        			variable = DecimalVariable.fromString(id, value, min, max);
+	        		else
+	        			variable = DecimalVariable.fromString(id, value);
+	        		
 	        		Log.d(TAG, "Got DecimalVariable");
 	        		
 	        		parser.nextTag();
