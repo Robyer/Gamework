@@ -11,7 +11,6 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import android.content.Context;
 import android.util.Xml;
-import cz.robyer.gamework.game.GameEvent;
 import cz.robyer.gamework.game.GameEvent.EventType;
 import cz.robyer.gamework.hook.Condition;
 import cz.robyer.gamework.hook.Hook;
@@ -345,14 +344,14 @@ public class ScenarioParser {
 	        	            continue;
 	        			
 	        			if (parser.getName().equalsIgnoreCase("reaction")) {
-		        			((MultiReaction)reaction).addReaction(readReaction(null));
+		        			((MultiReaction)reaction).addReaction(readReaction(id, true));
 	        			} else {
 	        				Log.e(TAG, "Expected <reaction>, got <" + parser.getName() + ">");
 	        				skip();
 	        			}
 	        		}
 	        	} else {
-	        		reaction = readReaction(id);
+	        		reaction = readReaction(id, false);
 	        	}
 
 	        	scenario.addReaction(id, reaction);
@@ -364,7 +363,7 @@ public class ScenarioParser {
 	    }
 	}
 
-	private Reaction readReaction(String id) throws XmlPullParserException, IOException {
+	private Reaction readReaction(String id, boolean isChild) throws XmlPullParserException, IOException {
 		Reaction reaction = null;
 		parser.require(XmlPullParser.START_TAG, ns, "reaction");
 		
@@ -372,10 +371,10 @@ public class ScenarioParser {
 		String value = parser.getAttributeValue(null, "value"); // null for game reactions
 		String variable = parser.getAttributeValue(null, "variable"); // only for variable reactions, null otherwise
 		
-		if (id != null)
-			Log.d(TAG, "Got Reaction id='" + id + "' type='" + type + "' value='" + value + "'");
+		if (isChild)
+			Log.d(TAG, "Got Reaction (parent id='" + id + "') type='" + type + "' value='" + value + "'");
 		else
-			Log.d(TAG, "Got Reaction type='" + type + "' value='" + value + "'");
+			Log.d(TAG, "Got Reaction id='" + id + "' type='" + type + "' value='" + value + "'");
 		
 		if (type.equalsIgnoreCase(REACTION_TYPE_SOUND)) {
 			reaction = new SoundReaction(id, value);
