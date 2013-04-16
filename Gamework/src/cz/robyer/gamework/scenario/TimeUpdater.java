@@ -54,6 +54,8 @@ public class TimeUpdater extends HookableObject {
 				} else if (h.getValue().equalsIgnoreCase("hour")) {
 					valid = (seconds == 0 && minutes == 0);
 					variable.setValue(hours);
+				} else {
+					Log.e(TAG, "Unknown time hook value '" + h.getValue() + "'");
 				}
 				break;
 			}

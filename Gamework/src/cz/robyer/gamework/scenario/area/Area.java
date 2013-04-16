@@ -11,8 +11,20 @@ import cz.robyer.gamework.scenario.HookableObject;
 public abstract class Area extends HookableObject {
 	protected boolean inArea = false;
 	
+	/**
+	 * Class constructor
+	 * @param id Identificator of area.
+	 */
 	public Area(String id) {
 		super(id);
+	}
+	
+	/**
+	 * Checks if user is inside area.
+	 * @return true if user is inside, false otherwise.
+	 */
+	public final boolean isInside() {
+		return inArea;
 	}
 	
 	abstract protected boolean isPointInArea(double lat, double lon);

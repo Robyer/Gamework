@@ -33,6 +33,7 @@ public class Scenario {
 	protected final Map<String, Message> messages = new HashMap<String, Message>();
 	protected final List<Hook> hooks = new ArrayList<Hook>();
 	
+	// TODO: implement onLoadComplete listener and wait for its loading before starting game
 	protected final SoundPool soundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
 	protected final TimeUpdater timeUpdater = new TimeUpdater(this);
 	

@@ -86,6 +86,8 @@ public class Condition extends BaseObject {
 				valid = (varValue != condValue);
 				break;
 			}
+			
+			Log.v(TAG, "Checking condition on varValue='" + varValue + ", condValue='" + condValue + "', valid='" + valid + "'");
 		} else if (variable instanceof DecimalVariable) {
 			int varValue = ((DecimalVariable)variable).getValue();
 			int condValue = Integer.parseInt(value);
@@ -110,6 +112,8 @@ public class Condition extends BaseObject {
 				valid = (varValue <= condValue);
 				break;
 			}
+			
+			Log.v(TAG, "Checking condition on varValue='" + varValue + ", condValue='" + condValue + "', valid='" + valid + "'");
 		}
 
 		return valid;

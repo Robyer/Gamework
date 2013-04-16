@@ -34,7 +34,7 @@ public class GameEvent implements Serializable {
 	}
 	
 	/**
-	 * Class constructor for custom events.
+	 * Class constructor for custom events. // TODO: use values also for UPDATED_* events?
 	 * @param type
 	 * @param value
 	 */

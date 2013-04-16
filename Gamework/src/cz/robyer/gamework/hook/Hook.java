@@ -136,6 +136,7 @@ public class Hook extends BaseObject {
 		switch (conditions_type) {
 		case CONDITIONS_NONE:
 			valid = true;
+			Log.v(TAG, "Checking NO conditions, valid=" + valid);
 			break;
 		case CONDITIONS_ALL:
 			valid = true;
@@ -146,6 +147,7 @@ public class Hook extends BaseObject {
 						break;
 					}
 				}
+			Log.v(TAG, "Checking ALL conditions, valid=" + valid);
 			break;
 		case CONDITIONS_ANY:
 			if (conditions != null)
@@ -155,6 +157,7 @@ public class Hook extends BaseObject {
 						break;
 					}
 				}
+			Log.v(TAG, "Checking ANY conditions, valid=" + valid);
 			break;
 		}
 		

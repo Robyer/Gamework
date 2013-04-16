@@ -32,6 +32,7 @@ public class SoundArea extends PointArea {
 		
 		if (soundId == -1) {
 			try {
+				// TODO: maybe not use soundpool but classic audiomanager for this, as this could be music
 				AssetFileDescriptor descriptor = getContext().getAssets().openFd(value);
 				soundId = getScenario().getSoundPool().load(descriptor, 1);
 				descriptor.close();
@@ -52,6 +53,7 @@ public class SoundArea extends PointArea {
 	
 	@Override
 	public void updateLocation(double lat, double lon) {
+		// TODO: fix when soundRadius > radius
 		double distance = GPoint.distanceBetween(point.latitude, point.longitude, lat, lon);		
 		boolean r = distance < (radius + (inArea ? LEAVE_RADIUS : 0));
 		float actualVolume = calcVolume(distance);
