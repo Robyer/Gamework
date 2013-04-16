@@ -1,157 +1,263 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scenario>
+    <!-- Basic info about scenario (all just string). This element MUST be first element in <scenario>. -->
     <about>
-        <!-- Základní informace o scénáři (zatím všechno string)
-        	- title = název scénáře
-        	- author = jméno autora/autorů
-        	- version = verze scénáře
-        	- duration = odhadovaná délka hraní
-        	- difficulty = obtížnost hry
-         -->
-	    <title>Example scenario</title>
-	    <author>Robert Pösel</author>
-	    <version>0.0.1</version>
-	    <location>Brno</location>
-	    <duration>1h</duration>
-	    <difficulty>Easy</difficulty>
+	    <title>Example scenario</title> 		<!-- Name of scenario -->
+	    <author>Robert Pösel</author>			<!-- Name of author -->
+	    <version>0.0.1 - 16.4.2013</version>	<!-- Version of this game -->
+	    <location>Brno</location>				<!-- Location where game is played -->
+	    <duration>1h</duration>					<!-- Estimated duration of one game -->
+	    <difficulty>Easy</difficulty>			<!-- Difficulty of game -->
     </about>
-   
+
+    <!-- Definition of game messages. Only <message> elements are allowed inside. -->
     <messages>
-        <message id="test" title="Testovací zpráva" value="messages/test.txt" />
-        <message id="welcome" title="Welcome to game!" value="messages/welcome.html" />
+	    <!-- <message> contains these attributes:
+	    	- id = identificator, must be unique among <messages>
+	    	- title = title of message
+	    	- value = path to file with content of message
+	     -->
+	    <message id="welcome" title="Welcome to game!" value="messages/welcome.html" />
+	    <message id="test" title="Some test message" value="messages/test.txt" />
     </messages>
-    
+
+    <!-- Definition of game areas. Only <area> elements are allowed inside. -->
     <areas>
-        <!-- Definice oblastí na mapě.
-        	- type:
-        		- point (lat, long, radius)
-        		- multipoint (vnořené pointy (lat,long)) 
-         -->
-        <area id="home" type="point" lat="49.1675242" lon="16.5827231" radius="20" />
-        <area id="albert" type="point" lat="49.1699164" lon="16.5821031" radius="15" />
-        <area id="bohunice" type="multipoint">
-            <point lat="49.1699244" lon="16.5750961" />
-            <point lat="49.1705711" lon="16.5869978" />
-            <point lat="49.1658472" lon="16.5864353" />
-            <point lat="49.1647558" lon="16.5754808" />
+        <!-- <area> contains these attributes:
+        	- id = identificator, must be unique among <areas>
+        	- type = one of: point, multipoint, sound
+        	- other fields depends on particular type
+        	
+        	Types:
+        	1. point - represents simple circle area with one center point and radius.
+        	2. multipoint - represents polygon composited from 3 or more points. // TODO: add checking into code
+        	3. sound - is same as Point, but contains source of sound, whose volume changes as user is being closer from center point.
+        	
+        	========================================
+			<area type="point"> contains in adition these attributes:
+			- lat = latitude of geo location, e.g. 12.3456789
+			- lon = longitude of geo location, e.g. 123.456789
+			- radius = radius of area in meters
+			
+        	<area type="sound"> contains in adition these attributes: // XXX: don't use this area as it is buggy at the moment
+			- lat = latitude of geo location, e.g. 12.3456789
+			- lon = longitude of geo location, e.g. 123.456789
+			- radius = radius of area in meters
+			- soundRadius = radius in which sound will be played
+			- value = path to file with sound sample
+			// TODO: fix and implement attributes for repeat, pitch, etc.
+			
+			<area type="multipoint"> contains in adition nested <point> elements (at least 3): // TODO: add checking into code
+				- <point> contains these attributes:
+					- lat = latitude of geo location, e.g. 12.3456789
+					- lon = longitude of geo location, e.g. 123.456789
+		 -->
+        <area id="railway" type="point" lat="49.1905819" lon="16.6128022" radius="50" />
+        <area id="veveri" type="multipoint">
+            <point lat="49.193896" lon="16.598848" />
+			<point lat="49.193999" lon="16.599222" />
+			<point lat="49.193700" lon="16.600036" />
+			<point lat="49.193826" lon="16.600658" />
+			<point lat="49.193787" lon="16.600849" />
+			<point lat="49.193952" lon="16.601334" />
+			<point lat="49.194398" lon="16.600937" />
+			<point lat="49.194709" lon="16.601235" />
+			<point lat="49.195470" lon="16.598830" />
+			<point lat="49.194421" lon="16.597960" />
+			<point lat="49.193905" lon="16.598794" />
         </area>
     </areas>
     
+    <!-- Definition of game variables. Only <variable> elements are allowed inside. -->
     <variables>
-        <!--
+        <!-- <variable> contains these attributes:
+        	- id = identificator, must be unique among <variables>
+        	- type = one of: decimal, boolean
+        	- other fields depends on particular type
+        	
         	Types:
-        	- decimal (min, max, value)
-        	- boolean (value)
-         -->
-        <variable id="health" type="decimal" min="0" max="100" value="100" title="Zdraví" />
-        <variable id="nakoupeno" type="boolean" value="false" />
+        	1. decimal - represents 32-bit integer variable  // TODO: rename to integer?
+        	2. boolean - represents boolean variable
+        	
+        	========================================
+			<variable type="decimal"> contains in adition these attributes:
+			- value = numeric value of this variable
+			- min (not required) = minimal value this variable can hold
+			- max (not required) = maximal value this variable can hold
+			Note: either both or none min/max values must be set.
+
+			<variable type="boolean"> contains in adition these attributes:
+			- value = one of: true, false
+		 -->
+        <variable id="health" type="decimal" min="0" max="100" value="100" />
+        <variable id="score" type="decimal" value="0" />
+        <variable id="completed" type="boolean" value="false" />
     </variables>
     
+    <!-- Definition of game reactions. Only <reaction> elements are allowed inside. -->
     <reactions>
-        <!--
+        <!-- <reaction> contains these attributes:
+        	- id = identificator, must be unique among <reactions>
+        	- type = one of: multi, sound, vibrate, message, event, activity, var_set, var_increment, var_decrement, var_multiply, var_divide, var_negate 
+        	- other fields depends on particular type
+        	
         	Types:
-        	- sound (path to file) - TODO: hlasitost? zvuky od frameworku? Gamework:SHOT atd.
-        	- vibrate (strength = 1-10)
-        	- html (path to file)
-        	- ...
-        	- decrement
-        	- increment
-        	- set
-        	- ...
-        	- event (value GAME_START, GAME_WIN, GAME_LOSE, etc.)
-        	- ...
-        	- dialog (icon?, title?, message, buttons (and their reactions))
-         -->
-        <reaction id="zvuk1" type="sound" value="sounds/rooster.mp3" />
-        <reaction id="vibrace" type="vibrate" value="50" />
-        <reaction id="vibrace1" type="vibrate" value="100" />
-        <reaction id="vibrace2" type="vibrate" value="500" />
-        <reaction id="vibrace3" type="vibrate" value="800" />
+        	1. multi - represents container containing more <reaction>s
+        	2. sound - plays sound sample
+        	3. vibrate - vibrates for defined amount of time
+        	4. message - marks <message> as received (= visible for the player)
+        	5. event - send one of game events to start, win or lose game
+        	6. activity - starts any activity defined by it's name
+        	7. var_set - set (=) value of <variable> (could be numeric or true/false value, depending on type of variable)
+        	8. var_increment - increment (+) value of decimal (only!) <variable>
+        	9. var_decrement - decrement (-) value of decimal (only!) <variable>
+        	10. var_multiply - multiply (*) value of decimal (only!) <variable>
+        	11. var_divide - divide (/) value of decimal (only!) <variable> 
+        	12. var_negate - negate (!) value of boolean (only!) <variable>
+        	// TODO: add "ref" (reference) type to call another reaction by his id (and checking cross references in code)
+        	
+        	========================================
+			<reaction type="multi"> contains in adition nested <reaction> elements of other types.
+			Note: This reaction CAN'T be nested inside another multi reaction.
+				  Nested reactions DON'T have id and can't be called separately.
+			
+			<reaction type="sound"> contains in adition these attributes:
+			- value = path to file with sound sample
+			
+        	<reaction type="vibrate"> contains in adition these attributes: // TODO: allow pattern value e.g. "50, 100, 50"
+			- value = number of ms to vibrate
+			
+			<reaction type="message"> contains in adition these attributes:
+			- value = id of <message> to be marked as received
+			
+			<reaction type="event"> contains in adition these attributes: // TODO: improve EventReaction for handling custom events
+			- value = one of GAME_START, GAME_WIN, GAME_LOSE for internal game events, or any other string for CUSTOM event
+			
+			<reaction type="activity"> contains in adition these attributes:
+			- value = full class name (with namespace) of activity which should be started
+			Note: id of this reaction is sent to activity through intent's extra string with name "reaction"
+			
+			<reaction type="var_*"> contains in adition these attributes:
+			- variable = id of <variable> whose value will be changed
+			- value = value for operation with variable, depends on reaction type (var_*):
+			Note: var_set can change any variable (just use correct value - true/false for boolean variables or any integer for decimal variables)
+				  var_increment, var_decrement, var_multiply, var_divide can be applied to decimal variables ONLY.
+				  var_negate can be applied to boolean variables ONLY.
+		 -->        
+        <reaction id="alert" type="sound" value="sounds/rooster.mp3" />
+        <reaction id="vibrate1" type="vibrate" value="100" />
+        <reaction id="vibrate2" type="vibrate" value="500" />
+        <reaction id="vibrate3" type="vibrate" value="800" />
         <reaction id="testmsg" type="message" value="test" />    
+    
+        <reaction id="score10" type="var_increment" variable="score" value="10" />
+        <reaction id="score50" type="var_increment" variable="score" value="50" />
         
-        <reaction id="zdravi" type="var_set" variable="health" value="50" />
-        
-        <reaction id="zraneni" type="multi">
-            <reaction type="sound" value="sounds/rooster.mp3" />
-        	<reaction type="vibrate" value="100" />
-        	<reaction type="var_decrement" variable="health" value="20" />
+        <reaction id="health_reset" type="var_set" variable="health" value="50" />
+        <reaction id="health_heal" type="var_increment" variable="health" value="20" />
+        <reaction id="health_hurt" type="multi">
+            <reaction type="var_decrement" variable="health" value="20" />
+        	<reaction type="sound" value="sounds/youch2.mp3" />    
         </reaction>
         
-        <reaction id="start_hry" type="multi">
+        <reaction id="complete" type="multi">
+            <reaction type="sound" value="sounds/rooster.mp3" />
+            <reaction type="vibrate" value="100" />
+            <reaction type="var_set" variable="completed" value="true" />    
+        </reaction>
+        
+        <reaction id="game_begin" type="multi">
             <reaction type="event" value="GAME_START" />
             <reaction type="message" value="welcome" />
-            <reaction type="task" value="sometask" />
         </reaction>
         
-        <reaction id="vyhra" type="multi">
-            <reaction type="vibrate" value="500" /> <!-- TODO: use pattern in value (100, 50, 100) -->
-            <reaction type="sound" value="sounds/vyhra.mp3" />
+        <reaction id="game_win" type="multi">
+            <reaction type="vibrate" value="500" /> 
+            <reaction type="sound" value="sounds/canttouchthis.mp3" />
             <reaction type="event" value="GAME_WIN" />
         </reaction>
-        <reaction id="prohra" type="multi">
-            <reaction type="vibrate" value="1400" /> <!-- TODO: use "reference" type to another reaction? -->
-            <reaction type="sound" value="sounds/prohra.mp3" />
+
+        <reaction id="game_lose" type="multi">
+            <reaction type="vibrate" value="1400" />
+            <reaction type="sound" value="sounds/haha.mp3" />
             <reaction type="event" value="GAME_LOSE" />
         </reaction>
+        
         <reaction id="help" type="activity" value="cz.robyer.gw_example.activity.HelpActivity" />
-        <reaction id="noactivity" type="activity" value="a.b.cy.random" />
-        <reaction id="nakup" type="multi">
-            <reaction type="sound" value="sounds/nakup.mp3" />
-            <reaction type="var_set" variable="nakoupeno" value="true" />
-        </reaction>
         
         <reaction id="tick_second" type="sound" value="sounds/tick.mp3" />
         <reaction id="tick_minute" type="sound" value="sounds/tick2.mp3" />
-        
-        <reaction id="message" type="message" value="test" />
     </reactions>
     
+    
+    <!-- Definition of hooks. Only <hook> elements are allowed inside. -->
     <hooks>
-        <!--
+        <!-- <hook> contains one or more nested <trigger> elements and these attributes:
+        	- type = one of: area, area_enter, area_leave, variable, time
+        	- value = depends on particular type:
+        		area, area_enter, area_enter: id of area
+        		variable: id of variable
+        		time: one of: second, minute, hour
+
         	Types:
-    		- area (area ID) - vstup nebo výstup do oblasti
-    		- area_enter (area ID)
-    		- area_leave (area ID)
-    		- variable - změna hodnoty proměnné
-    		- time (timestamp value) - nastání času
-    		- qrcode/gps/photo/...?
-       	 -->
+        	1. area - this is called when user enters or leaves particular area
+        	2. area_enter - same as above, but only when enters
+        	3. area_leave - same as above, but only when leaves
+        	4. variable - this is called when value of particular variable is changed
+        	5. time - this is called when time of game changes
+        	
+        	// TODO: add "qrcode" type to to hook qr code scanning
+        	// TODO: add "event" type to hook custom events
+        	
+        	========================================
+        	
+        	Each <trigger> contains zero or more nested <condition> elements and these attributes: 
+        	- reaction = id of reaction which will be activated
+        	- conditions (not required) = one of: all, any, none 
+        		all = all conditions must apply in order to activate reaction
+        		any = at least one condition must apply in order to activate reaction
+        		none (or no conditions attribute) = reaction is activated instantly without conditions
+        	- run (not required) = number of allowed runs of this trigger. Not set or value <= 0 means without limits.
+        	
+        	========================================
+        	
+        	Each <condition> contains these attributes:
+        	- type = one of: equals, notequals, greater, smaller, greaterequals, smallerequals
+        	- value = number or true/false value to be compared (depends on type of variable which will be compared)
+        	- variable = id of variable whose value will be compared (not required)
+        	Note: variable is not required only for these <hook> types: variable, time. In this case will be compared value of condition with value of changed variable/time defined in hook.
+		 -->
         <hook type="variable" value="health">
-            <!-- Trigger:
-	        	- reaction = id reakce kterou spustí za předpokladu že:
-	        	- conditions:
-	        		- all = všechny vnořené podmínky musí být splněny
-	        		- any = jakákoliv podmínka musí být splněná
-	        		- none = bezpodmínečně se spustí (výchozí)
-	        	- run:
-	        		- always = spustí se vždy při výskytu události
-	        		- <číslo> = počet spuštění, kolikrát se může spustit
-         	-->
-            <trigger reaction="prohra" conditions="ALL">
+            <trigger reaction="game_lose" conditions="ALL">
                 <condition type="equals" value="0" />
             </trigger>
         </hook>
-        <hook type="area_enter" value="albert">
-            <!-- vstup do Albertu -->
-            <trigger reaction="nakup" run="1" />
+        
+        <hook type="area_enter" value="veveri">
+            <trigger reaction="complete" run="1" />
         </hook>
-        <hook type="area_enter" value="home">
-            <!-- návrat domů -->
-            <trigger reaction="vyhra" conditions="ALL">
-                <condition type="equals" variable="nakoupeno" value="true" />
+        
+        <hook type="area_enter" value="railway">
+            <trigger reaction="game_win" conditions="ALL">
+            	<condition type="equals" variable="completed" value="true" />    
             </trigger>
         </hook>
-        <hook type="time" value="second">            
-           	<trigger reaction="tick_second" condition="ALL">
-           		<condition type="greater" value="0" />
+        
+        <hook type="time" value="second">
+           	<trigger reaction="tick_second" conditions="ALL" />
+
+           	<trigger reaction="health_hurt" conditions="ANY">
+           	    <condition type="equals" value="0" />
+           	    <condition type="equals" value="20" />
+           	    <condition type="equals" value="40" />
            	</trigger>
         </hook>
         <hook type="time" value="minute">
-           	<trigger reaction="tick_minute" condition="ALL">
+           	<trigger reaction="tick_minute" conditions="ALL">
            		<condition type="greater" value="0" />
            	</trigger>
-            <trigger reaction="prohra" condition="ALL">
-           		<condition type="greater" value="1" />
+			<trigger reaction="game_lose" conditions="ALL">
+           		<condition type="greater" value="5" />
            	</trigger>
         </hook>
     </hooks>
