@@ -33,7 +33,7 @@ public abstract class GameService extends Service implements GameEventListener, 
 	
 	private Scenario scenario;
 	private GameStatus status = GameStatus.GAME_NONE;
-	protected final GameHandler gameHandler = new GameHandler();
+	protected final GameHandler gameHandler = new GameHandler(this);
 	
 	private Timer timer;
 	private long start, time;
@@ -163,7 +163,7 @@ public abstract class GameService extends Service implements GameEventListener, 
     }
     
     /**
-     * Returns actual game time.
+     * Returns actual game time in milliseconds.
      */
     public final long getTime() {
     	return time;

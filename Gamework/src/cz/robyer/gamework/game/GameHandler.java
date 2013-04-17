@@ -13,7 +13,16 @@ public class GameHandler implements GameEventBroadcaster {
 	private static final String TAG = GameHandler.class.getSimpleName();
 	
 	private final WeakHashMap<GameEventListener, Boolean> listeners = new WeakHashMap<GameEventListener, Boolean>();
-
+	private final GameService parent;
+	
+	/**
+	 * Class constructor.
+	 * @param parent GameService which uses this handler.
+	 */
+	public GameHandler(GameService parent) {
+		this.parent = parent;
+	}
+	
 	/**
 	 * Add listener.
 	 * @param listener
@@ -72,8 +81,10 @@ public class GameHandler implements GameEventBroadcaster {
 		broadcastEvent(new GameEvent(type));
 	}
 
+	/**
+	 * Returns actual game time in milliseconds.
+	 */
 	public long getGameTime() {
-		// TODO: return game time somehow from GameService
-		return 0;
+		return parent.getTime();
 	}
 }
