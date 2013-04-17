@@ -95,7 +95,8 @@ public abstract class GameService extends Service implements GameEventListener, 
     	scenario.setHandler(gameHandler);
     	registerListener(this);
     	
-    	start = lastTime = SystemClock.uptimeMillis();
+    	start = System.currentTimeMillis();
+    	lastTime = SystemClock.uptimeMillis();
     	time = 0;
     	
     	status = GameStatus.GAME_WAITING;
