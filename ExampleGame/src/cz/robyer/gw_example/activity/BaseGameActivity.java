@@ -8,8 +8,8 @@ import android.view.View.OnClickListener;
 import android.widget.Toast;
 import cz.robyer.gamework.game.GameEvent;
 import cz.robyer.gamework.game.GameEventListener;
-import cz.robyer.gamework.game.GameService;
 import cz.robyer.gw_example.R;
+import cz.robyer.gw_example.game.GameService;
 
 /**
  * This is base activity for all game activities.
@@ -137,7 +137,7 @@ public abstract class BaseGameActivity extends BaseActivity implements GameEvent
 	 * @return instance
 	 */
 	protected GameService getGame() {
-		return GameService.getInstance();
+		return (GameService)GameService.getInstance();
 	}
 	
 	/**
@@ -152,7 +152,7 @@ public abstract class BaseGameActivity extends BaseActivity implements GameEvent
 		}
 
 		// Stop game service
-		Intent intent = new Intent(BaseGameActivity.this, GameService.class);
+		Intent intent = new Intent(this, GameService.class);
 		stopService(intent);
 		
 		// Start main activity
