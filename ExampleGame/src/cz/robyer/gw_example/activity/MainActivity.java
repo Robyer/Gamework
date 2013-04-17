@@ -1,19 +1,20 @@
 package cz.robyer.gw_example.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.Toast;
 import cz.robyer.gw_example.R;
+import cz.robyer.gw_example.game.GameService;
 
 /**
  * This is the main activity of application.
  * @author Robert Pösel
  */
 public class MainActivity extends BaseActivity {
-	private static final String TAG = MainActivity.class.getSimpleName();
+	//private static final String TAG = MainActivity.class.getSimpleName();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -26,29 +27,18 @@ public class MainActivity extends BaseActivity {
 	 * Init handlers for main buttons.
 	 */
 	private void initButtons() {
-		((Button)findViewById(R.id.btn_testing)).setOnClickListener(new OnClickListener() {
+
+		((Button)findViewById(R.id.btn_play)).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(MainActivity.this, TestingActivity.class);
-				startActivity(intent);
+				ProgressDialog.show(MainActivity.this, "", "Loading. Please wait...", true, true);
+            	
+				// Start game service with example.xml
+				Intent intent = new Intent(MainActivity.this, GameService.class);
+				intent.putExtra("filename", "example.xml");
+            	startService(intent);
 			}
 		});
-		
-		OnClickListener notImplementedListener = new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Toast.makeText(MainActivity.this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
-			}
-		}; 
-		
-		((Button)findViewById(R.id.btn_play)).setOnClickListener(notImplementedListener);		
-/*		((Button)findViewById(R.id.btn_options)).setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-				startActivity(intent);
-			}
-		});*/
 		
 		((Button)findViewById(R.id.btn_help)).setOnClickListener(new OnClickListener() {
 			@Override

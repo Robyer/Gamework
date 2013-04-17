@@ -11,7 +11,7 @@
 	    android:layout_height="match_parent"
 	    android:layout_width="0dp"
 	    android:layout_weight="1"
-	    android:contentDescription="Map"
+	    android:contentDescription="@string/title_activity_game_map"
 	    android:scaleType="fitCenter"
         android:src="@drawable/icon_map" />
 	
@@ -24,13 +24,13 @@
 		    android:id="@+id/btn_messages"
 		    android:layout_width="match_parent"
 		    android:layout_height="match_parent"
-		    android:contentDescription="Messages"
+		    android:contentDescription="@string/title_activity_game_messages"
 		    android:scaleType="fitCenter"
 	        android:src="@drawable/icon_message" />
 		
-		<TextView 
+		<!-- <TextView 
 		        android:id="@+id/text_map"
-		        style="@style/CountIcon" />
+		        style="@style/CountIcon" />  -->
 		
 	</FrameLayout>
 	
@@ -43,13 +43,13 @@
 		    android:id="@+id/btn_tasks"
 		    android:layout_width="match_parent"
 		    android:layout_height="match_parent"
-		    android:contentDescription="Tasks"
+		    android:contentDescription="@string/title_activity_game_tasks"
 		    android:scaleType="fitCenter"
 		    android:src="@drawable/icon_tasks" />
 		
-		<TextView 
+		<!--  <TextView 
 		        android:id="@+id/text_map"
-		        style="@style/CountIcon" />
+		        style="@style/CountIcon" />  -->
 		
 	</FrameLayout>
 	
@@ -58,16 +58,16 @@
 	    android:layout_height="match_parent"
 	    android:layout_width="0dp"
 	    android:layout_weight="1"
-	    android:contentDescription="Inventory"
+	    android:contentDescription="@string/title_activity_game_inventory"
 	    android:scaleType="fitCenter"
         android:src="@drawable/icon_backpack" />
 	
 	<ImageButton
-	    android:id="@+id/btn_settings"
+	    android:id="@+id/btn_tools"
 	    android:layout_height="match_parent"
 	    android:layout_width="0dp"
 	    android:layout_weight="1"
-	    android:contentDescription="Settings"
+	    android:contentDescription="@string/title_activity_game_tools"
 	    android:scaleType="fitCenter"
         android:src="@drawable/icon_options" />
 

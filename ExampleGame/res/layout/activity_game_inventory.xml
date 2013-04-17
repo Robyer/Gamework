@@ -13,7 +13,7 @@
         >
         
 	    <Button
-	        android:text="Scan QR code"
+	        android:text="@string/scan_qr"
 	        android:id="@+id/btn_scan_qr"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"

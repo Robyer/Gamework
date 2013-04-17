@@ -8,13 +8,13 @@ import cz.robyer.gw_example.R;
  * @author Robert Pösel
  */
 public class GameInventoryActivity extends BaseGameActivity {
-	private static final String TAG = GameInventoryActivity.class.getSimpleName();	
+	//private static final String TAG = GameInventoryActivity.class.getSimpleName();	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game_inventory);
-		super.initButtons();
+		initButtons();
 	}
 
 }

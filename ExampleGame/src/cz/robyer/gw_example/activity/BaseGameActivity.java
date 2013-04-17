@@ -10,7 +10,6 @@ import cz.robyer.gamework.game.GameEvent;
 import cz.robyer.gamework.game.GameEventListener;
 import cz.robyer.gamework.game.GameService;
 import cz.robyer.gw_example.R;
-import cz.robyer.gw_example.util.IntentFactory;
 
 /**
  * This is base activity for all game activities.
@@ -60,7 +59,7 @@ public abstract class BaseGameActivity extends BaseActivity implements GameEvent
 			Intent intent = new Intent(this, MainActivity.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(intent);
-			finish(); // TODO: Is this okay to be here? Or should we use completely different approach?
+			finish();
 		}
 	}
 	
@@ -90,8 +89,8 @@ public abstract class BaseGameActivity extends BaseActivity implements GameEvent
 					cls = GameObjectivesActivity.class;
 				else if (v.getId() == R.id.btn_inventory)
 					cls = GameInventoryActivity.class;
-				else if (v.getId() == R.id.btn_settings)
-					cls = GameSettingsActivity.class;
+				else if (v.getId() == R.id.btn_tools)
+					cls = GameToolsActivity.class;
 				
 				// ignore unknown buttons and link to same activity
 				if (cls == null || cls == this.getClass())
@@ -111,7 +110,7 @@ public abstract class BaseGameActivity extends BaseActivity implements GameEvent
 			buttons.findViewById(R.id.btn_messages).setOnClickListener(listener);
 			buttons.findViewById(R.id.btn_tasks).setOnClickListener(listener);
 			buttons.findViewById(R.id.btn_inventory).setOnClickListener(listener);
-			buttons.findViewById(R.id.btn_settings).setOnClickListener(listener);
+			buttons.findViewById(R.id.btn_tools).setOnClickListener(listener);
 		}
 	}
 	
@@ -152,11 +151,14 @@ public abstract class BaseGameActivity extends BaseActivity implements GameEvent
 			return;
 		}
 
-		stopService(IntentFactory.createGameServiceIntent(getApplicationContext()));
+		// Stop game service
+		Intent intent = new Intent(BaseGameActivity.this, GameService.class);
+		stopService(intent);
 		
+		// Start main activity
 		Intent startMain = new Intent(Intent.ACTION_MAIN);
 		startMain.addCategory(Intent.CATEGORY_HOME);
-		startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
 		startActivity(startMain);
 		
 		//super.onBackPressed();

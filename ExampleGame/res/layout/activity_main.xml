@@ -9,29 +9,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
-    
-    <Button
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:text="@string/testing"
-	    android:id="@+id/btn_testing"
-	    />
-    
-<!--
-    	 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/select_game"
-        />
-    
-    <Spinner
-	    android:id="@+id/game_spinner"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content" />
-	    
--->
-	    
+
 	<Button
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"

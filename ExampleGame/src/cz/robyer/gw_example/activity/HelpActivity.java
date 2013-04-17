@@ -13,7 +13,7 @@ import cz.robyer.gw_example.R;
  */
 @SuppressLint("SetJavaScriptEnabled")
 public class HelpActivity extends BaseActivity {	
-	private static final String TAG = HelpActivity.class.getSimpleName();
+	//private static final String TAG = HelpActivity.class.getSimpleName();
 
 	WebView webview;
 	

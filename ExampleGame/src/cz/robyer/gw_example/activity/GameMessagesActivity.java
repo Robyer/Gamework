@@ -18,7 +18,7 @@ import cz.robyer.gw_example.R;
  * @author Robert Pösel
  */
 public class GameMessagesActivity extends BaseGameActivity {
-	private static final String TAG = GameMessagesActivity.class.getSimpleName();
+	//private static final String TAG = GameMessagesActivity.class.getSimpleName();
 
 	ArrayAdapter<Message> adapter;
 	List<Message> messages;
@@ -27,7 +27,7 @@ public class GameMessagesActivity extends BaseGameActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game_messages);
-		super.initButtons();
+		initButtons();
 	}
 	
 	@Override

@@ -12,7 +12,6 @@ import cz.robyer.gamework.game.GameStatus;
 import cz.robyer.gamework.util.Log;
 import cz.robyer.gw_example.R;
 import cz.robyer.gw_example.activity.GameMapActivity;
-import cz.robyer.gw_example.activity.TestingActivity;
 
 public class GameService extends cz.robyer.gamework.game.GameService {
 
@@ -22,7 +21,7 @@ public class GameService extends cz.robyer.gamework.game.GameService {
 	@Override
 	protected Notification getGameNotification() {
 		// Creates an explicit intent for an Activity in your app
-    	Intent notificationIntent = new Intent(this, TestingActivity.class) // TODO: GameActivity
+    	Intent notificationIntent = new Intent(this, GameMapActivity.class) // TODO: GameActivity
     			.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
     	Location loc = getLocation();

@@ -53,15 +53,6 @@
                 android:value="cz.robyer.gw_example.MainActivity" />
         </activity>
         <activity
-            android:name="cz.robyer.gw_example.activity.TestingActivity"
-            android:label="@string/title_activity_testing"
-            android:parentActivityName="cz.robyer.gw_example.activity.MainActivity"
-            android:windowSoftInputMode="stateHidden|adjustResize" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="cz.robyer.gw_example.activity.Main" />
-        </activity>
-        <activity
             android:name="cz.robyer.gw_example.activity.MapActivity"
             android:label="@string/title_activity_map"
             android:parentActivityName="cz.robyer.gw_example.activity.TestingActivity" >
@@ -86,8 +77,9 @@
             android:label="@string/title_activity_game_inventory" >
         </activity>
         <activity
-            android:name="cz.robyer.gw_example.activity.GameSettingsActivity"
-            android:label="@string/title_activity_game_settings" >
+            android:name="cz.robyer.gw_example.activity.GameToolsActivity"
+            android:label="@string/title_activity_game_tools"
+            android:windowSoftInputMode="stateHidden|adjustResize" >
         </activity>
         <activity
             android:name="cz.robyer.gw_example.activity.MessageActivity"
@@ -96,10 +88,6 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="cz.robyer.gw_example.activity.GameMessagesActivity" />
-        </activity>
-        <activity
-            android:name="cz.robyer.gw_example.activity.SettingsActivity"
-            android:label="@string/title_activity_settings" >
         </activity>
         
         <service
