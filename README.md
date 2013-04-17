@@ -23,3 +23,18 @@ intent.putExtra("filename", "example.xml");
 startService(intent);
 ```
 
+**Example of own listener for game events:**
+```java
+if (GameService.isRunning()) {
+    GameService game = GameService.getInstance();
+    game.registerListener(new GameEventListener() {
+        @Override
+        public void receiveEvent(GameEvent event) {
+            if (event.type == UPDATED_LOCATION) {
+                ...
+            }
+            ...
+        }
+    });
+}
+```
