@@ -104,14 +104,21 @@ public class ScenarioParser {
 	public static Scenario fromFile(Context context, String filename, boolean aboutOnly) {
 		Log.i(TAG, String.format("Loading %s from file '%s'", (aboutOnly ? "info" : "scenario"), filename));
 		Scenario scenario = null;
+		InputStream stream = null;
 		try {
 			ScenarioParser parser = new ScenarioParser(context, false);
 			File file = context.getFileStreamPath(filename);
-			InputStream stream = new BufferedInputStream(new FileInputStream(file));
+			stream = new BufferedInputStream(new FileInputStream(file));
 			scenario = parser.parse(stream, aboutOnly);
-			stream.close(); // TODO: put this into finally?
 		} catch (Exception e) {
 			Log.e(TAG, e.getMessage(), e);
+		} finally {
+	        try {
+	        	if (stream != null)
+	        		stream.close();
+	        } catch (IOException ioe) {
+	        	Log.e(TAG, ioe.getMessage(), ioe);
+	        }
 		}
 		return scenario;
 	}
@@ -119,13 +126,20 @@ public class ScenarioParser {
 	public static Scenario fromAsset(Context context, String filename, boolean aboutOnly) {
 		Log.i(TAG, String.format("Loading %s from asset '%s'", (aboutOnly ? "info" : "scenario"), filename));
 		Scenario scenario = null;
+		InputStream stream = null;
 		try {
 			ScenarioParser parser = new ScenarioParser(context, false);
-			InputStream stream = context.getAssets().open(filename);
+			stream = context.getAssets().open(filename);
 			scenario = parser.parse(stream, aboutOnly);
-			stream.close(); // TODO: put this into finally?
 		} catch (Exception e) {
 			Log.e(TAG, e.getMessage(), e);
+		} finally {
+	        try {
+	        	if (stream != null)
+	        		stream.close();
+	        } catch (IOException ioe) {
+	        	Log.e(TAG, ioe.getMessage(), ioe);
+	        }
 		}
 		return scenario;
 	}
