@@ -268,7 +268,6 @@ public class Scenario {
 			Log.e(TAG, "onScenarioLoaded() finished with errors");
 		else
 			Log.i(TAG, "onScenarioLoaded() finished without errors");
-			// TODO: hmm, or better? put some logging functions into Scenario itself, which will log errors also into file, etc. - oh, maybe not in scenario, but in BaseObject itself... - hm, or not baseobject but keep it here? for errors that are "scenario-related" = chyby v xml definici, ne moje chyby pøi vývoji tady, ty logovat normálnì jen do konzole (tzn. chyby jako scenario is not attached jsou moje)
 	}
 
 }

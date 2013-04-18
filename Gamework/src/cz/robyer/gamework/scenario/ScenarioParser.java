@@ -534,6 +534,7 @@ public class ScenarioParser {
 	        	} else if (type.equalsIgnoreCase(AREA_TYPE_MULTIPOINT)) {
 	        		area = new MultiPointArea(id);
 	        		
+	        		int i = 0;
 	        		while (parser.next() != XmlPullParser.END_TAG) {
 	        			if (parser.getEventType() != XmlPullParser.START_TAG)
 	        	            continue;
@@ -545,6 +546,7 @@ public class ScenarioParser {
 			        		if (latitude != null && longitude != null) {
 				        		GPoint point = new GPoint(Double.parseDouble(latitude), Double.parseDouble(longitude));
 				        		((MultiPointArea)area).addPoint(point);
+				        		i++;
 				        		Log.d(TAG, "Got PointArea->GPoint");
 			        		} else {
 			        			Log.e(TAG, "GPoint must contains lat and lon");
@@ -555,6 +557,10 @@ public class ScenarioParser {
 	        				Log.e(TAG, "Expected <point>, got <" + parser.getName() + ">");
 	        				skip();
 	        			}
+	        		}
+	        		if (i < 3) {
+	        			Log.e(TAG, "MultiPointArea must contain at least 3 points");
+	        			continue;
 	        		}
 	        		
 	        	} else {

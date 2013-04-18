@@ -30,7 +30,7 @@
         	
         	Types:
         	1. point - represents simple circle area with one center point and radius.
-        	2. multipoint - represents polygon composited from 3 or more points. // TODO: add checking into code
+        	2. multipoint - represents polygon composited from 3 or more points.
         	3. sound - is same as Point, but contains source of sound, whose volume changes as user is being closer from center point.
         	
         	========================================
@@ -47,7 +47,7 @@
 			- value = path to file with sound sample
 			// TODO: fix and implement attributes for repeat, pitch, etc.
 			
-			<area type="multipoint"> contains in adition nested <point> elements (at least 3): // TODO: add checking into code
+			<area type="multipoint"> contains in adition nested <point> elements (at least 3):
 				- <point> contains these attributes:
 					- lat = latitude of geo location, e.g. 12.3456789
 					- lon = longitude of geo location, e.g. 123.456789
@@ -130,7 +130,7 @@
 			<reaction type="message"> contains in adition these attributes:
 			- value = id of <message> to be marked as received
 			
-			<reaction type="event"> contains in adition these attributes: // TODO: improve EventReaction for handling custom events
+			<reaction type="event"> contains in adition these attributes:
 			- value = one of GAME_START, GAME_WIN, GAME_LOSE for internal game events, or any other string for CUSTOM event
 			
 			<reaction type="activity"> contains in adition these attributes:
@@ -182,6 +182,8 @@
             <reaction type="sound" value="sounds/haha.mp3" />
             <reaction type="event" value="GAME_LOSE" />
         </reaction>
+        
+        <reaction id="myev" type="event" value="myevent" />
         
         <reaction id="help" type="activity" value="cz.robyer.gw_example.activity.HelpActivity" />
         
@@ -261,6 +263,9 @@
            	</trigger>
         </hook>
         <hook type="scanner" value="8594026360061">
+            <trigger reaction="myev" />
+        </hook>
+        <hook type="event" value="myevent">
             <trigger reaction="game_win" />
         </hook>
     </hooks>

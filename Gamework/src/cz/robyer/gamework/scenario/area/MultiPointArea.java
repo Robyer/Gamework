@@ -3,6 +3,8 @@ package cz.robyer.gamework.scenario.area;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.util.Log;
+
 import cz.robyer.gamework.util.GPoint;
 
 /**
@@ -44,6 +46,11 @@ public class MultiPointArea extends Area {
 	
 	@Override
 	protected boolean isPointInArea(double lat, double lon) {
+		if (points.size() < 3) {
+			Log.e(TAG, "MultiPointArea must contain at least 3 points");
+			return false;
+		}
+		
 		// little optimalization - check min-max rectangle first  
 		if (lat < minLat || lat > maxLat || lon < minLon || lon > maxLon)
 			return false;
