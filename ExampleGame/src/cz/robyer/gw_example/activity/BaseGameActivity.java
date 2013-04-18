@@ -1,5 +1,7 @@
 package cz.robyer.gw_example.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,6 +9,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
 import cz.robyer.gamework.game.GameEvent;
+import cz.robyer.gamework.game.GameEvent.EventType;
 import cz.robyer.gamework.game.GameEventListener;
 import cz.robyer.gw_example.R;
 import cz.robyer.gw_example.game.GameService;
@@ -118,16 +121,36 @@ public abstract class BaseGameActivity extends BaseActivity implements GameEvent
 	 * @see cz.robyer.gw_example.game.GameEventListener#receiveEvent(cz.robyer.gw_example.game.GameEvent)
 	 */
 	@Override
-	public void receiveEvent(GameEvent event) {
-		// TODO: think up and implement
+	public void receiveEvent(final GameEvent event) {
 		switch (event.type) {
 		case GAME_LOSE:
-		case GAME_PAUSE:
-		case GAME_QUIT:
-		case GAME_START:
 		case GAME_WIN:
-		case UPDATED_LOCATION:
-		case UPDATED_TIME:
+			runOnUiThread(new Runnable() {
+				public void run() {
+				String title = "Game";
+				if (GameService.isRunning())
+					title = getGame().getScenario().getInfo().getTitle();
+				
+				AlertDialog ad = new AlertDialog.Builder(BaseGameActivity.this).create();
+				ad.setCancelable(false);
+				ad.setTitle(title);
+				ad.setMessage(event.type == EventType.GAME_LOSE ? "You just LOST this game!" : "Congratulations, you WON!");
+				ad.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {  
+						dialog.dismiss();
+	
+						// Stop game service
+						stopService(new Intent(BaseGameActivity.this, GameService.class));
+						
+						// Show main activity
+						Intent startMain = new Intent(BaseGameActivity.this, MainActivity.class);
+						startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+						startActivity(startMain);
+					}
+				});
+				ad.show();
+			}});
 			break;
 		}
 	}
