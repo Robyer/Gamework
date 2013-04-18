@@ -11,6 +11,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import android.content.Context;
 import android.util.Xml;
+import cz.robyer.gamework.game.GameEvent;
 import cz.robyer.gamework.game.GameEvent.EventType;
 import cz.robyer.gamework.hook.Condition;
 import cz.robyer.gamework.hook.Hook;
@@ -75,6 +76,8 @@ public class ScenarioParser {
 	public static final String HOOK_TYPE_AREA_LEAVE = "area_leave";
 	public static final String HOOK_TYPE_VARIABLE = "variable";
 	public static final String HOOK_TYPE_TIME = "time";
+	public static final String HOOK_TYPE_EVENT = "event";
+	public static final String HOOK_TYPE_SCANNER = "scanner";
 	
 	// Trigger constants
 	public static final String TRIGGER_CONDITIONS_NONE = "none";
@@ -231,10 +234,14 @@ public class ScenarioParser {
 	        		itype = Hook.TYPE_AREA_ENTER;
 	        	} else if (type.equalsIgnoreCase(HOOK_TYPE_AREA_LEAVE)) {
 	        		itype = Hook.TYPE_AREA_LEAVE;
-	        	} else if (type.equalsIgnoreCase(HOOK_TYPE_TIME)) {
-	        		itype = Hook.TYPE_TIME;
 	        	} else if (type.equalsIgnoreCase(HOOK_TYPE_VARIABLE)) {
 	        		itype = Hook.TYPE_VARIABLE;
+	        	} else if (type.equalsIgnoreCase(HOOK_TYPE_TIME)) {
+	        		itype = Hook.TYPE_TIME;
+	        	} else if (type.equalsIgnoreCase(HOOK_TYPE_EVENT)) {
+	        		itype = Hook.TYPE_EVENT;
+	        	} else if (type.equalsIgnoreCase(HOOK_TYPE_SCANNER)) {
+	        		itype = Hook.TYPE_SCANNER;
 	        	} else {
 	        		Log.e(TAG, "Hook type '" + type + "' is unknown");
 	        		skip();
@@ -415,6 +422,8 @@ public class ScenarioParser {
     			reaction = new EventReaction(id, EventType.GAME_WIN);
     		} else if (value.equalsIgnoreCase(EVENT_GAME_LOSE)) {
     			reaction = new EventReaction(id, EventType.GAME_LOSE);
+    		} else {
+    			reaction = new EventReaction(id, new GameEvent(EventType.CUSTOM, value));
     		}
     	} else if (type.equalsIgnoreCase(REACTION_TYPE_ACTIVITY)) {
     		reaction = new ActivityReaction(id, value);

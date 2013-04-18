@@ -12,6 +12,9 @@ import android.util.Log;
 import cz.robyer.gamework.game.GameHandler;
 import cz.robyer.gamework.hook.Hook;
 import cz.robyer.gamework.scenario.area.Area;
+import cz.robyer.gamework.scenario.helper.EventHookable;
+import cz.robyer.gamework.scenario.helper.ScannerHookable;
+import cz.robyer.gamework.scenario.helper.TimeHookable;
 import cz.robyer.gamework.scenario.message.Message;
 import cz.robyer.gamework.scenario.reaction.Reaction;
 import cz.robyer.gamework.scenario.variable.Variable;
@@ -35,7 +38,11 @@ public class Scenario {
 	
 	// TODO: implement onLoadComplete listener and wait for its loading before starting game
 	protected final SoundPool soundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
-	protected final TimeUpdater timeUpdater = new TimeUpdater(this);
+	
+	// Helpers providing hookable interface for special events
+	protected final TimeHookable timeHookable = new TimeHookable(this);
+	protected final ScannerHookable scannerHookable = new ScannerHookable(this);
+	protected final EventHookable eventHookable = new EventHookable(this);
 	
 	public Scenario(Context context, ScenarioInfo info) {
 		this.context = context;
@@ -59,11 +66,6 @@ public class Scenario {
 		this.handler = handler;
 	}
 
-	public TimeUpdater getTimeUpdater() {
-		return timeUpdater;
-	}
-
-	
 	public SoundPool getSoundPool() {
 		return soundPool;
 	}
@@ -182,15 +184,21 @@ public class Scenario {
 	}
 
 	public void onTimeUpdate(long time) {
-		// TODO: improve somehow?
-		timeUpdater.updateTime(time);
+		timeHookable.updateTime(time);
 	}
 
 	public void onLocationUpdate(double lat, double lon) {
-		// TODO: improve somehow?
 		for (Area a : areas.values()) {
 			a.updateLocation(lat, lon);
 		}
+	}
+	
+	public void onCustomEvent(Object data) {
+		eventHookable.update(data);
+	}
+	
+	public void onScanned(Object data) {
+		scannerHookable.update(data);
 	}
 
 	private void initializeHooks() {
@@ -211,9 +219,15 @@ public class Scenario {
 				type = "Variable";
 				break;
 			case Hook.TYPE_TIME:
-				hookable = timeUpdater;
+				hookable = timeHookable;
 				type = "Time";
 				break;
+			case Hook.TYPE_SCANNER:
+				hookable = scannerHookable;
+				type = "Scanner";
+				break;
+			case Hook.TYPE_EVENT:
+				hookable = eventHookable;
 			}
 
 			if (hookable != null) {

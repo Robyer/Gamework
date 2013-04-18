@@ -193,21 +193,21 @@
     <!-- Definition of hooks. Only <hook> elements are allowed inside. -->
     <hooks>
         <!-- <hook> contains one or more nested <trigger> elements and these attributes:
-        	- type = one of: area, area_enter, area_leave, variable, time
+        	- type = one of: area, area_enter, area_leave, variable, time, event, scanner
         	- value = depends on particular type:
         		area, area_enter, area_enter: id of area
         		variable: id of variable
         		time: one of: second, minute, hour
-
+				event: value of your custom event
+				scanner: scanned value from code 
         	Types:
         	1. area - this is called when user enters or leaves particular area
         	2. area_enter - same as above, but only when enters
         	3. area_leave - same as above, but only when leaves
         	4. variable - this is called when value of particular variable is changed
         	5. time - this is called when time of game changes
-        	
-        	// TODO: add "qrcode" type to to hook qr code scanning
-        	// TODO: add "event" type to hook custom events
+        	6. event - this is called when is received your custom event
+        	7. scanner - this is called when user scan a code (QR or other)
         	
         	========================================
         	
@@ -259,6 +259,9 @@
 			<trigger reaction="game_lose" conditions="ALL">
            		<condition type="greater" value="5" />
            	</trigger>
+        </hook>
+        <hook type="scanner" value="8594026360061">
+            <trigger reaction="game_win" />
         </hook>
     </hooks>
     

@@ -1,15 +1,17 @@
-package cz.robyer.gamework.scenario;
+package cz.robyer.gamework.scenario.helper;
 
 import android.util.Log;
 import cz.robyer.gamework.hook.Hook;
+import cz.robyer.gamework.scenario.HookableObject;
+import cz.robyer.gamework.scenario.Scenario;
 import cz.robyer.gamework.scenario.variable.DecimalVariable;
 
 /**
- * TimeUpdater distributes time events ({@link #updateTime(long)}) to hooked scenario objects.
+ * This object distributes time events ({@link #updateTime(long)}) to hooked scenario objects.
  * @author Robert Pösel
  */
-public class TimeUpdater extends HookableObject {
-	private static final String TAG = TimeUpdater.class.getSimpleName();
+public class TimeHookable extends HookableObject {
+	private static final String TAG = TimeHookable.class.getSimpleName();
 	
 	private DecimalVariable variable = new DecimalVariable("", 0);
 	
@@ -17,13 +19,17 @@ public class TimeUpdater extends HookableObject {
 	 * Class constructor.
 	 * @param scenario to be attached to.
 	 */
-	public TimeUpdater(Scenario scenario) {
+	public TimeHookable(Scenario scenario) {
 		super("Gamework:TIME");
 		this.scenario = scenario;
 	}
 	
+	/**
+	 * Distributes time data to attached objects.
+	 * @param data - game time value
+	 */
 	public void updateTime(long time) {
-		Log.d(TAG, "Updating time (" + time + ")");		
+		Log.d(TAG, "Distributing time (" + time + ")");		
 		callHooks(time);
 	}
 	

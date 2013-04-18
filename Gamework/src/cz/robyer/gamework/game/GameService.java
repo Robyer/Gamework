@@ -3,14 +3,18 @@ package cz.robyer.gamework.game;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.SystemClock;
@@ -19,6 +23,7 @@ import cz.robyer.gamework.game.GameEvent.EventType;
 import cz.robyer.gamework.scenario.Scenario;
 import cz.robyer.gamework.scenario.ScenarioParser;
 import cz.robyer.gamework.util.Log;
+import cz.robyer.gamework.util.Utils;
 
 /**
  * Main service object representing whole game.
@@ -333,9 +338,73 @@ public abstract class GameService extends Service implements GameEventListener, 
     		if (status == GameStatus.GAME_RUNNING)
     			scenario.onTimeUpdate(time);
     		break;
+    		
+    	case CUSTOM:
+    		if (status == GameStatus.GAME_RUNNING && event.value != null)
+    			scenario.onCustomEvent(event.value);
+    		break;
+    		
+    	case SCANNED_CODE:
+    		if (status == GameStatus.GAME_RUNNING && event.value != null)
+    			scenario.onScanned(event.value);
+    		break;
     	}
     	
     	onEvent(event);
 	}
+    
+    /**
+     * Starts scanner activity or show alert dialog asking for download scanner application first.
+     * @param activity which will wait for result.
+     * @see GameService#onActivityResult(int, int, Intent)
+     */
+    public void startScanner(final Activity activity) {
+    	Intent intent = new Intent(Constants.SCANNER_SCAN);
+
+    	if (Utils.isIntentCallable(getApplicationContext(), intent)) {
+    		activity.startActivityForResult(intent, Constants.SCANNER_CODE);
+    	} else {
+    		AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+    		builder.setMessage(Constants.SCANNER_MISSING)
+    			.setCancelable(true)
+    			.setPositiveButton("Google Play", new DialogInterface.OnClickListener() {
+    				public void onClick(DialogInterface dialog, int id) {
+    					Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.SCANNER_URL_MARKET));
+    					activity.startActivity(intent);
+    				}
+    			})
+    			.setNeutralButton("Web browser", new DialogInterface.OnClickListener() {
+    				public void onClick(DialogInterface dialog, int id) {
+    					Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.SCANNER_URL_DIRECT));
+    					activity.startActivity(intent);
+    				}
+    			})
+    			.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+    				public void onClick(DialogInterface dialog, int id) {
+    					dialog.cancel();
+    				}
+    			});
+
+    		builder.create().show();    		
+    	}
+    }
+
+    /**
+     * Process activity result to handle scanned data. This must be called from Activity, which started {@link #startScanner(Activity)}. 
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     * @return true if code was properly scanned, false otherwise.
+     * @see Activity#onActivityResult(int, int, Intent)
+     * @see GameService#startScanner(Activity)
+     */
+    public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
+    	if (requestCode == Constants.SCANNER_CODE && data != null && data.getExtras() != null) {
+			String result = data.getExtras().getString(Constants.SCANNER_RESULT);
+    		gameHandler.broadcastEvent(new GameEvent(EventType.SCANNED_CODE, result));
+    		return true;
+    	}
+    	return false;
+    }
 
 }

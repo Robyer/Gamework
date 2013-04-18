@@ -19,7 +19,8 @@ public class GameEvent implements Serializable {
 		UPDATED_LOCATION, 	/** Player's location was updated. */
 		UPDATED_TIME,		/** Game time was updated. */
 		UPDATED_MESSAGES,	/** Game message was received */
-		CUSTOM,
+		SCANNED_CODE,		/** User scanned some QR code */
+		CUSTOM,				/** Custom event whose value was defined in scenario */
 	}
 	
 	public final EventType type;

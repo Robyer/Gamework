@@ -23,6 +23,8 @@ public class Hook extends BaseObject {
 	public static final int TYPE_AREA_LEAVE = 2;
 	public static final int TYPE_VARIABLE = 3;
 	public static final int TYPE_TIME = 4;
+	public static final int TYPE_EVENT = 5;
+	public static final int TYPE_SCANNER = 6;
 
 	public static final int CONDITIONS_NONE = 0;
 	public static final int CONDITIONS_ANY = 1;

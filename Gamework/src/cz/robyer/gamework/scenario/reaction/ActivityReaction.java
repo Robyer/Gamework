@@ -1,8 +1,8 @@
 package cz.robyer.gamework.scenario.reaction;
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.util.Log;
+import cz.robyer.gamework.util.Utils;
 
 /**
  * Represents reaction which starts defined activity.
@@ -32,7 +32,7 @@ public class ActivityReaction extends Reaction {
 		intent.putExtra("reaction", id); // distribute reaction id to the activity
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		
-		if (!isCallable(intent)) {
+		if (!Utils.isIntentCallable(getContext(), intent)) {
 			Log.e(TAG, String.format("Activity '%s' is not callable", value));
 			intent = null;
 			return false;
@@ -52,15 +52,6 @@ public class ActivityReaction extends Reaction {
 		}
 		
 		getContext().startActivity(intent);
-	}
-	
-	/**
-	 * Checks if there exists some activity for particular intent.
-	 * @param intent to be checked.
-	 * @return true if intent can be called, false otherwise.
-	 */
-	private boolean isCallable(Intent intent) {
-        return getContext().getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY) != null;
 	}
 
 }

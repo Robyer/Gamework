@@ -6,16 +6,16 @@ Definition of game scenario is located in *.xml file which allows easy reconfigu
 
 How to use
 ==========
-0. Create your Android application (with Activities, etc.)
-1. Include Gamework library into your project
-2. Create file with game scenario (*.xml)
+1. Create your Android application (with Activities, etc.)
+2. Include Gamework library into your project
+3. Create file with game scenario (*.xml)
   - Look at *ExampleGame / assets /* ***example.xml*** to understand scenario structure
-3. Create your game service by inheriting *cz.robyer.gamework.game.GameService* class and implement needed methods:
+4. Create your game service by inheriting *cz.robyer.gamework.game.GameService* class and implement needed methods:
   - *getGameNotification()*
   - *onGameStart()*
   - *onEvent()*
-4. Don't forgot to add your service into *AndroidManifest.xml*
-5. Now you can start game by startService(intent) with Extra String name "filename" with filename of scenario from asets
+5. Don't forgot to add your service into *AndroidManifest.xml*
+6. Now you can start game by startService(intent) with Extra String name "filename" with filename of scenario from asets
 
 -
 **Example of start game service:**

@@ -1,7 +1,7 @@
 package cz.robyer.gamework.util;
 
 /**
- * 
+ * Represents geographic coordinates.
  * @author Robert Pösel
  */
 public class GPoint {

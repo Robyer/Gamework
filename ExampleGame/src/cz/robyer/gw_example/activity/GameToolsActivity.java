@@ -84,7 +84,7 @@ public class GameToolsActivity extends BaseGameActivity {
 		((Button)findViewById(R.id.btn_info)).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (game.getScenario() == null) {
+				if (game != null && game.getScenario() == null) {
 					showNotRunning();
 					return;
 				}
@@ -119,7 +119,7 @@ public class GameToolsActivity extends BaseGameActivity {
 			
 			@Override
 			public void onClick(View v) {
-				if (game.getScenario() == null) {
+				if (game != null && game.getScenario() == null) {
 					showNotRunning();
 					return;
 				}

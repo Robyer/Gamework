@@ -10,11 +10,13 @@ import android.os.Vibrator;
  * @author Robert Pösel
  */
 public class VibrateReaction extends Reaction {
+	private static final int MAX = 5000;
+	
 	protected int value = 100;
 	
 	public VibrateReaction(String id, int value) {
 		super(id);
-		this.value = Math.min(Math.max(value, 1), 5000); // TODO: make limit as constant?
+		this.value = Math.min(Math.max(value, 1), MAX);
 	}
 
 	@Override
