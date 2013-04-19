@@ -8,6 +8,7 @@
 	    <location>Brno</location>				<!-- Location where game is played -->
 	    <duration>1h</duration>					<!-- Estimated duration of one game -->
 	    <difficulty>Easy</difficulty>			<!-- Difficulty of game -->
+	    <description>Testing game</description> <!-- Description of game -->
     </about>
 
     <!-- Definition of game messages. Only <message> elements are allowed inside. -->
@@ -76,7 +77,7 @@
         	- other fields depends on particular type
         	
         	Types:
-        	1. decimal - represents 32-bit integer variable  // TODO: rename to integer?
+        	1. decimal - represents 32-bit integer variable
         	2. boolean - represents boolean variable
         	
         	========================================
@@ -125,7 +126,7 @@
 			- value = path to file with sound sample
 			
         	<reaction type="vibrate"> contains in adition these attributes: // TODO: allow pattern value e.g. "50, 100, 50"
-			- value = number of ms to vibrate
+			- value = number of ms to vibrate or vibration pattern (e.g. "0,50,0,100")
 			
 			<reaction type="message"> contains in adition these attributes:
 			- value = id of <message> to be marked as received

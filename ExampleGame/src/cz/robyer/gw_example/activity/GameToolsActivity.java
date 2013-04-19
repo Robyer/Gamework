@@ -95,14 +95,15 @@ public class GameToolsActivity extends BaseGameActivity {
 				ad.setCancelable(false); // This blocks the 'BACK' button
 				//ad.setIcon(android.R.drawable.ic_dialog_info);
 
-				ad.setTitle(info.getTitle());
+				ad.setTitle(info.title);
 				ad.setMessage(getResources().getString(
 						R.string.scenario_info, 
-							info.getAuthor(),
-							info.getVersion(),
-							info.getLocation(),
-							info.getDuration(),
-							info.getDifficulty()
+							info.author,
+							info.version,
+							info.location,
+							info.duration,
+							info.difficulty,
+							info.description
 						));
 				
 				ad.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {  

@@ -68,7 +68,7 @@ public class GameService extends cz.robyer.gamework.game.GameService {
     			.setWhen(getStartTime())
     	        .setSmallIcon(R.drawable.ic_stat_game)
     	        .setContentIntent(PendingIntent.getActivity(this, 0, notificationIntent, 0))
-    	        .setContentTitle(getScenario().getInfo().getTitle())
+    	        .setContentTitle(getScenario().getInfo().title)
     	        .setContentText(summary);
     	
     	if (text != null)

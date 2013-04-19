@@ -619,6 +619,7 @@ public class ScenarioParser {
 		String location = null;
 		String duration = null;
 		String difficulty = null;
+		String description = null;
 		
 		while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG)
@@ -637,12 +638,14 @@ public class ScenarioParser {
 	        	duration = readText("duration");
 	        } else if (name.equals("difficulty")) {
 	        	difficulty = readText("difficulty");
+	        } else if (name.equals("description")) {
+	        	difficulty = readText("description");
 	        } else {
 	            skip();
 	        }
 	    }
 		
-		ScenarioInfo info = new ScenarioInfo(title, author, version, location, duration, difficulty);
+		ScenarioInfo info = new ScenarioInfo(title, author, version, location, duration, difficulty, description);
 	    scenario = new Scenario(context, info);
 	}
 	

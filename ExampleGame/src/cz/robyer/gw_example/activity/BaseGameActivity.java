@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
 import cz.robyer.gamework.game.GameEvent;
-import cz.robyer.gamework.game.GameEvent.EventType;
 import cz.robyer.gamework.game.GameEventListener;
 import cz.robyer.gamework.game.GameStatus;
 import cz.robyer.gw_example.R;
@@ -140,7 +139,7 @@ public abstract class BaseGameActivity extends BaseActivity implements GameEvent
 	private void showGameWinLoseDialog(boolean won) {
 		String title = "Game";
 		if (GameService.isRunning())
-			title = getGame().getScenario().getInfo().getTitle();
+			title = getGame().getScenario().getInfo().title;
 			
 		AlertDialog ad = new AlertDialog.Builder(BaseGameActivity.this).create();
 		ad.setCancelable(false);

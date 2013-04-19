@@ -6,7 +6,7 @@
     <string name="title_activity_map">Map</string>
     <string name="play_game">Play game</string>
     <string name="help">About / Help</string>
-    <string name="scenario_info">Author: %1$s\nVersion: %2$s\nLocation: %3$s\nDuration: %4$s\nDifficulty: %5$s</string>
+    <string name="scenario_info">Author: %1$s\nVersion: %2$s\nLocation: %3$s\nDuration: %4$s\nDifficulty: %5$s\nDescription: %6$s</string>
     <string name="game_notification_title">Game: %1$s</string>
     <string name="press_back_again_to_quit">Press back again to quit the game.</string>
     <string name="game_not_running">Game is not running.</string>
