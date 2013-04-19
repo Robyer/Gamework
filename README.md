@@ -14,8 +14,8 @@ How to use
   - *getGameNotification()*
   - *onGameStart()*
   - *onEvent()*
-5. Don't forgot to add your service into *AndroidManifest.xml*
-6. Now you can start game by startService(intent) with Extra String name "filename" with filename of scenario from asets
+5. Don't forget to add definition of your service into *AndroidManifest.xml*
+6. Now you can start game by *startService(intent)* with Extra String name "filename", whose value represents filename of scenario in your *assets* folder
 
 -
 **Example of start game service:**
@@ -40,3 +40,7 @@ if (GameService.isRunning()) {
     });
 }
 ```
+
+License
+=======
+Gamework library is licensed under *Apache License Version 2.0*.
