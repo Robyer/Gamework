@@ -5,7 +5,7 @@ import android.util.Log;
 import cz.robyer.gamework.util.Utils;
 
 /**
- * Represents reaction which starts defined activity.
+ * Game reaction which starts activity.
  * @author Robert Pösel
  */
 public class ActivityReaction extends Reaction {
@@ -14,8 +14,8 @@ public class ActivityReaction extends Reaction {
 	
 	/**
 	 * Class constructor.
-	 * @param id Identifier of this reaction.
-	 * @param value Full name (with namespace) of activity class to be started.
+	 * @param id Identificator of this reaction.
+	 * @param value Full name (with namespace) of activity class which should be started.
 	 */
 	public ActivityReaction(String id, String value) {
 		super(id);
@@ -24,6 +24,9 @@ public class ActivityReaction extends Reaction {
 	
 	/**
 	 * Prepares intent which will be used to run activity.
+	 */
+	/* (non-Javadoc)
+	 * @see cz.robyer.gamework.scenario.BaseObject#onScenarioLoaded()
 	 */
 	@Override
 	public boolean onScenarioLoaded() {
@@ -43,6 +46,9 @@ public class ActivityReaction extends Reaction {
 	
 	/**
 	 * Start defined activity (if it exists).
+	 */
+	/* (non-Javadoc)
+	 * @see cz.robyer.gamework.scenario.reaction.Reaction#action()
 	 */
 	@Override
 	public void action() {

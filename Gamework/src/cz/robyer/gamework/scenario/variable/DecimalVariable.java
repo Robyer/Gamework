@@ -60,8 +60,18 @@ public class DecimalVariable extends Variable {
 		}
 	}
 	
-	public void modify(int type, String s) {
-		int value = Integer.parseInt(s);
+	@Override
+	public void modify(int type, Object val) {
+		int value;
+		
+		if (val instanceof Integer)
+			value = (Integer)val;
+		else if (val instanceof String)
+			value = Integer.parseInt((String)val);
+		else {
+			Log.e(TAG, "Not supported VariableReaction value");
+			return;
+		}
 		
 		switch (type) {
 		case VariableReaction.SET:
@@ -81,7 +91,7 @@ public class DecimalVariable extends Variable {
 			break;
 		default:
 			Log.e(TAG, "Not supported VariableReaction type");
-			break;
+			return;
 		}
 		
 		checkLimit();

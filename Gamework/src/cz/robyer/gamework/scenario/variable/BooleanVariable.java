@@ -27,8 +27,18 @@ public class BooleanVariable extends Variable {
 		return value;
 	}
 	
-	public void modify(int type, String s) {
-		boolean value = Boolean.parseBoolean(s);
+	@Override
+	public void modify(int type, Object val) {
+		boolean value;
+		
+		if (val instanceof Integer)
+			value = (Boolean)val;
+		else if (val instanceof String)
+			value = Boolean.parseBoolean((String)val);
+		else {
+			Log.e(TAG, "Not supported VariableReaction value");
+			return;
+		}
 		
 		switch (type) {
 		case VariableReaction.SET:
@@ -39,7 +49,7 @@ public class BooleanVariable extends Variable {
 			break;
 		default:
 			Log.e(TAG, "Not supported VariableReaction type");
-			break;
+			return;
 		}
 		
 		callHooks(this);

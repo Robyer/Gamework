@@ -12,6 +12,6 @@ public abstract class Variable extends HookableObject {
 		super(id);
 	}
 	
-	public abstract void modify(int type, String value);
+	public abstract void modify(int type, Object value);
 	
 }

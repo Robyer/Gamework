@@ -7,7 +7,7 @@ import android.util.Log;
 import cz.robyer.gamework.scenario.Scenario;
 
 /**
- * 
+ * Game reaction which play sound sample.
  * @author Robert Pösel
  */
 public class SoundReaction extends Reaction {
@@ -16,15 +16,19 @@ public class SoundReaction extends Reaction {
 	protected float volume = 1.0f;
 	protected float pitch = 1.0f;
 	
+	/**
+	 * Class constructor.
+	 * @param id Identificator of this reaction.
+	 * @param value Filename of sound name from assets folder to be played.
+	 */
 	public SoundReaction(String id, String value) {
 		super(id);
 		this.value = value;
 	}
-
-	public String getValue() {
-		return value;
-	}
 	
+	/* (non-Javadoc)
+	 * @see cz.robyer.gamework.scenario.BaseObject#setScenario(cz.robyer.gamework.scenario.Scenario)
+	 */
 	@Override
 	public void setScenario(Scenario scenario) {
 		super.setScenario(scenario);
@@ -40,10 +44,17 @@ public class SoundReaction extends Reaction {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see cz.robyer.gamework.scenario.reaction.Reaction#action()
+	 */
 	@Override
 	public void action() {
-		if (soundId != -1)
-			getScenario().getSoundPool().play(soundId, volume, volume, 1, 0, pitch);
+		if (soundId == -1) {
+			Log.e(TAG, String.format("Sound '%s' is not loaded", value));
+			return;
+		}
+		
+		getScenario().getSoundPool().play(soundId, volume, volume, 1, 0, pitch);
 	}
 
 }
