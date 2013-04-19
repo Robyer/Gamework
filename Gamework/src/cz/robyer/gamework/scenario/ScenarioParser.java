@@ -404,7 +404,23 @@ public class ScenarioParser {
 		if (type.equalsIgnoreCase(REACTION_TYPE_SOUND)) {
 			reaction = new SoundReaction(id, value);
     	} else if (type.equalsIgnoreCase(REACTION_TYPE_VIBRATE)) {
-    		reaction = new VibrateReaction(id, Integer.parseInt(value));
+    		String[] values = value.split(", ?");
+    		if (values.length == 1) {
+    			// simple vibrate
+    			reaction = new VibrateReaction(id, Integer.parseInt(value));
+    		} else if (values.length > 1) {
+    			// vibrating pattern
+    			long[] pattern = new long[values.length];
+    			int i = 0;
+    			for (String val : values) {
+    				pattern[i++] = Long.parseLong(val);
+    			}
+    			reaction = new VibrateReaction(id, pattern);
+    		} else {
+    			Log.e(TAG, "Wrong vibrate value/pattern '" + value + "'");
+        		skip();
+        		return null;
+    		}
     	} else if (type.equalsIgnoreCase(REACTION_TYPE_MESSAGE)) {
     		reaction = new MessageReaction(id, value);
     	} else if (type.equalsIgnoreCase(REACTION_TYPE_VAR_DEC)) {
@@ -639,7 +655,7 @@ public class ScenarioParser {
 	        } else if (name.equals("difficulty")) {
 	        	difficulty = readText("difficulty");
 	        } else if (name.equals("description")) {
-	        	difficulty = readText("description");
+	        	description = readText("description");
 	        } else {
 	            skip();
 	        }

@@ -186,8 +186,7 @@ public abstract class BaseGameActivity extends BaseActivity implements GameEvent
 		stopService(intent);
 		
 		// Start main activity
-		Intent startMain = new Intent(Intent.ACTION_MAIN);
-		startMain.addCategory(Intent.CATEGORY_HOME);
+		Intent startMain = new Intent(this, MainActivity.class);
 		startMain.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(startMain);
 		

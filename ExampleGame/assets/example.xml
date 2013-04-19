@@ -125,8 +125,8 @@
 			<reaction type="sound"> contains in adition these attributes:
 			- value = path to file with sound sample
 			
-        	<reaction type="vibrate"> contains in adition these attributes: // TODO: allow pattern value e.g. "50, 100, 50"
-			- value = number of ms to vibrate or vibration pattern (e.g. "0,50,0,100")
+        	<reaction type="vibrate"> contains in adition these attributes:
+			- value = number of ms to vibrate or vibration pattern (e.g. "0, 80, 100, 500")
 			
 			<reaction type="message"> contains in adition these attributes:
 			- value = id of <message> to be marked as received
@@ -148,7 +148,7 @@
         <reaction id="alert" type="sound" value="sounds/rooster.mp3" />
         <reaction id="vibrate1" type="vibrate" value="100" />
         <reaction id="vibrate2" type="vibrate" value="500" />
-        <reaction id="vibrate3" type="vibrate" value="800" />
+        <reaction id="vibrate3" type="vibrate" value="0, 80, 100, 80, 100, 500" />
         <reaction id="testmsg" type="message" value="test" />    
     
         <reaction id="score10" type="var_increment" variable="score" value="10" />
