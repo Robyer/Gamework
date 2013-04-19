@@ -16,11 +16,20 @@ import cz.robyer.gw_example.game.GameService;
 public class MainActivity extends BaseActivity {
 	//private static final String TAG = MainActivity.class.getSimpleName();
 	
+	private ProgressDialog dialog;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		initButtons();
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		if (dialog != null)
+			dialog.dismiss();
 	}
 	
 	/**
@@ -31,7 +40,7 @@ public class MainActivity extends BaseActivity {
 		((Button)findViewById(R.id.btn_play)).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				ProgressDialog.show(MainActivity.this, "", "Loading. Please wait...", true, true);
+				dialog = ProgressDialog.show(MainActivity.this, "", "Loading. Please wait...", true, true);
             	
 				// Start game service with example.xml
 				Intent intent = new Intent(MainActivity.this, GameService.class);

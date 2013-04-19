@@ -104,23 +104,26 @@
         	
         	Types:
         	1. multi - represents container containing more <reaction>s
-        	2. sound - plays sound sample
-        	3. vibrate - vibrates for defined amount of time
-        	4. message - marks <message> as received (= visible for the player)
-        	5. event - send one of game events to start, win or lose game
-        	6. activity - starts any activity defined by it's name
-        	7. var_set - set (=) value of <variable> (could be numeric or true/false value, depending on type of variable)
-        	8. var_increment - increment (+) value of decimal (only!) <variable>
-        	9. var_decrement - decrement (-) value of decimal (only!) <variable>
-        	10. var_multiply - multiply (*) value of decimal (only!) <variable>
-        	11. var_divide - divide (/) value of decimal (only!) <variable> 
-        	12. var_negate - negate (!) value of boolean (only!) <variable>
-        	// TODO: add "ref" (reference) type to call another reaction by his id (and checking cross references in code)
+        	2. ref - represents reference to another reaction - this makes sense only inside multi reaction.
+        	3. sound - plays sound sample
+        	4. vibrate - vibrates for defined amount of time
+        	5. message - marks <message> as received (= visible for the player)
+        	6. event - send one of game events to start, win or lose game
+        	7. activity - starts any activity defined by it's name
+        	8. var_set - set (=) value of <variable> (could be numeric or true/false value, depending on type of variable)
+        	9. var_increment - increment (+) value of decimal (only!) <variable>
+        	10. var_decrement - decrement (-) value of decimal (only!) <variable>
+        	11. var_multiply - multiply (*) value of decimal (only!) <variable>
+        	12. var_divide - divide (/) value of decimal (only!) <variable> 
+        	13. var_negate - negate (!) value of boolean (only!) <variable>
         	
         	========================================
 			<reaction type="multi"> contains in adition nested <reaction> elements of other types.
 			Note: This reaction CAN'T be nested inside another multi reaction.
 				  Nested reactions DON'T have id and can't be called separately.
+			
+			<reaction type="ref"> contains in adition these attributes:
+			- value = identificator of another reaction which should be activated
 			
 			<reaction type="sound"> contains in adition these attributes:
 			- value = path to file with sound sample
@@ -173,7 +176,7 @@
         </reaction>
         
         <reaction id="game_win" type="multi">
-            <reaction type="vibrate" value="500" /> 
+            <reaction type="ref" value="vibrate3" />
             <reaction type="sound" value="sounds/canttouchthis.mp3" />
             <reaction type="event" value="GAME_WIN" />
         </reaction>

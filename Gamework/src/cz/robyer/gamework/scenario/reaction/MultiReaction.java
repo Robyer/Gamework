@@ -47,6 +47,14 @@ public class MultiReaction extends Reaction {
 		}
 		return ok;
 	}
+	
+	/**
+	 * Returns list of reactions.
+	 * @return list of reactions.
+	 */
+	public List<Reaction> getReactions() {
+		return reactions;
+	}
 		
 	/**
 	 * Add child reaction into this container.

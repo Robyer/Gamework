@@ -28,6 +28,7 @@ import cz.robyer.gamework.scenario.reaction.EventReaction;
 import cz.robyer.gamework.scenario.reaction.MessageReaction;
 import cz.robyer.gamework.scenario.reaction.MultiReaction;
 import cz.robyer.gamework.scenario.reaction.Reaction;
+import cz.robyer.gamework.scenario.reaction.ReferenceReaction;
 import cz.robyer.gamework.scenario.reaction.SoundReaction;
 import cz.robyer.gamework.scenario.reaction.VariableReaction;
 import cz.robyer.gamework.scenario.reaction.VariableReaction.OperatorType;
@@ -68,6 +69,7 @@ public class ScenarioParser {
 	public static final String REACTION_TYPE_VAR_NEG = "var_negate";
 	public static final String REACTION_TYPE_EVENT = "event";
 	public static final String REACTION_TYPE_ACTIVITY = "activity";
+	public static final String REACTION_TYPE_REFERENCE = "ref";
 	
 	// Events constants
 	public static final String EVENT_GAME_START = "game_start";
@@ -447,6 +449,8 @@ public class ScenarioParser {
     		}
     	} else if (type.equalsIgnoreCase(REACTION_TYPE_ACTIVITY)) {
     		reaction = new ActivityReaction(id, value);
+    	} else if (type.equalsIgnoreCase(REACTION_TYPE_REFERENCE)) {
+    		reaction = new ReferenceReaction(id, value);
     	} else {
     		Log.e(TAG, "Reaction type '" + type + "' is unknown");
     		skip();
