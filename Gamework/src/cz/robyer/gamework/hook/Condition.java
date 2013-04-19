@@ -13,14 +13,9 @@ import cz.robyer.gamework.util.Log;
 public class Condition extends BaseObject {
 	public static final String TAG = Condition.class.getSimpleName();
 	
-	public static final int TYPE_EQUALS = 0;
-	public static final int TYPE_NOTEQUALS = 1;
-	public static final int TYPE_GREATER = 3;
-	public static final int TYPE_SMALLER = 4;
-	public static final int TYPE_GREATEREQUALS = 5;
-	public static final int TYPE_SMALLEREQUALS = 6;
+	public static enum ConditionType {EQUALS, NOTEQUALS, GREATER, SMALLER, GREATEREQUALS, SMALLEREQUALS};
 	
-	protected int type;
+	protected ConditionType type;
 	protected String variable;
 	protected String value;
 	protected Hook parent;
@@ -31,14 +26,14 @@ public class Condition extends BaseObject {
 	 * @param id of variable for condition, could be empty
 	 * @param value to be compared with value of variable
 	 */
-	public Condition(int type, String variable, String value) {
+	public Condition(ConditionType type, String variable, String value) {
 		super();
 		this.type = type;
 		this.variable = variable;
 		this.value = value;
 	}
 	
-	public int getType() {
+	public ConditionType getType() {
 		return type;
 	}
 	
@@ -79,10 +74,10 @@ public class Condition extends BaseObject {
 			boolean condValue = Boolean.parseBoolean(value);
 			
 			switch (type) {
-			case TYPE_EQUALS:
+			case EQUALS:
 				valid = (varValue == condValue);
 				break;
-			case TYPE_NOTEQUALS:
+			case NOTEQUALS:
 				valid = (varValue != condValue);
 				break;
 			}
@@ -93,22 +88,22 @@ public class Condition extends BaseObject {
 			int condValue = Integer.parseInt(value);
 			
 			switch (type) {
-			case TYPE_EQUALS:
+			case EQUALS:
 				valid = (varValue == condValue);
 				break;
-			case TYPE_NOTEQUALS:
+			case NOTEQUALS:
 				valid = (varValue != condValue);
 				break;
-			case TYPE_GREATER:
+			case GREATER:
 				valid = (varValue > condValue);
 				break;
-			case TYPE_SMALLER:
+			case SMALLER:
 				valid = (varValue < condValue);
 				break;
-			case TYPE_GREATEREQUALS:
+			case GREATEREQUALS:
 				valid = (varValue >= condValue);
 				break;
-			case TYPE_SMALLEREQUALS:
+			case SMALLEREQUALS:
 				valid = (varValue <= condValue);
 				break;
 			}

@@ -11,35 +11,35 @@ import cz.robyer.gamework.scenario.IdentificableObject;
 public class Message extends IdentificableObject {
 	protected String title;
 	protected String value;
-	protected Status status;
+	protected MessageStatus status;
 	protected long received;
 	
-	public static enum Status {NONE, UNREAD, READ, DELETED}
+	public static enum MessageStatus {NONE, UNREAD, READ, DELETED}
 	
 	public Message(String id, String title, String value) {
 		super(id);
 		this.title = title;
 		this.value = value;
-		this.status = Status.NONE;
+		this.status = MessageStatus.NONE;
 	}
 	
-	public void setStatus(Status status) {
+	public void setStatus(MessageStatus status) {
 		this.status = status;
 	}
 	
-	public Status getStatus() {
+	public MessageStatus getStatus() {
 		return status;
 	}
 	
 	public boolean isVisible() {
-		return (status != Status.NONE) && (status != Status.DELETED);
+		return (status != MessageStatus.NONE) && (status != MessageStatus.DELETED);
 	}
 	
 	public void activate() {
-		if (status == Status.NONE) {
+		if (status == MessageStatus.NONE) {
 			GameHandler handler = getScenario().getHandler();
 			
-			status = Status.UNREAD;
+			status = MessageStatus.UNREAD;
 			received = handler.getGameTime();
 			handler.broadcastEvent(EventType.UPDATED_MESSAGES);
 		}

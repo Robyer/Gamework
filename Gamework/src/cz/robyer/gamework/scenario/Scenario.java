@@ -208,26 +208,28 @@ public class Scenario {
 			String type = null;
 			
 			switch (hook.getType()) {
-			case Hook.TYPE_AREA:
-			case Hook.TYPE_AREA_ENTER:
-			case Hook.TYPE_AREA_LEAVE:
+			case AREA:
+			case AREA_ENTER:
+			case AREA_LEAVE:
 				hookable = areas.get(hook.getValue());
 				type = "Area";
 				break;
-			case Hook.TYPE_VARIABLE:
+			case VARIABLE:
 				hookable = variables.get(hook.getValue());
 				type = "Variable";
 				break;
-			case Hook.TYPE_TIME:
+			case TIME:
 				hookable = timeHookable;
 				type = "Time";
 				break;
-			case Hook.TYPE_SCANNER:
+			case SCANNER:
 				hookable = scannerHookable;
 				type = "Scanner";
 				break;
-			case Hook.TYPE_EVENT:
+			case EVENT:
 				hookable = eventHookable;
+				type = "Event";
+				break;
 			}
 
 			if (hookable != null) {

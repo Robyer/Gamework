@@ -48,13 +48,13 @@ public abstract class Area extends HookableObject {
 			boolean valid = false;
 				
 			switch (h.getType()) {
-			case Hook.TYPE_AREA:
+			case AREA:
 				valid = true;
 				break;
-			case Hook.TYPE_AREA_ENTER:
+			case AREA_ENTER:
 				valid = inside;
 				break;
-			case Hook.TYPE_AREA_LEAVE:
+			case AREA_LEAVE:
 				valid = !inside;
 				break;
 			}

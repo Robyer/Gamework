@@ -2,6 +2,7 @@ package cz.robyer.gamework.scenario.helper;
 
 import android.util.Log;
 import cz.robyer.gamework.hook.Hook;
+import cz.robyer.gamework.hook.Hook.HookType;
 import cz.robyer.gamework.scenario.HookableObject;
 import cz.robyer.gamework.scenario.Scenario;
 
@@ -39,7 +40,7 @@ public class EventHookable extends HookableObject {
 			return;
 		
 		for (Hook h : hooks) {
-			if (h.getType() != Hook.TYPE_EVENT)
+			if (h.getType() != HookType.EVENT)
 				continue;
 			
 			if (data instanceof String) {

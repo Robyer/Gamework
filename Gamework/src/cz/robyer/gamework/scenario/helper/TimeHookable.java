@@ -2,6 +2,7 @@ package cz.robyer.gamework.scenario.helper;
 
 import android.util.Log;
 import cz.robyer.gamework.hook.Hook;
+import cz.robyer.gamework.hook.Hook.HookType;
 import cz.robyer.gamework.scenario.HookableObject;
 import cz.robyer.gamework.scenario.Scenario;
 import cz.robyer.gamework.scenario.variable.DecimalVariable;
@@ -47,23 +48,23 @@ public class TimeHookable extends HookableObject {
 		int hours = (int)(time / 3600);
 	
 		for (Hook h : hooks) {
+			if (h.getType() != HookType.TIME)
+				continue;
+			
 			boolean valid = false;
 				
-			switch (h.getType()) {
-			case Hook.TYPE_TIME:				
-				if (h.getValue().equalsIgnoreCase("second")) {
-					valid = true;
-					variable.setValue(seconds);
-				} else if (h.getValue().equalsIgnoreCase("minute")) {
-					valid = (seconds == 0);
-					variable.setValue(minutes);
-				} else if (h.getValue().equalsIgnoreCase("hour")) {
-					valid = (seconds == 0 && minutes == 0);
-					variable.setValue(hours);
-				} else {
-					Log.e(TAG, "Unknown time hook value '" + h.getValue() + "'");
-				}
-				break;
+			if (h.getValue().equalsIgnoreCase("second")) {
+				valid = true;
+				variable.setValue(seconds);
+			} else if (h.getValue().equalsIgnoreCase("minute")) {
+				valid = (seconds == 0);
+				variable.setValue(minutes);
+			} else if (h.getValue().equalsIgnoreCase("hour")) {
+				valid = (seconds == 0 && minutes == 0);
+				variable.setValue(hours);
+			} else {
+				Log.e(TAG, "Unknown time hook value '" + h.getValue() + "'");
+				continue;
 			}
 			
 			if (valid)

@@ -17,23 +17,13 @@ import cz.robyer.gamework.util.Log;
 public class Hook extends BaseObject {
 	private static final String TAG = Hook.class.getSimpleName();
 	
-	// TODO: refactor to enums?
-	public static final int TYPE_AREA = 0;
-	public static final int TYPE_AREA_ENTER = 1;
-	public static final int TYPE_AREA_LEAVE = 2;
-	public static final int TYPE_VARIABLE = 3;
-	public static final int TYPE_TIME = 4;
-	public static final int TYPE_EVENT = 5;
-	public static final int TYPE_SCANNER = 6;
-
-	public static final int CONDITIONS_NONE = 0;
-	public static final int CONDITIONS_ANY = 1;
-	public static final int CONDITIONS_ALL = 2;
+	public static enum HookType {AREA, AREA_ENTER, AREA_LEAVE, VARIABLE, TIME, EVENT, SCANNER};	
+	public static enum HookConditions {NONE, ANY, ALL};
 	
 	public static final int RUN_ALWAYS = -1;
 	
-	protected int type;
-	protected int conditions_type;
+	protected HookType type;
+	protected HookConditions conditions_type;
 	protected int runs;
 	protected String value; 
 	protected String reaction;
@@ -42,7 +32,7 @@ public class Hook extends BaseObject {
 	
 	protected Reaction react;
 	
-	public Hook(int type, String value, String reaction, int conditions_type, int runs) {
+	public Hook(HookType type, String value, String reaction, HookConditions conditions_type, int runs) {
 		super();
 		this.type = type;
 		this.value = value;
@@ -51,12 +41,12 @@ public class Hook extends BaseObject {
 		this.runs = (runs > 0 ? runs : RUN_ALWAYS);
 	}
 	
-	public Hook(int type, String value, String reaction, int conditions) {
-		this(type, value, reaction, conditions, RUN_ALWAYS);
+	public Hook(HookType type, String value, String reaction, HookConditions conditions_type) {
+		this(type, value, reaction, conditions_type, RUN_ALWAYS);
 	}
 	
-	public Hook(int type, String value, String reaction) {
-		this(type, value, reaction, CONDITIONS_NONE, RUN_ALWAYS);
+	public Hook(HookType type, String value, String reaction) {
+		this(type, value, reaction, HookConditions.NONE, RUN_ALWAYS);
 	}
 	
 	@Override
@@ -99,7 +89,7 @@ public class Hook extends BaseObject {
 		return parent;
 	}
 	
-	public int getType() {
+	public HookType getType() {
 		return type;
 	}
 	
@@ -136,11 +126,11 @@ public class Hook extends BaseObject {
 		boolean valid = false;
 			
 		switch (conditions_type) {
-		case CONDITIONS_NONE:
+		case NONE:
 			valid = true;
-			Log.v(TAG, "Checking NO conditions, valid=" + valid);
+			Log.v(TAG, "Checking NO conditions");
 			break;
-		case CONDITIONS_ALL:
+		case ALL:
 			valid = true;
 			if (conditions != null)
 				for (Condition condition : conditions) {
@@ -151,7 +141,7 @@ public class Hook extends BaseObject {
 				}
 			Log.v(TAG, "Checking ALL conditions, valid=" + valid);
 			break;
-		case CONDITIONS_ANY:
+		case ANY:
 			if (conditions != null)
 				for (Condition condition : conditions) {
 					if (condition.isValid(variable)) {

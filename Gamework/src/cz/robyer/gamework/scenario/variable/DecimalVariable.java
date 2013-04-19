@@ -2,7 +2,7 @@ package cz.robyer.gamework.scenario.variable;
 
 import java.security.InvalidParameterException;
 
-import cz.robyer.gamework.scenario.reaction.VariableReaction;
+import cz.robyer.gamework.scenario.reaction.VariableReaction.OperatorType;
 import cz.robyer.gamework.util.Log;
 
 /**
@@ -61,7 +61,7 @@ public class DecimalVariable extends Variable {
 	}
 	
 	@Override
-	public void modify(int type, Object val) {
+	public void modify(OperatorType type, Object val) {
 		int value;
 		
 		if (val instanceof Integer)
@@ -74,19 +74,19 @@ public class DecimalVariable extends Variable {
 		}
 		
 		switch (type) {
-		case VariableReaction.SET:
+		case SET:
 			this.value = value;
 			break;
-		case VariableReaction.INCREMENT:
+		case INCREMENT:
 			this.value += value;
 			break;
-		case VariableReaction.DECREMENT:
+		case DECREMENT:
 			this.value -= value;
 			break;
-		case VariableReaction.MULTIPLY:
+		case MULTIPLY:
 			this.value *= value;
 			break;
-		case VariableReaction.DIVIDE:
+		case DIVIDE:
 			this.value /= value;
 			break;
 		default:

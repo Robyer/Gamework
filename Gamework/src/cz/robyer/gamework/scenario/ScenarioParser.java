@@ -14,7 +14,10 @@ import android.util.Xml;
 import cz.robyer.gamework.game.GameEvent;
 import cz.robyer.gamework.game.GameEvent.EventType;
 import cz.robyer.gamework.hook.Condition;
+import cz.robyer.gamework.hook.Condition.ConditionType;
 import cz.robyer.gamework.hook.Hook;
+import cz.robyer.gamework.hook.Hook.HookConditions;
+import cz.robyer.gamework.hook.Hook.HookType;
 import cz.robyer.gamework.scenario.area.Area;
 import cz.robyer.gamework.scenario.area.MultiPointArea;
 import cz.robyer.gamework.scenario.area.PointArea;
@@ -27,6 +30,7 @@ import cz.robyer.gamework.scenario.reaction.MultiReaction;
 import cz.robyer.gamework.scenario.reaction.Reaction;
 import cz.robyer.gamework.scenario.reaction.SoundReaction;
 import cz.robyer.gamework.scenario.reaction.VariableReaction;
+import cz.robyer.gamework.scenario.reaction.VariableReaction.OperatorType;
 import cz.robyer.gamework.scenario.reaction.VibrateReaction;
 import cz.robyer.gamework.scenario.variable.BooleanVariable;
 import cz.robyer.gamework.scenario.variable.DecimalVariable;
@@ -226,22 +230,22 @@ public class ScenarioParser {
 	        	
 	        	String type = parser.getAttributeValue(null, "type");
 	        	String value = parser.getAttributeValue(null, "value");
-	        	int itype;
+	        	HookType itype;
 	        	
 	        	if (type.equalsIgnoreCase(HOOK_TYPE_AREA)) {
-	        		itype = Hook.TYPE_AREA;
+	        		itype = HookType.AREA;
 	        	} else if (type.equalsIgnoreCase(HOOK_TYPE_AREA_ENTER)) {
-	        		itype = Hook.TYPE_AREA_ENTER;
+	        		itype = HookType.AREA_ENTER;
 	        	} else if (type.equalsIgnoreCase(HOOK_TYPE_AREA_LEAVE)) {
-	        		itype = Hook.TYPE_AREA_LEAVE;
+	        		itype = HookType.AREA_LEAVE;
 	        	} else if (type.equalsIgnoreCase(HOOK_TYPE_VARIABLE)) {
-	        		itype = Hook.TYPE_VARIABLE;
+	        		itype = HookType.VARIABLE;
 	        	} else if (type.equalsIgnoreCase(HOOK_TYPE_TIME)) {
-	        		itype = Hook.TYPE_TIME;
+	        		itype = HookType.TIME;
 	        	} else if (type.equalsIgnoreCase(HOOK_TYPE_EVENT)) {
-	        		itype = Hook.TYPE_EVENT;
+	        		itype = HookType.EVENT;
 	        	} else if (type.equalsIgnoreCase(HOOK_TYPE_SCANNER)) {
-	        		itype = Hook.TYPE_SCANNER;
+	        		itype = HookType.SCANNER;
 	        	} else {
 	        		Log.e(TAG, "Hook type '" + type + "' is unknown");
 	        		skip();
@@ -269,7 +273,7 @@ public class ScenarioParser {
 		parser.require(XmlPullParser.END_TAG, ns, "hooks");
 	}
 
-	private Hook readTrigger(int hook_type, String hook_value) throws XmlPullParserException, IOException {
+	private Hook readTrigger(HookType hook_type, String hook_value) throws XmlPullParserException, IOException {
 		Hook hook = null;
 		parser.require(XmlPullParser.START_TAG, ns, "trigger");
 		
@@ -277,16 +281,16 @@ public class ScenarioParser {
 		String conditions = parser.getAttributeValue(null, "conditions");
 		String run = parser.getAttributeValue(null, "run");
 		
-		int conditions_type;
+		HookConditions conditions_type;
 		if (conditions == null || conditions.equalsIgnoreCase(TRIGGER_CONDITIONS_NONE)) {
-			conditions_type = Hook.CONDITIONS_NONE;
+			conditions_type = HookConditions.NONE;
 		} else if (conditions.equalsIgnoreCase(TRIGGER_CONDITIONS_ALL)) {
-			conditions_type = Hook.CONDITIONS_ALL;
+			conditions_type = HookConditions.ALL;
 		} else if (conditions.equalsIgnoreCase(TRIGGER_CONDITIONS_ANY)) {
-			conditions_type = Hook.CONDITIONS_ANY;
+			conditions_type = HookConditions.ANY;
 		} else {
 			Log.d(TAG, "Conditions='" + conditions + "' is unknown. Used no conditions");
-			conditions_type = Hook.CONDITIONS_NONE;
+			conditions_type = HookConditions.NONE;
 		}
 		
 		int runs = Hook.RUN_ALWAYS;
@@ -306,20 +310,20 @@ public class ScenarioParser {
 				String type = parser.getAttributeValue(null, "type");
 				String variable = parser.getAttributeValue(null, "variable");
 				String value = parser.getAttributeValue(null, "value");
-				int itype;
+				ConditionType itype;
 				
 				if (type.equalsIgnoreCase(CONDITION_TYPE_EQUALS)) {
-					itype = Condition.TYPE_EQUALS;
+					itype = ConditionType.EQUALS;
 				} else if (type.equalsIgnoreCase(CONDITION_TYPE_NOTEQUALS)) {
-					itype = Condition.TYPE_NOTEQUALS;
+					itype = ConditionType.NOTEQUALS;
 				} else if (type.equalsIgnoreCase(CONDITION_TYPE_GREATER)) {
-					itype = Condition.TYPE_GREATER;
+					itype = ConditionType.GREATER;
 				} else if (type.equalsIgnoreCase(CONDITION_TYPE_SMALLER)) {
-					itype = Condition.TYPE_SMALLER;
+					itype = ConditionType.SMALLER;
 				} else if (type.equalsIgnoreCase(CONDITION_TYPE_GREATEREQUALS)) {
-					itype = Condition.TYPE_GREATEREQUALS;
+					itype = ConditionType.GREATEREQUALS;
 				} else if (type.equalsIgnoreCase(CONDITION_TYPE_SMALLEREQUALS)) {
-					itype = Condition.TYPE_SMALLEREQUALS;
+					itype = ConditionType.SMALLEREQUALS;
 				} else {
 					Log.e(TAG, "Condition type '" + type + "' is unknown");
 	        		skip();
@@ -404,17 +408,17 @@ public class ScenarioParser {
     	} else if (type.equalsIgnoreCase(REACTION_TYPE_MESSAGE)) {
     		reaction = new MessageReaction(id, value);
     	} else if (type.equalsIgnoreCase(REACTION_TYPE_VAR_DEC)) {
-    		reaction = new VariableReaction(id, VariableReaction.DECREMENT, variable, value);
+    		reaction = new VariableReaction(id, OperatorType.DECREMENT, variable, value);
     	} else if (type.equalsIgnoreCase(REACTION_TYPE_VAR_DIV)) {
-    		reaction = new VariableReaction(id, VariableReaction.DIVIDE, variable, value);
+    		reaction = new VariableReaction(id, OperatorType.DIVIDE, variable, value);
     	} else if (type.equalsIgnoreCase(REACTION_TYPE_VAR_INC)) {
-    		reaction = new VariableReaction(id, VariableReaction.INCREMENT, variable, value);
+    		reaction = new VariableReaction(id, OperatorType.INCREMENT, variable, value);
     	} else if (type.equalsIgnoreCase(REACTION_TYPE_VAR_MUL)) {
-    		reaction = new VariableReaction(id, VariableReaction.MULTIPLY, variable, value);
+    		reaction = new VariableReaction(id, OperatorType.MULTIPLY, variable, value);
     	} else if (type.equalsIgnoreCase(REACTION_TYPE_VAR_NEG)) {
-    		reaction = new VariableReaction(id, VariableReaction.NEGATE, variable, value);
+    		reaction = new VariableReaction(id, OperatorType.NEGATE, variable, value);
     	} else if (type.equalsIgnoreCase(REACTION_TYPE_VAR_SET)) {
-    		reaction = new VariableReaction(id, VariableReaction.SET, variable, value);
+    		reaction = new VariableReaction(id, OperatorType.SET, variable, value);
     	} else if (type.equalsIgnoreCase(REACTION_TYPE_EVENT)) {
     		if (value.equalsIgnoreCase(EVENT_GAME_START)) {
     			reaction = new EventReaction(id, EventType.GAME_START);

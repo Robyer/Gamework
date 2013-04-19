@@ -1,6 +1,6 @@
 package cz.robyer.gamework.scenario.variable;
 
-import cz.robyer.gamework.scenario.reaction.VariableReaction;
+import cz.robyer.gamework.scenario.reaction.VariableReaction.OperatorType;
 import cz.robyer.gamework.util.Log;
 
 /**
@@ -28,7 +28,7 @@ public class BooleanVariable extends Variable {
 	}
 	
 	@Override
-	public void modify(int type, Object val) {
+	public void modify(OperatorType type, Object val) {
 		boolean value;
 		
 		if (val instanceof Integer)
@@ -41,10 +41,10 @@ public class BooleanVariable extends Variable {
 		}
 		
 		switch (type) {
-		case VariableReaction.SET:
+		case SET:
 			this.value = value;
 			break;
-		case VariableReaction.NEGATE:
+		case NEGATE:
 			this.value = !this.value;
 			break;
 		default:

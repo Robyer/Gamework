@@ -1,6 +1,7 @@
 package cz.robyer.gamework.scenario.variable;
 
 import cz.robyer.gamework.scenario.HookableObject;
+import cz.robyer.gamework.scenario.reaction.VariableReaction.OperatorType;
 
 /**
  * Abstract variable object.
@@ -12,6 +13,6 @@ public abstract class Variable extends HookableObject {
 		super(id);
 	}
 	
-	public abstract void modify(int type, Object value);
+	public abstract void modify(OperatorType type, Object value);
 	
 }

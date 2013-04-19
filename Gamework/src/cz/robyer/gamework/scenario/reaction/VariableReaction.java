@@ -10,19 +10,11 @@ import cz.robyer.gamework.scenario.variable.Variable;
  * @author Robert Pösel
  */
 public class VariableReaction extends Reaction {
-	// TODO: refactor to enums
-	public static final int SET = 0;
-	// decimals only
-	public static final int INCREMENT = 1;
-	public static final int DECREMENT = 2;
-	public static final int MULTIPLY = 3;
-	public static final int DIVIDE = 4;
-	// booleans only
-	public static final int NEGATE = 5;
+	public static enum OperatorType {SET, INCREMENT, DECREMENT, MULTIPLY, DIVIDE, NEGATE};
 	
 	protected String variable;
 	protected String value;
-	protected int type;
+	protected OperatorType type;
 	
 	/** holds Variable object from scenario to optimize access time */
 	protected Variable var;
@@ -36,7 +28,7 @@ public class VariableReaction extends Reaction {
 	 * @param variable Identificator of variable which should be modified.
 	 * @param value Value which will be used in modification.
 	 */
-	public VariableReaction(String id, int type, String variable, String value) {
+	public VariableReaction(String id, OperatorType type, String variable, String value) {
 		super(id);
 		this.type = type;
 		this.variable = variable;
