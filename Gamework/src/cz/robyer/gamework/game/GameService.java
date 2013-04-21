@@ -21,7 +21,7 @@ import android.os.SystemClock;
 import cz.robyer.gamework.constants.Constants;
 import cz.robyer.gamework.game.GameEvent.EventType;
 import cz.robyer.gamework.scenario.Scenario;
-import cz.robyer.gamework.scenario.ScenarioParser;
+import cz.robyer.gamework.scenario.parser.XmlScenarioParser;
 import cz.robyer.gamework.util.Log;
 import cz.robyer.gamework.util.Utils;
 
@@ -88,7 +88,7 @@ public abstract class GameService extends Service implements GameEventListener, 
     	
     	status = GameStatus.GAME_LOADING;
     	String filename = intent.getStringExtra("filename");
-    	scenario = ScenarioParser.fromAsset(getApplicationContext(), filename);
+    	scenario = XmlScenarioParser.fromAsset(getApplicationContext(), filename);
     	if (scenario == null) {
     		Log.e(TAG, "Scenario '" + filename + "' wasn't loaded");
     		status = GameStatus.GAME_NONE;

@@ -1,4 +1,4 @@
-package cz.robyer.gamework.scenario;
+package cz.robyer.gamework.scenario.parser;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -18,6 +18,8 @@ import cz.robyer.gamework.hook.Condition.ConditionType;
 import cz.robyer.gamework.hook.Hook;
 import cz.robyer.gamework.hook.Hook.HookConditions;
 import cz.robyer.gamework.hook.Hook.HookType;
+import cz.robyer.gamework.scenario.Scenario;
+import cz.robyer.gamework.scenario.ScenarioInfo;
 import cz.robyer.gamework.scenario.area.Area;
 import cz.robyer.gamework.scenario.area.MultiPointArea;
 import cz.robyer.gamework.scenario.area.PointArea;
@@ -43,8 +45,8 @@ import cz.robyer.gamework.util.Log;
  * 
  * @author Robert Pösel
  */
-public class ScenarioParser {
-	private static final String TAG = ScenarioParser.class.getSimpleName();
+public class XmlScenarioParser {
+	private static final String TAG = XmlScenarioParser.class.getSimpleName();
     private static final String ns = null; // We don't use namespaces
     	
     // Area constants
@@ -115,7 +117,7 @@ public class ScenarioParser {
 		Scenario scenario = null;
 		InputStream stream = null;
 		try {
-			ScenarioParser parser = new ScenarioParser(context, false);
+			XmlScenarioParser parser = new XmlScenarioParser(context, false);
 			File file = context.getFileStreamPath(filename);
 			stream = new BufferedInputStream(new FileInputStream(file));
 			scenario = parser.parse(stream, aboutOnly);
@@ -137,7 +139,7 @@ public class ScenarioParser {
 		Scenario scenario = null;
 		InputStream stream = null;
 		try {
-			ScenarioParser parser = new ScenarioParser(context, false);
+			XmlScenarioParser parser = new XmlScenarioParser(context, false);
 			stream = context.getAssets().open(filename);
 			scenario = parser.parse(stream, aboutOnly);
 		} catch (Exception e) {
@@ -153,7 +155,7 @@ public class ScenarioParser {
 		return scenario;
 	}
     
-    public ScenarioParser(Context context, boolean namespaces) throws XmlPullParserException {
+    public XmlScenarioParser(Context context, boolean namespaces) throws XmlPullParserException {
     	this.context = context;
     	this.parser = Xml.newPullParser();
     	this.parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, namespaces);
