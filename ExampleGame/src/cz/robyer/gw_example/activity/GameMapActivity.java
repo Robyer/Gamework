@@ -18,6 +18,7 @@ import com.google.android.gms.maps.model.PolygonOptions;
 
 import cz.robyer.gamework.game.GameEvent;
 import cz.robyer.gamework.game.GameService;
+import cz.robyer.gamework.game.GameStatus;
 import cz.robyer.gamework.scenario.Scenario;
 import cz.robyer.gamework.scenario.area.Area;
 import cz.robyer.gamework.scenario.area.MultiPointArea;
@@ -29,7 +30,6 @@ import cz.robyer.gw_example.R;
 /**
  * Represents game map with showed areas and player position.
  * @author Robert Pösel
- *
  */
 public class GameMapActivity extends BaseGameActivity {
 	private static final String TAG = GameMapActivity.class.getSimpleName();
@@ -94,12 +94,13 @@ public class GameMapActivity extends BaseGameActivity {
 	        	    	Thing thing = entry.getValue();
 	        	    	...
 	        		}*/
-		        	map.setMyLocationEnabled(true);
+		        	if (game.getStatus() == GameStatus.GAME_RUNNING)
+		        		map.setMyLocationEnabled(true);
 
 		        	Location loc = game.getLocation();
 		        	if (loc != null) {
 		        		LatLng pos = new LatLng(loc.getLatitude(), loc.getLongitude());
-		        		CameraUpdate update = CameraUpdateFactory.newLatLngZoom(pos, 10);
+		        		CameraUpdate update = CameraUpdateFactory.newLatLngZoom(pos, 12);
 		        		map.moveCamera(update);
 		        	}
 	    		}
@@ -108,16 +109,22 @@ public class GameMapActivity extends BaseGameActivity {
 	}
 	
 	/**
-	 * Checks UPDATED_LOCATION event and updates player position on map.
+	 * Checks game events and enabled/disables player location layer.
 	 */
 	public void receiveEvent(GameEvent event) {
 		super.receiveEvent(event);
 		
 		switch (event.type) {
-		case UPDATED_LOCATION:
-			// TODO: update position of user on map
-	    	//myLatitude.setText(String.valueOf(location.getLatitude()));
-			//myLongitude.setText(String.valueOf(location.getLongitude()));    	
+		case GAME_START:
+			if (map != null)
+        		map.setMyLocationEnabled(true);
+			break;
+		case GAME_LOSE:
+		case GAME_PAUSE:
+		case GAME_QUIT:
+		case GAME_WIN:
+			if (map != null)
+				map.setMyLocationEnabled(false);
 			break;
 		}
 	}
