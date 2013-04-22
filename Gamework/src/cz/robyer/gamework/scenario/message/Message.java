@@ -1,5 +1,6 @@
 package cz.robyer.gamework.scenario.message;
 
+import cz.robyer.gamework.game.GameEvent;
 import cz.robyer.gamework.game.GameEvent.EventType;
 import cz.robyer.gamework.game.GameHandler;
 import cz.robyer.gamework.scenario.IdentificableObject;
@@ -41,7 +42,7 @@ public class Message extends IdentificableObject {
 			
 			status = MessageStatus.UNREAD;
 			received = handler.getGameTime();
-			handler.broadcastEvent(EventType.UPDATED_MESSAGES);
+			handler.broadcastEvent(new GameEvent(EventType.UPDATED_MESSAGES, id));
 		}
 	}
 	

@@ -27,7 +27,7 @@ public class GameEvent implements Serializable {
 	public final Object value;
 	
 	/**
-	 * Class constructor.
+	 * Class constructor for basic events without value.
 	 * @param type
 	 */
 	public GameEvent(EventType type) {
@@ -35,7 +35,7 @@ public class GameEvent implements Serializable {
 	}
 	
 	/**
-	 * Class constructor for custom events. // TODO: use values also for UPDATED_* events?
+	 * Class constructor for events which contains additional value.
 	 * @param type
 	 * @param value
 	 */

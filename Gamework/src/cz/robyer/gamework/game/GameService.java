@@ -190,11 +190,13 @@ public abstract class GameService extends Service implements GameEventListener, 
     
     /**
 	 * Calculate and update actual game time.
+	 * @return time - actual game time
 	 */
-	private final void updateGameTime() {
+	private final long updateGameTime() {
 		long now = SystemClock.uptimeMillis();
 		time += now - lastTime;
 		lastTime = now;
+		return time;
 	}
 	
 	/**
@@ -203,7 +205,7 @@ public abstract class GameService extends Service implements GameEventListener, 
     @Override
     public final void onLocationChanged(Location location) {
     	this.location = location;
-    	gameHandler.broadcastEvent(EventType.UPDATED_LOCATION);
+    	gameHandler.broadcastEvent(new GameEvent(EventType.UPDATED_LOCATION, location));
     }
 
 	@Override public final void onProviderDisabled(String provider) {}
@@ -262,8 +264,8 @@ public abstract class GameService extends Service implements GameEventListener, 
         	timer.schedule(new TimerTask() {
         		@Override
         		public void run() {
-        			updateGameTime();
-        			gameHandler.broadcastEvent(EventType.UPDATED_TIME);
+        			long time = updateGameTime();
+        			gameHandler.broadcastEvent(new GameEvent(EventType.UPDATED_TIME, time));
         		}
         	}, 1000, 1000);
 		}
@@ -330,13 +332,17 @@ public abstract class GameService extends Service implements GameEventListener, 
     		break;
    	  		
     	case UPDATED_LOCATION:
-    		if (status == GameStatus.GAME_RUNNING && location != null)
-    			scenario.onLocationUpdate(location.getLatitude(), location.getLongitude());
+    		if (status == GameStatus.GAME_RUNNING && location != null) {
+    			Location loc = event.value != null ? (Location)event.value : location;
+    			scenario.onLocationUpdate(loc.getLatitude(), loc.getLongitude());
+    		}
     		break;
     		
     	case UPDATED_TIME:
-    		if (status == GameStatus.GAME_RUNNING)
-    			scenario.onTimeUpdate(time);
+    		if (status == GameStatus.GAME_RUNNING) {
+    			long t = event.value != null ? (Long)event.value : time;
+    			scenario.onTimeUpdate(t);
+    		}
     		break;
     		
     	case CUSTOM:
