@@ -136,30 +136,34 @@ public abstract class BaseGameActivity extends BaseActivity implements GameEvent
 		}
 	}
 	
-	private void showGameWinLoseDialog(boolean won) {
-		String title = "Game";
-		if (GameService.isRunning())
-			title = getGame().getScenario().getInfo().title;
-			
-		AlertDialog ad = new AlertDialog.Builder(BaseGameActivity.this).create();
-		ad.setCancelable(false);
-		ad.setTitle(title);
-		ad.setMessage(won ? "Congratulations, you WON!" : "You just LOST this game!");
-		ad.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {  
-				dialog.dismiss();
-
-				// Stop game service
-				stopService(new Intent(BaseGameActivity.this, GameService.class));
+	private void showGameWinLoseDialog(final boolean won) {
+		runOnUiThread(new Runnable() {
+		    public void run() {
+				String title = "Game";
+				if (GameService.isRunning())
+					title = getGame().getScenario().getInfo().title;
 					
-				// Show main activity
-				Intent startMain = new Intent(BaseGameActivity.this, MainActivity.class);
-				startMain.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-				startActivity(startMain);
-			}
+				AlertDialog ad = new AlertDialog.Builder(BaseGameActivity.this).create();
+				ad.setCancelable(false);
+				ad.setTitle(title);
+				ad.setMessage(won ? "Congratulations, you WON!" : "You just LOST this game!");
+				ad.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {  
+						dialog.dismiss();
+		
+						// Stop game service
+						stopService(new Intent(BaseGameActivity.this, GameService.class));
+							
+						// Show main activity
+						Intent startMain = new Intent(BaseGameActivity.this, MainActivity.class);
+						startMain.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+						startActivity(startMain);
+					}
+				});
+				ad.show();
+		    }
 		});
-		ad.show();
 	}
 	
 	/**
