@@ -34,12 +34,19 @@ public class SoundReaction extends Reaction {
 		super.setScenario(scenario);
 		
 		if (soundId == -1) {
+			AssetFileDescriptor descriptor = null;
 			try {
-				AssetFileDescriptor descriptor = getContext().getAssets().openFd(value);
+				descriptor = getContext().getAssets().openFd(value);
 				soundId = getScenario().getSoundPool().load(descriptor, 1);
-				descriptor.close();
 			} catch (IOException e) {
 				Log.e(TAG, String.format("Can't load sound '%s'", value));
+			} finally {
+				try {
+		        	if (descriptor != null)
+		        		descriptor.close();
+		        } catch (IOException ioe) {
+		        	Log.e(TAG, ioe.getMessage(), ioe);
+		        }
 			}
 		}
 	}
