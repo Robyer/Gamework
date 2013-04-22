@@ -160,7 +160,6 @@ public class Scenario {
 	}
 	
 	public List<Message> getVisibleMessages() {
-		// TODO: Refactor this. Keep visibleMessages array persistent in Scenario so it won't be created every time when requested.
 		List<Message> list = new ArrayList<Message>();
 		for (Message m : messages.values()) {
 			if (m.isVisible())

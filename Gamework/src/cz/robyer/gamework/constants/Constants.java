@@ -5,8 +5,10 @@ package cz.robyer.gamework.constants;
  * @author Robert Pösel
  */
 public class Constants {
-	public static final int NOTIFICATION_GAMEPLAY = 1; /** Game notification id */
+	/** Game notification id */
+	public static final int NOTIFICATION_GAMEPLAY = 1;
 	
+	/** Scanner constants */
 	public static final int SCANNER_CODE = 0;
 	public static final String SCANNER_SCAN = "la.droid.qr.scan";
 	public static final String SCANNER_RESULT = "la.droid.qr.result";

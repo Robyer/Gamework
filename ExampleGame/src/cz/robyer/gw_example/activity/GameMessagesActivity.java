@@ -10,8 +10,10 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import cz.robyer.gamework.game.GameEvent;
+import cz.robyer.gamework.game.GameService;
 import cz.robyer.gamework.scenario.message.Message;
 import cz.robyer.gw_example.R;
+import cz.robyer.gw_example.service.MessageAdapter;
 
 /**
  * Represents list of game messages.
@@ -36,19 +38,21 @@ public class GameMessagesActivity extends BaseGameActivity {
 		
 		ListView list = (ListView)findViewById(R.id.list_messages);
 		
-		messages = getGame().getScenario().getVisibleMessages();
-		adapter = new ArrayAdapter<Message>(this, android.R.layout.simple_list_item_1, android.R.id.text1, messages);
-		
-		list.setAdapter(adapter);
-		list.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Intent intent = new Intent(GameMessagesActivity.this, MessageActivity.class);
-				intent.putExtra("position", position);
-				intent.putExtra("id", id);
-				startActivity(intent);
-			}
-		});
+		if (GameService.isRunning()) {
+			messages = getGame().getScenario().getVisibleMessages();
+			adapter = new MessageAdapter(this, R.layout.messagelist_item, messages);
+			
+			list.setAdapter(adapter);
+			list.setOnItemClickListener(new OnItemClickListener() {
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+					Intent intent = new Intent(GameMessagesActivity.this, MessageActivity.class);
+					Message msg = messages.get(position);
+					intent.putExtra("id", msg.getId());
+					startActivity(intent);
+				}
+			});
+		}
 	}
 	
 	/**

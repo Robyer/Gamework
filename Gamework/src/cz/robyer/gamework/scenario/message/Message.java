@@ -1,12 +1,16 @@
 package cz.robyer.gamework.scenario.message;
 
+import java.io.IOException;
+import java.io.InputStream;
+
+import android.util.Log;
 import cz.robyer.gamework.game.GameEvent;
 import cz.robyer.gamework.game.GameEvent.EventType;
 import cz.robyer.gamework.game.GameHandler;
 import cz.robyer.gamework.scenario.IdentificableObject;
 
 /**
- * 
+ * Represents in-game message.
  * @author Robert Pösel
  */
 public class Message extends IdentificableObject {
@@ -30,6 +34,40 @@ public class Message extends IdentificableObject {
 	
 	public MessageStatus getStatus() {
 		return status;
+	}
+	
+	public String getTitle() {
+		return title;
+	}
+	
+	public String getContent() {
+		InputStream stream = null;
+		String content = null;
+		try {
+			stream = getContext().getAssets().open(value);
+			int size = stream.available();
+            byte[] buffer = new byte[size];
+            stream.read(buffer);
+            content = new String(buffer);
+		} catch (IOException e) {
+			Log.e(TAG, String.format("Can't load file '%s'", value));
+		} finally {
+			try {
+	        	if (stream != null)
+	        		stream.close();
+	        } catch (IOException ioe) {
+	        	Log.e(TAG, ioe.getMessage(), ioe);
+	        }
+		}
+		return content;
+	}
+	
+	public long getReceived() {
+		return received;
+	}
+	
+	public String getValue() {
+		return value;
 	}
 	
 	public boolean isVisible() {
