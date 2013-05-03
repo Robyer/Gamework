@@ -5,7 +5,7 @@ import cz.robyer.gamework.hook.Hook;
 import cz.robyer.gamework.scenario.HookableObject;
 
 /**
- * 
+ * This is basic abstract object for game areas.
  * @author Robert Pösel
  */
 public abstract class Area extends HookableObject {
@@ -27,8 +27,19 @@ public abstract class Area extends HookableObject {
 		return inArea;
 	}
 	
+	/**
+	 * Checks if particular latitude and longitude is in this area.
+	 * @param lat latitude
+	 * @param lon longitude
+	 * @return true if location is inside area, false otherwise
+	 */
 	abstract protected boolean isPointInArea(double lat, double lon);
 	
+	/**
+	 * Updates actual location of player for this area and call hooks if entering/leaving.
+	 * @param lat latitude of player
+	 * @param lon longitude of player
+	 */
 	public void updateLocation(double lat, double lon) {
 		boolean r = isPointInArea(lat, lon);
 		
@@ -40,6 +51,10 @@ public abstract class Area extends HookableObject {
 		}
 	}
 	
+	/**
+	 * Call valid attached hooks.
+	 * @param inside - did player entered or leaved this area?
+	 */
 	protected void callHooks(boolean inside) {
 		if (hooks == null)
 			return;

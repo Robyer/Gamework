@@ -10,23 +10,45 @@ import cz.robyer.gamework.util.Log;
 public class BooleanVariable extends Variable {
 	protected boolean value;
 	
+	/**
+	 * Class constructor.
+	 * @param id - identificator of variable
+	 * @param value - actual (default) value
+	 */
 	public BooleanVariable(String id, boolean value) {
 		super(id);
 		this.value = value;
 	}
 	
+	/**
+	 * Factory for creating this variable from string value.
+	 * @param id - identificator of variable
+	 * @param value - actual (default) value a string
+	 * @return BooleanVariable
+	 */
 	public static BooleanVariable fromString(String id, String value) {
 		return new BooleanVariable(id, Boolean.parseBoolean(value));
 	}
 	
+	/**
+	 * Sets value of this variable.
+	 * @param value to be set
+	 */
 	public void setValue(boolean value) {
 		this.value = value;
 	}
 	
+	/**
+	 * Get value of this variable.
+	 * @return actual value
+	 */
 	public boolean getValue() {
 		return value;
 	}
 	
+	/* (non-Javadoc)
+	 * @see cz.robyer.gamework.scenario.variable.Variable#modify(cz.robyer.gamework.scenario.reaction.VariableReaction.OperatorType, java.lang.Object)
+	 */
 	@Override
 	public void modify(OperatorType type, Object val) {
 		boolean value;
@@ -54,4 +76,5 @@ public class BooleanVariable extends Variable {
 		
 		callHooks(this);
 	}
+
 }

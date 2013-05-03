@@ -16,7 +16,7 @@ import cz.robyer.gamework.util.Log;
  */
 public class Hook extends BaseObject {
 	private static final String TAG = Hook.class.getSimpleName();
-	
+
 	public static enum HookType {AREA, AREA_ENTER, AREA_LEAVE, VARIABLE, TIME, EVENT, SCANNER};	
 	public static enum HookConditions {NONE, ANY, ALL};
 	
@@ -32,6 +32,14 @@ public class Hook extends BaseObject {
 	
 	protected Reaction react;
 	
+	/**
+	 * Class constructor.
+	 * @param type
+	 * @param value
+	 * @param reaction
+	 * @param conditions_type
+	 * @param runs
+	 */
 	public Hook(HookType type, String value, String reaction, HookConditions conditions_type, int runs) {
 		super();
 		this.type = type;
@@ -40,15 +48,31 @@ public class Hook extends BaseObject {
 		this.conditions_type = conditions_type;
 		this.runs = (runs > 0 ? runs : RUN_ALWAYS);
 	}
-	
+
+	/**
+	 * Class constructor.
+	 * @param type
+	 * @param value
+	 * @param reaction
+	 * @param conditions_type
+	 */
 	public Hook(HookType type, String value, String reaction, HookConditions conditions_type) {
 		this(type, value, reaction, conditions_type, RUN_ALWAYS);
 	}
 	
+	/**
+	 * Class constructor.
+	 * @param type
+	 * @param value
+	 * @param reaction
+	 */
 	public Hook(HookType type, String value, String reaction) {
 		this(type, value, reaction, HookConditions.NONE, RUN_ALWAYS);
 	}
 	
+	/* (non-Javadoc)
+	 * @see cz.robyer.gamework.scenario.BaseObject#setScenario(cz.robyer.gamework.scenario.Scenario)
+	 */
 	@Override
 	public void setScenario(Scenario scenario) {
 		super.setScenario(scenario);
@@ -59,6 +83,9 @@ public class Hook extends BaseObject {
 			}
 	}
 	
+	/* (non-Javadoc)
+	 * @see cz.robyer.gamework.scenario.BaseObject#onScenarioLoaded()
+	 */
 	@Override
 	public boolean onScenarioLoaded() {
 		react = scenario.getReaction(reaction);
@@ -76,10 +103,17 @@ public class Hook extends BaseObject {
 		return ok;
 	}
 	
+	/**
+	 * Sets hook parent on which is attached.
+	 * @param parent
+	 */
 	public void setParent(HookableObject parent) {
 		this.parent = parent;
 	}
 	
+	/**
+	 * Returns hook parent.
+	 */
 	public HookableObject getParent() {
 		if (parent == null) {
 			Log.e(TAG, "No parent is attached");
@@ -89,14 +123,26 @@ public class Hook extends BaseObject {
 		return parent;
 	}
 	
+	/**
+	 * Returns hook type.
+	 * @return type
+	 */
 	public HookType getType() {
 		return type;
 	}
 	
+	/**
+	 * Returns hook value.
+	 * @return value
+	 */
 	public String getValue() {
 		return value;
 	}
 
+	/**
+	 * Add condition into list.
+	 * @param condition
+	 */
 	public void addCondition(Condition condition) {
 		if (condition == null) {
 			Log.w(TAG, "addCondition() with null condition");

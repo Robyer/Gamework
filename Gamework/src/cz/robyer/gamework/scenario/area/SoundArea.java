@@ -9,7 +9,7 @@ import cz.robyer.gamework.scenario.Scenario;
 import cz.robyer.gamework.util.GPoint;
 
 /**
- * 
+ * This represents point area in which space is played some sound.
  * @author Robert Pösel
  */
 public class SoundArea extends PointArea {
@@ -20,12 +20,23 @@ public class SoundArea extends PointArea {
 	protected int loop = -1; // loop forever
 	protected int soundRadius;
 	
+	/**
+	 * Class constructor
+	 * @param id - identificator of area
+	 * @param point - center point of area
+	 * @param radius - radius in meters
+	 * @param value - sound to be played
+	 * @param soundRadius - radius in which sound will be played, in meters
+	 */
 	public SoundArea(String id, GPoint point, int radius, String value, int soundRadius) {
 		super(id, point, radius);
 		this.value = value;
 		this.soundRadius = soundRadius;
 	}
 	
+	/* (non-Javadoc)
+	 * @see cz.robyer.gamework.scenario.BaseObject#setScenario(cz.robyer.gamework.scenario.Scenario)
+	 */
 	@Override
 	public void setScenario(Scenario scenario) {
 		super.setScenario(scenario);
@@ -58,10 +69,13 @@ public class SoundArea extends PointArea {
 		return 1.0f - (float)((soundRadius - distance) / soundRadius);  
 	}
 	
+	/* (non-Javadoc)
+	 * @see cz.robyer.gamework.scenario.area.Area#updateLocation(double, double)
+	 */
 	@Override
 	public void updateLocation(double lat, double lon) {
 		// TODO: fix when soundRadius > radius
-		double distance = GPoint.distanceBetween(point.latitude, point.longitude, lat, lon);		
+		double distance = GPoint.distanceBetween(point.latitude, point.longitude, lat, lon);
 		boolean r = distance < (radius + (inArea ? LEAVE_RADIUS : 0));
 		float actualVolume = calcVolume(distance);
 

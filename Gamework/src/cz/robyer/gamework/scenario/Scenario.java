@@ -20,7 +20,7 @@ import cz.robyer.gamework.scenario.reaction.Reaction;
 import cz.robyer.gamework.scenario.variable.Variable;
 
 /**
- * Represents definition of a whole game - objects and behaviors.
+ * Represents definition of a whole game - game objects and behavior.
  * @author Robert Pösel
  */
 public class Scenario {
@@ -37,6 +37,9 @@ public class Scenario {
 	protected final List<Hook> hooks = new ArrayList<Hook>();
 	
 	// TODO: implement onLoadComplete listener and wait for its loading before starting game
+	// http://stackoverflow.com/questions/14782579/waiting-for-soundpool-to-load-before-moving-on-with-application
+	// http://stackoverflow.com/questions/14300293/soundpool-loading-never-ends
+	// http://stackoverflow.com/questions/5202510/soundpool-sample-not-ready
 	protected final SoundPool soundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
 	
 	// Helpers providing hookable interface for special events
@@ -44,16 +47,27 @@ public class Scenario {
 	protected final ScannerHookable scannerHookable = new ScannerHookable(this);
 	protected final EventHookable eventHookable = new EventHookable(this);
 	
+	/**
+	 * Class constructor.
+	 * @param context - application context
+	 * @param info - scenario info
+	 */
 	public Scenario(Context context, ScenarioInfo info) {
 		this.context = context;
 		this.info = info;
 	}
 	
+	/**
+	 * Class constructor
+	 * @param context - application context
+	 * @param handler - game handler
+	 * @param info - scenario info
+	 */
 	public Scenario(Context context, GameHandler handler, ScenarioInfo info) {
 		this(context, info);
 		setHandler(handler);
 	}
-		
+
 	public Context getContext() {
 		return context;
 	}
@@ -115,8 +129,7 @@ public class Scenario {
 	public Variable getVariable(String id) {
 		return variables.get(id);
 	}
-	
-		
+
 	public void addReaction(String id, Reaction reaction) {
 		if (reaction == null) {
 			Log.w(TAG, "addReaction() with null reaction");
@@ -196,6 +209,10 @@ public class Scenario {
 		eventHookable.update(data);
 	}
 	
+	/**
+	 * Called after sucessfuly scanned code.
+	 * @param data - scanned value from code
+	 */
 	public void onScanned(Object data) {
 		scannerHookable.update(data);
 	}

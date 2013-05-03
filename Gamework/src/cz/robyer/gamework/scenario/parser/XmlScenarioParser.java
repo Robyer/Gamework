@@ -42,7 +42,7 @@ import cz.robyer.gamework.util.GPoint;
 import cz.robyer.gamework.util.Log;
 
 /**
- * 
+ * This class is for parsing scenario from XML files.
  * @author Robert Pösel
  */
 public class XmlScenarioParser {
@@ -104,14 +104,33 @@ public class XmlScenarioParser {
     private XmlPullParser parser;
     private Scenario scenario;
     
+    /**
+     * Factory for parsing scenario from file.
+     * @param context
+     * @param filename - path to file
+     * @return Scenario or null
+     */
     public static Scenario fromFile(Context context, String filename) {
     	return fromFile(context, filename, false);
     }
     
+    /**
+     * Factory for parsing scenario from assets.
+     * @param context
+     * @param filename - path to file in assets directory
+     * @return Scenario or null
+     */
     public static Scenario fromAsset(Context context, String filename) {
     	return fromAsset(context, filename, false);
     }
     
+    /**
+     * Factory for parsing scenario from file.
+     * @param context
+     * @param filename - path to file
+     * @param aboutOnly - parse only About section
+     * @return Scenario or null
+     */
 	public static Scenario fromFile(Context context, String filename, boolean aboutOnly) {
 		Log.i(TAG, String.format("Loading %s from file '%s'", (aboutOnly ? "info" : "scenario"), filename));
 		Scenario scenario = null;
@@ -134,6 +153,13 @@ public class XmlScenarioParser {
 		return scenario;
 	}
 	
+	/**
+     * Factory for parsing scenario from assets.
+     * @param context
+     * @param filename - path to file in assets directory
+     * @param aboutOnly - parse only About section
+     * @return Scenario or null
+     */
 	public static Scenario fromAsset(Context context, String filename, boolean aboutOnly) {
 		Log.i(TAG, String.format("Loading %s from asset '%s'", (aboutOnly ? "info" : "scenario"), filename));
 		Scenario scenario = null;
@@ -155,12 +181,26 @@ public class XmlScenarioParser {
 		return scenario;
 	}
     
+	/**
+	 * Class constructor.
+	 * @param context
+	 * @param namespaces - use namespaces
+	 * @throws XmlPullParserException
+	 */
     public XmlScenarioParser(Context context, boolean namespaces) throws XmlPullParserException {
     	this.context = context;
     	this.parser = Xml.newPullParser();
     	this.parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, namespaces);
     }
 	
+    /**
+     * Parses inputstream into scenario object.
+     * @param input - input stream
+     * @param aboutOnly - parse only About section
+     * @return Scenario object
+     * @throws XmlPullParserException
+     * @throws IOException
+     */
 	public Scenario parse(InputStream input, boolean aboutOnly) throws XmlPullParserException, IOException {
 	    scenario = null;
 		
@@ -203,6 +243,11 @@ public class XmlScenarioParser {
 	    return scenario;
 	}
 	
+	/**
+	 * Skips whole element and subelements.
+	 * @throws XmlPullParserException
+	 * @throws IOException
+	 */
 	private void skip() throws XmlPullParserException, IOException {
 	    Log.d(TAG, "Skipping unknown child '" + parser.getName() + "'");
 		if (parser.getEventType() != XmlPullParser.START_TAG) {
@@ -221,6 +266,11 @@ public class XmlScenarioParser {
 	    }
 	}
 
+	/**
+	 * Read hooks section.
+	 * @throws XmlPullParserException
+	 * @throws IOException
+	 */
 	private void readHooks() throws XmlPullParserException, IOException {
 		Log.d(TAG, "Reading hooks");
 
@@ -277,6 +327,14 @@ public class XmlScenarioParser {
 		parser.require(XmlPullParser.END_TAG, ns, "hooks");
 	}
 
+	/**
+	 * Read triggers.
+	 * @param hook_type
+	 * @param hook_value
+	 * @return
+	 * @throws XmlPullParserException
+	 * @throws IOException
+	 */
 	private Hook readTrigger(HookType hook_type, String hook_value) throws XmlPullParserException, IOException {
 		Hook hook = null;
 		parser.require(XmlPullParser.START_TAG, ns, "trigger");
@@ -349,6 +407,11 @@ public class XmlScenarioParser {
     	return hook;
 	}
 
+	/**
+	 * Read reactions section.
+	 * @throws XmlPullParserException
+	 * @throws IOException
+	 */
 	private void readReactions() throws XmlPullParserException, IOException {
 		Log.d(TAG, "Reading reactions");
 		
@@ -392,6 +455,14 @@ public class XmlScenarioParser {
 	    }
 	}
 
+	/**
+	 * Read single reaction.
+	 * @param id - identificator of reaction (or parent multireaction)
+	 * @param isChild - is this child reaction inside multireaction?
+	 * @return Reaction
+	 * @throws XmlPullParserException
+	 * @throws IOException
+	 */
 	private Reaction readReaction(String id, boolean isChild) throws XmlPullParserException, IOException {
 		Reaction reaction = null;
 		parser.require(XmlPullParser.START_TAG, ns, "reaction");
@@ -464,6 +535,11 @@ public class XmlScenarioParser {
     	return reaction;
 	}
 
+	/**
+	 * Read variables section.
+	 * @throws XmlPullParserException
+	 * @throws IOException
+	 */
 	private void readVariables() throws XmlPullParserException, IOException {
 		Log.d(TAG, "Reading variables");
 		
@@ -513,6 +589,11 @@ public class XmlScenarioParser {
 	    }
 	}
 
+	/**
+	 * Read areas section.
+	 * @throws XmlPullParserException
+	 * @throws IOException
+	 */
 	private void readAreas() throws XmlPullParserException, IOException {
 		Log.d(TAG, "Reading areas");
 		
@@ -604,6 +685,11 @@ public class XmlScenarioParser {
 	    }
 	}
 	
+	/**
+	 * Read messages section.
+	 * @throws XmlPullParserException
+	 * @throws IOException
+	 */
 	private void readMessages() throws XmlPullParserException, IOException {
 		Log.d(TAG, "Reading messages");
 		
@@ -630,6 +716,11 @@ public class XmlScenarioParser {
 	    }
 	}
 
+	/**
+	 * Read About section.
+	 * @throws XmlPullParserException
+	 * @throws IOException
+	 */
 	private void readScenario() throws XmlPullParserException, IOException {
 		Log.d(TAG, "Reading about");
 		
@@ -671,6 +762,13 @@ public class XmlScenarioParser {
 	    scenario = new Scenario(context, info);
 	}
 	
+	/**
+	 * Read text value of some element.
+	 * @param tag
+	 * @return value of element
+	 * @throws IOException
+	 * @throws XmlPullParserException
+	 */
 	private String readText(String tag) throws IOException, XmlPullParserException {
 	    parser.require(XmlPullParser.START_TAG, ns, tag);
 		

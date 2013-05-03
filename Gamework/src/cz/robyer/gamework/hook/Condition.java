@@ -33,14 +33,26 @@ public class Condition extends BaseObject {
 		this.value = value;
 	}
 	
+	/**
+	 * Returns type of this condition.
+	 * @return condition type
+	 */
 	public ConditionType getType() {
 		return type;
 	}
 	
+	/**
+	 * Sets parent hook on which is this condition attached.
+	 * @param parent
+	 */
 	public void setParent(Hook parent) {
 		this.parent = parent;
 	}
 	
+	/**
+	 * Returns parent hook of this condition.
+	 * @return hook or throws exception
+	 */
 	public Hook getParent() {
 		if (parent == null) {
 			Log.e(TAG, "No parent is attached");
