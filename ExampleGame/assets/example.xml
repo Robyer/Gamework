@@ -4,7 +4,7 @@
 	<about>
 		<title>Example scenario</title> 		<!-- Name of scenario -->
 		<author>Robert Pösel</author>			<!-- Name of author -->
-		<version>0.0.1 - 16.4.2013</version>	<!-- Version of this game -->
+		<version>0.0.1 - 5.5.2013</version>		<!-- Version of this game -->
 		<location>Brno</location>				<!-- Location where game is played -->
 		<duration>1h</duration>					<!-- Estimated duration of one game -->
 		<difficulty>Easy</difficulty>			<!-- Difficulty of game -->
@@ -16,10 +16,13 @@
 		<!-- <message> contains these attributes:
 			- id = identificator, must be unique among <messages>
 			- title = title of message
-			- value = path to file with content of message
+			- value = path to file with content of message or short text of message itself
+			- tag (not required) = specifies type of message for grouping use - then from scenario you can get all messages with same tag
+			- default = if set to "true" then this message is visible from start of game automatically
 		 -->
-		<message id="welcome" title="Welcome to game!" value="messages/welcome.html" />
+		<message id="welcome" default="true" title="Welcome to game!" value="messages/test.txt" />
 		<message id="test" title="Some test message" value="messages/test.txt" />
+		<message id="goal1" tag="goals" default="true" title="Win this game" value="Testing text of goal..." />
 	</messages>
 
 	<!-- Definition of game areas. Only <area> elements are allowed inside. -->
@@ -167,11 +170,6 @@
 			<reaction type="sound" value="sounds/rooster.mp3" />
 			<reaction type="vibrate" value="100" />
 			<reaction type="var_set" variable="completed" value="true" />    
-		</reaction>
-		
-		<reaction id="game_begin" type="multi">
-			<reaction type="event" value="GAME_START" />
-			<reaction type="message" value="welcome" />
 		</reaction>
 		
 		<reaction id="game_win" type="multi">

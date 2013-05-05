@@ -702,11 +702,14 @@ public class XmlScenarioParser {
 	        if (parser.getName().equalsIgnoreCase("message")) {
 	        	parser.require(XmlPullParser.START_TAG, ns, "message");
 	        	String id = parser.getAttributeValue(null, "id");
+	        	String tag = parser.getAttributeValue(null, "tag");
 	        	String title = parser.getAttributeValue(null, "title");
 	        	String value = parser.getAttributeValue(null, "value");
+	        	String def = parser.getAttributeValue(null, "default");
+	        	boolean bdef = (def != null && def.equalsIgnoreCase("true"));
 	        	
 	        	Log.d(TAG, "Got Message");
-        		scenario.addMessage(id, new Message(id, title, value));
+        		scenario.addMessage(id, new Message(id, tag, title, value, bdef));
         		
         		parser.nextTag();
 	        	parser.require(XmlPullParser.END_TAG, ns, "message");

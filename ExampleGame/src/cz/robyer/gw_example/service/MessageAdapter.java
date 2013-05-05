@@ -39,7 +39,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
             
             holder = new DataHolder();
             holder.title = (TextView)row.findViewById(R.id.title);
-            holder.time = (TextView)row.findViewById(R.id.time);
+            holder.subtitle = (TextView)row.findViewById(R.id.subtitle);
             
             row.setTag(holder);
         } else {
@@ -48,7 +48,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
         
         Message message = data.get(position);
         holder.title.setText(message.getTitle());
-        holder.time.setText(Long.toString(message.getReceived()));
+        holder.subtitle.setText(message.getValue());
         
         return row;
     }
@@ -56,7 +56,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
     static class DataHolder
     {
         TextView title;
-        TextView time;
+        TextView subtitle;
     }
     
 }

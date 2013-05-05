@@ -39,7 +39,7 @@ public class GameMessagesActivity extends BaseGameActivity {
 		ListView list = (ListView)findViewById(R.id.list_messages);
 		
 		if (GameService.isRunning()) {
-			messages = getGame().getScenario().getVisibleMessages();
+			messages = getGame().getScenario().getVisibleMessages("");
 			adapter = new MessageAdapter(this, R.layout.messagelist_item, messages);
 			
 			list.setAdapter(adapter);
@@ -59,7 +59,7 @@ public class GameMessagesActivity extends BaseGameActivity {
 	 * Refreshes list of messages.
 	 */
 	public void refreshList() {
-		messages = getGame().getScenario().getVisibleMessages();
+		messages = getGame().getScenario().getVisibleMessages("");
 		adapter.notifyDataSetChanged();
 	}
 	
@@ -68,7 +68,6 @@ public class GameMessagesActivity extends BaseGameActivity {
 	 */
 	@Override
 	public void receiveEvent(GameEvent event) {
-		// TODO: think up and implement
 		switch (event.type) {
 		case UPDATED_MESSAGES:
 			refreshList();

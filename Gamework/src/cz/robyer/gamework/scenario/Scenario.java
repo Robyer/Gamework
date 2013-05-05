@@ -172,10 +172,15 @@ public class Scenario {
 		return messages.get(id);
 	}
 	
-	public List<Message> getVisibleMessages() {
+	/**
+	 * Returns all visible (received and not deleted) messages with specified tag.
+	 * @param tag of message, use empty string for messages without tag or null for all messages
+	 * @return list of messages
+	 */
+	public List<Message> getVisibleMessages(String tag) {
 		List<Message> list = new ArrayList<Message>();
 		for (Message m : messages.values()) {
-			if (m.isVisible())
+			if (m.isVisible() && (tag == null || tag.equalsIgnoreCase(m.getTag())))
 				list.add(m);
 		}
 		return list;

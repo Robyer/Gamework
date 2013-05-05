@@ -14,6 +14,7 @@ import cz.robyer.gamework.scenario.IdentificableObject;
  * @author Robert Pösel
  */
 public class Message extends IdentificableObject {
+	protected String tag;
 	protected String title;
 	protected String value;
 	protected MessageStatus status;
@@ -27,11 +28,12 @@ public class Message extends IdentificableObject {
 	 * @param title - title of message
 	 * @param value - text or path to file with content of message
 	 */
-	public Message(String id, String title, String value) {
+	public Message(String id, String tag, String title, String value, boolean def) {
 		super(id);
 		this.title = title;
+		this.tag = (tag == null ? "" : tag);
 		this.value = value;
-		this.status = MessageStatus.NONE;
+		this.status = def ? MessageStatus.UNREAD : MessageStatus.NONE;
 	}
 	
 	/**
@@ -48,6 +50,14 @@ public class Message extends IdentificableObject {
 	 */
 	public MessageStatus getStatus() {
 		return status;
+	}
+	
+	/**
+	 * Returns tag of this message.
+	 * @return tag
+	 */
+	public String getTag() {
+		return tag;
 	}
 	
 	/**
