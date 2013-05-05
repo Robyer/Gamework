@@ -87,15 +87,14 @@ public abstract class GameService extends Service implements GameEventListener, 
     	}
     	
     	status = GameStatus.GAME_LOADING;
-    	String filename = intent.getStringExtra("filename");
-    	scenario = XmlScenarioParser.fromAsset(getApplicationContext(), filename);
+    	scenario = loadScenario(intent);
     	if (scenario == null) {
-    		Log.e(TAG, "Scenario '" + filename + "' wasn't loaded");
+    		Log.e(TAG, "Scenario wasn't loaded");
     		status = GameStatus.GAME_NONE;
     		return 0;
     	}
     	
-    	Log.i(TAG, "Scenario '" + filename + "' was loaded");
+    	Log.i(TAG, "Scenario '" + scenario.getInfo().title + "' was loaded");
 
     	scenario.setHandler(gameHandler);
     	registerListener(this);
@@ -119,7 +118,18 @@ public abstract class GameService extends Service implements GameEventListener, 
         return START_NOT_STICKY; // or START_REDELIVER_INTENT?
     }
     
-    @Override
+    /**
+     * Default method for load scenario from assets.
+     * @param intent which was used with startService
+     * @return scenario or null if error occurs
+     */
+    protected Scenario loadScenario(Intent intent) {
+    	String filename = intent.getStringExtra("filename");
+    	Scenario scenario = XmlScenarioParser.fromAsset(getApplicationContext(), filename);
+		return scenario;
+	}
+
+	@Override
     public final IBinder onBind(Intent intent) {
     	Log.i(TAG, "onBind()");
     	return null; // we don't support binding
