@@ -98,9 +98,9 @@ public abstract class BaseGameActivity extends BaseActivity implements GameEvent
 					cls = GameInventoryActivity.class;
 				else if (v.getId() == R.id.btn_tools)
 					cls = GameToolsActivity.class;
-				
+		
 				// ignore unknown buttons and link to same activity
-				if (cls == null || cls == this.getClass())
+				if (cls == null || cls.isInstance(BaseGameActivity.this))
 					return;
 				
 				Intent intent = new Intent(BaseGameActivity.this, cls);
