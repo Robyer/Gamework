@@ -40,13 +40,12 @@
 			- lon = longitude of geo location, e.g. 123.456789
 			- radius = radius of area in meters
 			
-			<area type="sound"> contains in adition these attributes: // XXX: don't use this area as it is buggy at the moment
+			<area type="sound"> contains in adition these attributes:
 			- lat = latitude of geo location, e.g. 12.3456789
 			- lon = longitude of geo location, e.g. 123.456789
 			- radius = radius of area in meters
-			- soundRadius = radius in which sound will be played
+			- soundRadius = radius in which sound will be played, in meters
 			- value = path to file with sound sample
-			// TODO: fix and implement attributes for repeat, pitch, etc.
 			
 			<area type="multipoint"> contains in adition nested <point> elements (at least 3):
 				- <point> contains these attributes:
