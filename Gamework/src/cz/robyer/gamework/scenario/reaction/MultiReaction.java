@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.robyer.gamework.scenario.Scenario;
-import cz.robyer.gamework.util.Log;
+import cz.robyer.gamework.utils.Log;
 
 /**
  * Game reaction as container with other game reactions.

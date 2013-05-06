@@ -22,8 +22,8 @@ import cz.robyer.gamework.constants.Constants;
 import cz.robyer.gamework.game.GameEvent.EventType;
 import cz.robyer.gamework.scenario.Scenario;
 import cz.robyer.gamework.scenario.parser.XmlScenarioParser;
-import cz.robyer.gamework.util.Log;
-import cz.robyer.gamework.util.Utils;
+import cz.robyer.gamework.utils.Log;
+import cz.robyer.gamework.utils.Utils;
 
 /**
  * Main service object representing whole game.

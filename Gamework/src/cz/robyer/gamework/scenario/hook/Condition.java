@@ -4,7 +4,7 @@ import cz.robyer.gamework.scenario.BaseObject;
 import cz.robyer.gamework.scenario.variable.BooleanVariable;
 import cz.robyer.gamework.scenario.variable.DecimalVariable;
 import cz.robyer.gamework.scenario.variable.Variable;
-import cz.robyer.gamework.util.Log;
+import cz.robyer.gamework.utils.Log;
 
 /**
  * Represents condition for {@link Hook}.

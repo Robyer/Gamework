@@ -1,4 +1,4 @@
-package cz.robyer.gamework.util;
+package cz.robyer.gamework.utils;
 
 import android.content.Context;
 import android.content.Intent;

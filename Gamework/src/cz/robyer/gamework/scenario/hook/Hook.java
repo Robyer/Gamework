@@ -8,7 +8,7 @@ import cz.robyer.gamework.scenario.HookableObject;
 import cz.robyer.gamework.scenario.Scenario;
 import cz.robyer.gamework.scenario.reaction.Reaction;
 import cz.robyer.gamework.scenario.variable.Variable;
-import cz.robyer.gamework.util.Log;
+import cz.robyer.gamework.utils.Log;
 
 /**
  * Represents hook which is activated when some game state (variable, time,...) is changed.

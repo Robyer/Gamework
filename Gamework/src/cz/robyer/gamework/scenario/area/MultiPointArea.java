@@ -5,7 +5,7 @@ import java.util.List;
 
 import android.util.Log;
 
-import cz.robyer.gamework.util.GPoint;
+import cz.robyer.gamework.utils.GPoint;
 
 /**
  * This represents polygonal game area based on 3 or more points.

@@ -38,8 +38,8 @@ import cz.robyer.gamework.scenario.reaction.VibrateReaction;
 import cz.robyer.gamework.scenario.variable.BooleanVariable;
 import cz.robyer.gamework.scenario.variable.DecimalVariable;
 import cz.robyer.gamework.scenario.variable.Variable;
-import cz.robyer.gamework.util.GPoint;
-import cz.robyer.gamework.util.Log;
+import cz.robyer.gamework.utils.GPoint;
+import cz.robyer.gamework.utils.Log;
 
 /**
  * This class is for parsing scenario from XML files.

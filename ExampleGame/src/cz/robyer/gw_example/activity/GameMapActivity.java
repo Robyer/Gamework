@@ -24,7 +24,7 @@ import cz.robyer.gamework.scenario.area.Area;
 import cz.robyer.gamework.scenario.area.MultiPointArea;
 import cz.robyer.gamework.scenario.area.PointArea;
 import cz.robyer.gamework.scenario.area.SoundArea;
-import cz.robyer.gamework.util.GPoint;
+import cz.robyer.gamework.utils.GPoint;
 import cz.robyer.gw_example.R;
 
 /**

@@ -1,6 +1,6 @@
 package cz.robyer.gamework.scenario.area;
 
-import cz.robyer.gamework.util.GPoint;
+import cz.robyer.gamework.utils.GPoint;
 
 /**
  * This represents circle game area based on center point and radius.

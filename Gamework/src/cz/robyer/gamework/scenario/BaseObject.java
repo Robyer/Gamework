@@ -2,7 +2,7 @@ package cz.robyer.gamework.scenario;
 
 import android.content.Context;
 import cz.robyer.gamework.game.GameHandler;
-import cz.robyer.gamework.util.Log;
+import cz.robyer.gamework.utils.Log;
 
 /**
  * This is base object for scenario.

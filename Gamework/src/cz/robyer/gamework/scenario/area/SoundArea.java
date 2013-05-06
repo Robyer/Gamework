@@ -6,7 +6,7 @@ import android.content.res.AssetFileDescriptor;
 import android.media.SoundPool;
 import android.util.Log;
 import cz.robyer.gamework.scenario.Scenario;
-import cz.robyer.gamework.util.GPoint;
+import cz.robyer.gamework.utils.GPoint;
 
 /**
  * This represents point area with ability to define sound radius, in which area is played defined sound.

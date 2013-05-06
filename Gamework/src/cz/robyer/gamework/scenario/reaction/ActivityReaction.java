@@ -2,7 +2,7 @@ package cz.robyer.gamework.scenario.reaction;
 
 import android.content.Intent;
 import android.util.Log;
-import cz.robyer.gamework.util.Utils;
+import cz.robyer.gamework.utils.Utils;
 
 /**
  * Game reaction which starts activity.

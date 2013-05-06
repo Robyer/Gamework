@@ -1,7 +1,7 @@
 package cz.robyer.gamework.scenario.variable;
 
 import cz.robyer.gamework.scenario.reaction.VariableReaction.OperatorType;
-import cz.robyer.gamework.util.Log;
+import cz.robyer.gamework.utils.Log;
 
 /**
  * Represents variable with only 2 states - true and false.

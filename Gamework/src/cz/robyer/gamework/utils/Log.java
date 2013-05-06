@@ -1,4 +1,4 @@
-package cz.robyer.gamework.util;
+package cz.robyer.gamework.utils;
 
 /**
  * Logging class.

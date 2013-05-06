@@ -3,7 +3,7 @@ package cz.robyer.gamework.game;
 import java.util.WeakHashMap;
 
 import cz.robyer.gamework.game.GameEvent.EventType;
-import cz.robyer.gamework.util.Log;
+import cz.robyer.gamework.utils.Log;
 
 /**
  * Handler for broadcasting {@link GameEvent}s.

@@ -3,7 +3,7 @@ package cz.robyer.gamework.scenario.variable;
 import java.security.InvalidParameterException;
 
 import cz.robyer.gamework.scenario.reaction.VariableReaction.OperatorType;
-import cz.robyer.gamework.util.Log;
+import cz.robyer.gamework.utils.Log;
 
 /**
  * Represents numeric decimal variable.
