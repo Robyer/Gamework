@@ -11,7 +11,7 @@ import cz.robyer.gamework.scenario.variable.Variable;
  * Base hookable object which contains a list of attached hooks.
  * @author Robert Pösel
  */
-public class HookableObject extends IdentificableObject {
+public abstract class HookableObject extends IdentificableObject {
 	protected List<Hook> hooks;
 	
 	/**
