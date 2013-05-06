@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.util.Log;
-import cz.robyer.gamework.hook.Hook;
+import cz.robyer.gamework.scenario.hook.Hook;
 import cz.robyer.gamework.scenario.variable.Variable;
 
 /**

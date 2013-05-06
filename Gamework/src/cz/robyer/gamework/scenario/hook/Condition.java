@@ -1,4 +1,4 @@
-package cz.robyer.gamework.hook;
+package cz.robyer.gamework.scenario.hook;
 
 import cz.robyer.gamework.scenario.BaseObject;
 import cz.robyer.gamework.scenario.variable.BooleanVariable;

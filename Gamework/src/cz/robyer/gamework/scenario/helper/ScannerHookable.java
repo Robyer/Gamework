@@ -1,10 +1,10 @@
 package cz.robyer.gamework.scenario.helper;
 
 import android.util.Log;
-import cz.robyer.gamework.hook.Hook;
-import cz.robyer.gamework.hook.Hook.HookType;
 import cz.robyer.gamework.scenario.HookableObject;
 import cz.robyer.gamework.scenario.Scenario;
+import cz.robyer.gamework.scenario.hook.Hook;
+import cz.robyer.gamework.scenario.hook.Hook.HookType;
 
 /**
  * This object distributes scanned data ({@link #update(Object)}) to hooked scenario objects.

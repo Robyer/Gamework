@@ -1,8 +1,8 @@
 package cz.robyer.gamework.scenario.area;
 
 import android.util.Log;
-import cz.robyer.gamework.hook.Hook;
 import cz.robyer.gamework.scenario.HookableObject;
+import cz.robyer.gamework.scenario.hook.Hook;
 
 /**
  * This is basic abstract object for game areas.

@@ -1,4 +1,4 @@
-package cz.robyer.gamework.hook;
+package cz.robyer.gamework.scenario.hook;
 
 import java.util.ArrayList;
 import java.util.List;
