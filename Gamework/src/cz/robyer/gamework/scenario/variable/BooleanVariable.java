@@ -53,7 +53,7 @@ public class BooleanVariable extends Variable {
 	public void modify(OperatorType type, Object val) {
 		boolean value;
 		
-		if (val instanceof Integer)
+		if (val instanceof Boolean)
 			value = (Boolean)val;
 		else if (val instanceof String)
 			value = Boolean.parseBoolean((String)val);

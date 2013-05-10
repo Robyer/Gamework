@@ -7,18 +7,22 @@ import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
 
 import cz.robyer.gamework.game.GameEvent;
 import cz.robyer.gamework.game.GameService;
-import cz.robyer.gamework.game.GameStatus;
 import cz.robyer.gamework.scenario.Scenario;
 import cz.robyer.gamework.scenario.area.Area;
 import cz.robyer.gamework.scenario.area.MultiPointArea;
@@ -34,26 +38,27 @@ import cz.robyer.gw_example.R;
 public class GameMapActivity extends BaseGameActivity {
 	private static final String TAG = GameMapActivity.class.getSimpleName();
 	private GoogleMap map;
+	private Marker playerMarker;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game_map);		
 		initButtons();
-		
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+
 		if (!GameService.isRunning())
 			return;
 		
 		if (map == null) {
 	        map = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
-	        // Check if we were successful in obtaining the map.
+
 	        if (map != null) {
-	        	//map.animateCamera(CameraUpdateFactory.zoomIn());
-	        	 
-	            // The Map is verified. It is now safe to manipulate the map.
-	        	//map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-	        	
-	        	GameService game = getGame();	        	
+	        	final GameService game = getGame();	        	
 	        	Scenario scenario = null;
 	    		if (game != null)
 	    			scenario = game.getScenario();
@@ -89,21 +94,20 @@ public class GameMapActivity extends BaseGameActivity {
 		        			map.addPolygon(polygon);
 		        		}
 		        	}
-		        	/*for (Map.Entry<String,Thing> entry : map.entrySet()) {
-	        	    	String key = entry.getKey();
-	        	    	Thing thing = entry.getValue();
-	        	    	...
-	        		}*/
-		        	if (game.getStatus() == GameStatus.GAME_RUNNING)
-		        		map.setMyLocationEnabled(true);
-
-		        	Location loc = game.getLocation();
-		        	if (loc != null) {
-		        		LatLng pos = new LatLng(loc.getLatitude(), loc.getLongitude());
-		        		CameraUpdate update = CameraUpdateFactory.newLatLngZoom(pos, 12);
-		        		map.moveCamera(update);
-		        	}
 	    		}
+	    		
+	    		map.setOnMapLongClickListener(new OnMapLongClickListener() {
+					@Override
+					public void onMapLongClick(LatLng point) {
+						Toast.makeText(GameMapActivity.this, "Player location set.", Toast.LENGTH_SHORT).show();
+						
+						Location location = new Location("user");
+						location.setLatitude(point.latitude);
+						location.setLongitude(point.longitude);
+
+						game.onLocationChanged(location);
+					}
+				});
 	        }
 	    }
 	}
@@ -111,21 +115,31 @@ public class GameMapActivity extends BaseGameActivity {
 	/**
 	 * Checks game events and enabled/disables player location layer.
 	 */
-	public void receiveEvent(GameEvent event) {
+	public void receiveEvent(final GameEvent event) {
 		super.receiveEvent(event);
 		
 		switch (event.type) {
-		case GAME_START:
-			if (map != null)
-        		map.setMyLocationEnabled(true);
-			break;
-		case GAME_LOSE:
-		case GAME_PAUSE:
-		case GAME_QUIT:
-		case GAME_WIN:
-			if (map != null)
-				map.setMyLocationEnabled(false);
-			break;
+		case UPDATED_LOCATION:
+			if (event.value instanceof Location) {
+				Location loc = (Location)event.value;
+
+				if (playerMarker == null) {
+					MarkerOptions opt = new MarkerOptions()
+		        		.draggable(false)
+		        		.visible(true)
+		        		.title("Player")
+		        		.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+		        		.position(new LatLng(loc.getLatitude(), loc.getLongitude()));
+
+		        	playerMarker = map.addMarker(opt);
+
+		        	// move camera to player position
+		        	LatLng pos = new LatLng(loc.getLatitude(), loc.getLongitude());
+	        		CameraUpdate update = CameraUpdateFactory.newLatLngZoom(pos, 12);
+	        		map.moveCamera(update);
+				} else						
+					playerMarker.setPosition(new LatLng(loc.getLatitude(), loc.getLongitude()));
+			}
 		}
 	}
 	

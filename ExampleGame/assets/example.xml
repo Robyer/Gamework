@@ -55,7 +55,7 @@
 					- lat = latitude of geo location, e.g. 12.3456789
 					- lon = longitude of geo location, e.g. 123.456789
 		 -->
-		<area id="railway" type="point" lat="49.1905819" lon="16.6128022" radius="50" />
+		<area id="railway" type="point" lat="49.1905819" lon="16.6128022" radius="100" />
 		<area id="veveri" type="multipoint">
 			<point lat="49.193896" lon="16.598848" />
 			<point lat="49.193999" lon="16.599222" />

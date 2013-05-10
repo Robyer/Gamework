@@ -23,6 +23,8 @@ public abstract class BaseGameActivity extends BaseActivity implements GameEvent
 	
 	/** Helper for quitting activity by second press of 'back' */
 	protected boolean backClicked = false;
+
+	private AlertDialog ad;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +52,10 @@ public abstract class BaseGameActivity extends BaseActivity implements GameEvent
 		
 		/** Unregister listening to game events */
 		if (GameService.isRunning())
-			getGame().unregisterListener(this);		
+			getGame().unregisterListener(this);
+		
+		if (ad != null)
+			ad.dismiss();
 	}
 	
 	/**
@@ -142,8 +147,8 @@ public abstract class BaseGameActivity extends BaseActivity implements GameEvent
 				String title = "Game";
 				if (GameService.isRunning())
 					title = getGame().getScenario().getInfo().title;
-					
-				AlertDialog ad = new AlertDialog.Builder(BaseGameActivity.this).create();
+
+				ad = new AlertDialog.Builder(BaseGameActivity.this).create();
 				ad.setCancelable(false);
 				ad.setTitle(title);
 				ad.setMessage(won ? "Congratulations, you WON!" : "You just LOST this game!");
