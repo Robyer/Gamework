@@ -54,11 +54,12 @@ public class GameMapActivity extends BaseGameActivity {
 		if (!GameService.isRunning())
 			return;
 		
+		final GameService game = getGame();
+		
 		if (map == null) {
 	        map = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
 
-	        if (map != null) {
-	        	final GameService game = getGame();	        	
+	        if (map != null) {	        	
 	        	Scenario scenario = null;
 	    		if (game != null)
 	    			scenario = game.getScenario();
@@ -101,7 +102,7 @@ public class GameMapActivity extends BaseGameActivity {
 					public void onMapLongClick(LatLng point) {
 						Toast.makeText(GameMapActivity.this, "Player location set.", Toast.LENGTH_SHORT).show();
 						
-						Location location = new Location("user");
+						Location location = new Location("custom");
 						location.setLatitude(point.latitude);
 						location.setLongitude(point.longitude);
 
@@ -110,6 +111,9 @@ public class GameMapActivity extends BaseGameActivity {
 				});
 	        }
 	    }
+		
+		if (game != null)
+			updateMarker(game.getLocation());
 	}
 	
 	/**
@@ -121,26 +125,31 @@ public class GameMapActivity extends BaseGameActivity {
 		switch (event.type) {
 		case UPDATED_LOCATION:
 			if (event.value instanceof Location) {
-				Location loc = (Location)event.value;
-
-				if (playerMarker == null) {
-					MarkerOptions opt = new MarkerOptions()
-		        		.draggable(false)
-		        		.visible(true)
-		        		.title("Player")
-		        		.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-		        		.position(new LatLng(loc.getLatitude(), loc.getLongitude()));
-
-		        	playerMarker = map.addMarker(opt);
-
-		        	// move camera to player position
-		        	LatLng pos = new LatLng(loc.getLatitude(), loc.getLongitude());
-	        		CameraUpdate update = CameraUpdateFactory.newLatLngZoom(pos, 12);
-	        		map.moveCamera(update);
-				} else						
-					playerMarker.setPosition(new LatLng(loc.getLatitude(), loc.getLongitude()));
+				updateMarker((Location)event.value);
 			}
 		}
+	}
+	
+	private void updateMarker(Location loc) {
+		if (map == null || loc == null)
+			return;
+		
+		if (playerMarker == null) {
+			MarkerOptions opt = new MarkerOptions()
+        		.draggable(false)
+        		.visible(true)
+        		.title("Player")
+        		.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+        		.position(new LatLng(loc.getLatitude(), loc.getLongitude()));
+
+        	playerMarker = map.addMarker(opt);
+
+        	// move camera to player position
+        	LatLng pos = new LatLng(loc.getLatitude(), loc.getLongitude());
+    		CameraUpdate update = CameraUpdateFactory.newLatLngZoom(pos, 12);
+    		map.moveCamera(update);
+		} else						
+			playerMarker.setPosition(new LatLng(loc.getLatitude(), loc.getLongitude()));
 	}
 	
 	private LatLng toLatLng(GPoint p) {

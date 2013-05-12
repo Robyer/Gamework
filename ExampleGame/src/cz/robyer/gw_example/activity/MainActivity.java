@@ -49,13 +49,13 @@ public class MainActivity extends BaseActivity {
 			}
 		});
 		
-		((Button)findViewById(R.id.btn_help)).setOnClickListener(new OnClickListener() {
+		/*((Button)findViewById(R.id.btn_help)).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(MainActivity.this, HelpActivity.class);
 				startActivity(intent);
 			}
-		});
+		});*/
 	}
 
 }

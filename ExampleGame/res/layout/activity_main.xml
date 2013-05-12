@@ -17,11 +17,12 @@
 	    android:id="@+id/btn_play"
 	    />
 	
+	<!--
 	<Button
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:text="@string/help"
 	    android:id="@+id/btn_help"
 	    />
-	
+	 -->
 </LinearLayout>
