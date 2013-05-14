@@ -22,7 +22,7 @@
 		 -->
 		<message id="welcome" default="true" title="Welcome to game!" value="messages/test.txt" />
 		<message id="test" title="Some test message" value="messages/test.txt" />
-		<message id="goal1" tag="goals" default="true" title="Win this game" value="Testing text of goal..." />
+		<message id="goal1" tag="goals" default="true" title="Win this game" value="Go to the Veveri and then to the Railroad station until time is out..." />
 	</messages>
 
 	<!-- Definition of game areas. Only <area> elements are allowed inside. -->
@@ -150,7 +150,7 @@
 				  var_increment, var_decrement, var_multiply, var_divide can be applied to decimal variables ONLY.
 				  var_negate can be applied to boolean variables ONLY.
 		 -->        
-		<reaction id="alert" type="sound" value="sounds/rooster.mp3" />
+		<reaction id="alert" type="sound" value="sounds/alert.mp3" />
 		<reaction id="vibrate1" type="vibrate" value="100" />
 		<reaction id="vibrate2" type="vibrate" value="500" />
 		<reaction id="vibrate3" type="vibrate" value="0, 80, 100, 80, 100, 500" />
@@ -159,28 +159,26 @@
 		<reaction id="score10" type="var_increment" variable="score" value="10" />
 		<reaction id="score50" type="var_increment" variable="score" value="50" />
 		
-		<reaction id="health_reset" type="var_set" variable="health" value="50" />
-		<reaction id="health_heal" type="var_increment" variable="health" value="20" />
 		<reaction id="health_hurt" type="multi">
 			<reaction type="var_decrement" variable="health" value="20" />
-			<reaction type="sound" value="sounds/youch2.mp3" />    
+			<reaction type="ref" value="alert" />
 		</reaction>
 		
 		<reaction id="complete" type="multi">
-			<reaction type="sound" value="sounds/rooster.mp3" />
+			<reaction type="sound" value="sounds/complete.mp3" />
 			<reaction type="vibrate" value="100" />
 			<reaction type="var_set" variable="completed" value="true" />    
 		</reaction>
 		
 		<reaction id="game_win" type="multi">
 			<reaction type="ref" value="vibrate3" />
-			<reaction type="sound" value="sounds/canttouchthis.mp3" />
+			<reaction type="sound" value="sounds/win.mp3" />
 			<reaction type="event" value="GAME_WIN" />
 		</reaction>
 
 		<reaction id="game_lose" type="multi">
 			<reaction type="vibrate" value="1400" />
-			<reaction type="sound" value="sounds/haha.mp3" />
+			<reaction type="sound" value="sounds/lose.mp3" />
 			<reaction type="event" value="GAME_LOSE" />
 		</reaction>
 		
