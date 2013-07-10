@@ -92,6 +92,8 @@ public class Condition extends BaseObject {
 			case NOTEQUALS:
 				valid = (varValue != condValue);
 				break;
+			default:
+				break;
 			}
 			
 			Log.v(TAG, "Checking condition on varValue='" + varValue + ", condValue='" + condValue + "', valid='" + valid + "'");

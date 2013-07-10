@@ -364,6 +364,9 @@ public abstract class GameService extends Service implements GameEventListener, 
     		if (status == GameStatus.GAME_RUNNING && event.value != null)
     			scenario.onScanned(event.value);
     		break;
+
+    	default:
+    		break;
     	}
     	
     	onEvent(event);

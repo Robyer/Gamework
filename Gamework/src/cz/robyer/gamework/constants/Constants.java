@@ -7,7 +7,7 @@ package cz.robyer.gamework.constants;
 public class Constants {
 	/** Game notification id */
 	public static final int NOTIFICATION_GAMEPLAY = 1;
-	
+
 	/** Scanner constants */
 	public static final int SCANNER_CODE = 0;
 	public static final String SCANNER_SCAN = "la.droid.qr.scan";

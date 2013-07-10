@@ -31,6 +31,11 @@ public class ActivityReaction extends Reaction {
 	@Override
 	public boolean onScenarioLoaded() {
 		intent = new Intent();
+		
+		// fix for relative class name, make it absolute
+		if (value.charAt(0) == '.')
+			value = getContext().getPackageName() + value;
+		
 		intent.setClassName(getContext(), value);
 		intent.putExtra("reaction", id); // distribute reaction id to the activity
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

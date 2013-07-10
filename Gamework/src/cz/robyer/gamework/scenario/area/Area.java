@@ -72,6 +72,8 @@ public abstract class Area extends HookableObject {
 			case AREA_LEAVE:
 				valid = !inside;
 				break;
+			default:
+				break;
 			}
 				
 			if (valid)
