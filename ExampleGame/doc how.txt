@@ -1,3 +1,0 @@
-in VM options add "-bootclasspath /path/to/sdk/platforms/android-##/android.jar"
-
--bootclasspath d:/programy/ADTBundle/sdk/platforms/android-17/android.jar

@@ -1,6 +1,6 @@
 Gamework
 ========
-Gamework is easy to use Android framework for creating geolocation games.
+An easy to use Android framework for creating geolocation games.
 
 Definition of game scenario is located in *.xml file which allows easy reconfiguration - often without changing any application code.
 
@@ -9,7 +9,7 @@ How to use
 1. Create your Android application (with Activities, etc.)
 2. Include Gamework library into your project
 3. Create file with game scenario (*.xml)
-  - Look at *ExampleGame / assets /* ***example.xml*** to understand scenario structure
+  - Look at *GameworkApp / assets /* ***example.xml*** to understand scenario structure
 4. Create your game service by inheriting *cz.robyer.gamework.game.GameService* class and implement needed methods:
   - *getGameNotification()*
   - *onGameStart()*
